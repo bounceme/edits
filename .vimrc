@@ -17,8 +17,8 @@ set ttyfast " u got a fast terminal
 " set ttyscroll=3
 set lazyredraw " to avoid scrolling problems
 " Allow netrw to remove non-empty local directories
-"
 let g:netrw_localrmdir='rm -rf'
+runtime macros/matchit.vim
 " set ttymouse=xterm2
 "------------------------------------------------------------
 " Usability options {{{1
@@ -163,9 +163,6 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
-
-
 
 " Nerdtree
 
