@@ -11,7 +11,7 @@ set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
 " mapping of <C-L> below)
 set autochdir		"autodirectory
-set clipboard=unnamed "clipboard
+set clipboard=unnamed "clipboard@
 set ttimeoutlen=50 " delay in ms
 set ttyfast " u got a fast terminal
 " set ttyscroll=3
