@@ -131,22 +131,19 @@ Plugin 'flazz/vim-colorschemes'
 " Plugin 'vim-scripts/xterm16.vim'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
-Plugin 'othree/vim-autocomplpop'
 " Plugin 'othree/xml.vim'
 " Plugin 'dirkwallenstein/vim-autocomplpop'
 Plugin 'vim-scripts/L9'
 Plugin 'ervandew/supertab'
+Plugin 'othree/vim-autocomplpop'
+" Plugin 'marijnh/tern_for_vim'
 " Plugin 'tpope/vim-commentary'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'tpope/vim-vinegar'
+" Plugin 'drmingdrmer/xptemplate'
 " Plugin 'fholgado/minibufexpl.vim'
 " Plugin 'Shougo/neocomplcache.vim'
 " Plugin 'Shougo/neocomplete.vim'
-
-
-
-
-
 
 
 " " All of your Plugins must be added before the following line
@@ -182,12 +179,37 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 " let g:airline_powerline_fonts = 1
 
+" sparkup
+" let g:sparkupExecuteMapping = '<tab>'
 
 " ycm
 let g:ycm_seed_identifiers_with_syntax = 1
 
+" neocomplcache
+" set completeopt+=longest
+" let g:neocomplete#enable_auto_select = 1
+" let g:neocomplete#disable_auto_complete = 1
+" inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+"
+" if !exists('g:neocomplcache_force_omni_patterns')
+"   let g:neocomplcache_force_omni_patterns = {}
+" endif
+" let g:neocomplcache_force_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+" let g:neocomplcache_force_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+" let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+"
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
 "supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
+let b:SuperTabDisabled = 1
+" let g:SuperTabClosePreviewOnPopupClose = 1
+" let g:SuperTabDefaultCompletionType = 'context'
+
+" xptemplate
+let g:xptemplate_brace_complete = ''
+let g:xptemplate_nav_next = '<C-n>'
+let g:xptemplate_nav_prev = '<C-p>'
 
 "acp
 let g:AutoComplPopDontSelectFirst = 1
