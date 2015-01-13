@@ -1,6 +1,6 @@
 set nocompatible
 set hidden
-syntax on              	" syntax highlighting!
+syntax on              	" syntax highlighting
 filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
