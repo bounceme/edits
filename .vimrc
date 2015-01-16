@@ -31,6 +31,8 @@ runtime macros/matchit.vim
 " Use case insensitive search, except when using capital letters
 set ignorecase
 set smartcase
+set tabstop=4
+set shiftwidth=4
 
 " Allow backspacing over autoindent, line breaks and start of insert action
 set backspace=indent,eol,start
@@ -144,6 +146,7 @@ Plugin 'tpope/vim-vinegar'
 " Plugin 'fholgado/minibufexpl.vim'
 " Plugin 'Shougo/neocomplcache.vim'
 " Plugin 'Shougo/neocomplete.vim'
+" Plugin 'nemtsov/JavaScript-Indent'
 
 
 " " All of your Plugins must be added before the following line
@@ -220,6 +223,8 @@ let g:ctrlp_working_path_mode = 'c'
 
 " delimitMate
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
 
 " xml
 let g:xmledit_enable_html = 1
