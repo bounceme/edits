@@ -224,7 +224,7 @@ let g:ctrlp_working_path_mode = 'c'
 " delimitMate
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
-let delimitMate_expand_space = 1
+" let delimitMate_expand_space = 1
 
 " xml
 let g:xmledit_enable_html = 1
