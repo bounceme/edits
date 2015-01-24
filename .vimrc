@@ -5,7 +5,7 @@ filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
 set relativenumber
-" colorscheme xterm16      " colorscheme
+" colorscheme xterm16      " colorscheme(xterm16,peachpuff,elflord)
 set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
@@ -88,7 +88,8 @@ map Y y$
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
-" nnoremap <C-L> :nohl<CR><C-L>
+nnoremap <C-L> :nohl<CR><C-L>
+" hi MatchParen cterm=bold ctermbg=none ctermfg=none
 
 "Open In chrome
 nnoremap <F5> :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
@@ -112,14 +113,10 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'rstacruz/sparkup'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
-" Plugin 'scrooloose/nerdtree'
-" Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'tpope/vim-surround'
 Plugin 'bling/vim-airline'
-" Plugin 'takac/vim-spotifysearch'
 Plugin 'valloric/MatchTagAlways'
 Plugin 'kristijanhusak/vim-multiple-cursors'
-" Plugin 'terryma/vim-multiple-cursors'
 Plugin 'scrooloose/syntastic'
 Plugin 'bling/vim-bufferline'
 Plugin 'moll/vim-bbye'
@@ -139,7 +136,6 @@ Plugin 'vim-scripts/L9'
 Plugin 'ervandew/supertab'
 Plugin 'othree/vim-autocomplpop'
 " Plugin 'marijnh/tern_for_vim'
-" Plugin 'tpope/vim-commentary'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'tpope/vim-vinegar'
 " Plugin 'drmingdrmer/xptemplate'
@@ -147,6 +143,8 @@ Plugin 'tpope/vim-vinegar'
 " Plugin 'Shougo/neocomplcache.vim'
 " Plugin 'Shougo/neocomplete.vim'
 " Plugin 'nemtsov/JavaScript-Indent'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'othree/javascript-libraries-syntax.vim'
 
 
 " " All of your Plugins must be added before the following line
@@ -217,6 +215,11 @@ let g:xptemplate_nav_prev = '<C-p>'
 "acp
 let g:AutoComplPopDontSelectFirst = 1
 
+" MatchTagAlways
+" let g:mta_use_matchparen_group = 0
+" let g:mta_set_default_matchtag_color = 0
+" hi MatchTag cterm=bold ctermbg=none ctermfg=none
+
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
@@ -229,3 +232,6 @@ let delimitMate_expand_cr = 1
 " xml
 let g:xmledit_enable_html = 1
 let xml_no_comment_map=1
+
+" JavaScript syntax
+let g:used_javascript_libs = 'jquery'
