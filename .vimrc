@@ -91,8 +91,6 @@ map Y y$
 nnoremap <C-L> :nohl<CR><C-L>
 " hi MatchParen cterm=bold ctermbg=none ctermfg=none
 
-"Open In chrome
-nnoremap <F5> :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
 "------------------------------------------------------------
 "
 "set nocompatible              " be iMproved, required
@@ -123,6 +121,7 @@ Plugin 'moll/vim-bbye'
 Plugin 'terryma/vim-expand-region'
 Plugin 'Raimondi/delimitMate'
 Plugin 'sukima/xmledit'
+Plugin 'lfilho/cosco.vim'
 "Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
@@ -235,3 +234,7 @@ let xml_no_comment_map=1
 
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
+
+" cosco
+autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
+" autocmd FileType javascript,css,YOUR_LANG inoremap <silent> <Leader>; <c-o>:call cosco#commaOrSemiColon()<CR>
