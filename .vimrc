@@ -5,7 +5,7 @@ filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
 set relativenumber
-" colorscheme xterm16      " colorscheme(xterm16,peachpuff,elflord)
+" colorscheme xterm16,busierbee,candyman
 set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
