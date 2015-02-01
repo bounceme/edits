@@ -72,11 +72,6 @@ set mouse=a
 " "press <Enter> to continue"
 " set cmdheight=2
 
-" color bolds
-" if &t_Co == 8 && $TERM !~# '^linux'
-"   set t_Co=16
-" endif
-
 "------------------------------------------------------------
 " Mappings {{{1
 "
@@ -124,7 +119,6 @@ Plugin 'sukima/xmledit'
 Plugin 'lfilho/cosco.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
-" Plugin 'vim-scripts/xterm16.vim'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
 " Plugin 'othree/xml.vim'
