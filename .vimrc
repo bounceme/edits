@@ -213,7 +213,7 @@ let g:used_javascript_libs = 'jquery'
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
 " autocmd FileType javascript,css,YOUR_LANG inoremap <silent> <Leader>; <c-o>:call cosco#commaOrSemiColon()<CR>
 
-" lightline
+" lightline (from https://github.com/timss/vimconf/blob/master/.vimrc)
  let g:lightline = {
             \ 'colorscheme': 'jellybeans',
             \ 'active': {
