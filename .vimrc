@@ -83,7 +83,7 @@ map Y y$
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
-" nnoremap <C-L> :nohl<CR><C-L>
+nnoremap <C-L> :nohl<CR><C-L>
 " hi MatchParen cterm=bold ctermbg=none ctermfg=none
 
 "------------------------------------------------------------
@@ -219,8 +219,8 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
             \ 'active': {
             \     'left': [
             \         ['mode', 'paste'],
-            \         ['readonly'],
-            \         ['ctrlpmark', 'bufferline']
+            \         ['ctrlpmark', 'readonly'],
+            \         ['bufferline']
             \     ],
             \     'right': [
             \         ['lineinfo'],
