@@ -161,10 +161,10 @@ let g:session_autosave="yes"
 " Syntastic
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
-let g:syntastic_mode_map = {
-        \ 'mode': 'active',
-        \ 'active_filetypes':
-            \ ['css', 'js', 'html'] }
+" let g:syntastic_mode_map = {
+"         \ 'mode': 'active',
+"         \ 'active_filetypes':
+"             \ ['css', 'js', 'html'] }
 
 " sparkup
 " let g:sparkupExecuteMapping = '<tab>'
@@ -349,15 +349,13 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
             return lightline#statusline(0)
         endfunction
 
-function! s:syntastic()
+        function! s:syntastic()
             SyntasticCheck
             call lightline#update()
         endfunction
 
         augroup AutoSyntastic
             autocmd!
-            execute "autocmd FileType " .
-                        \join(g:syntastic_mode_map["active_filetypes"], ",") .
-                        \" autocmd BufWritePost <buffer> :call s:syntastic()"
+            autocmd BufWritePost *.py,*.js,*.css,*.html call s:syntastic()
         augroup END
     """ }}}
