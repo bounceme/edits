@@ -5,6 +5,8 @@ filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
 set relativenumber
+set tabstop=4
+set shiftwidth=4
 " colorscheme xterm16,busierbee/mustang,candyman
 set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
@@ -31,8 +33,6 @@ runtime macros/matchit.vim
 " Use case insensitive search, except when using capital letters
 set ignorecase
 set smartcase
-set tabstop=4
-set shiftwidth=4
 
 " Allow backspacing over autoindent, line breaks and start of insert action
 set backspace=indent,eol,start
@@ -107,7 +107,6 @@ Plugin 'rstacruz/sparkup'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'tpope/vim-surround'
-" Plugin 'bling/vim-airline'
 Plugin 'itchyny/lightline.vim'
 Plugin 'valloric/MatchTagAlways'
 Plugin 'kristijanhusak/vim-multiple-cursors'
@@ -163,16 +162,8 @@ let g:session_autosave="yes"
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 
-" Airline
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-" let g:airline_powerline_fonts = 1
-
 " sparkup
 " let g:sparkupExecuteMapping = '<tab>'
-
-" ycm
-let g:ycm_seed_identifiers_with_syntax = 1
 
 "supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
