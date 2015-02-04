@@ -214,12 +214,13 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
 " autocmd FileType javascript,css,YOUR_LANG inoremap <silent> <Leader>; <c-o>:call cosco#commaOrSemiColon()<CR>
 
 " lightline (from https://github.com/timss/vimconf/blob/master/.vimrc)
- let g:lightline = {
+    """ Lightline {{{
+        let g:lightline = {
             \ 'colorscheme': 'jellybeans',
             \ 'active': {
             \     'left': [
             \         ['mode', 'paste'],
-            \         ['ctrlpmark', 'readonly'],
+            \         ['ctrlpmark', 'readonly', 'fugitive'],
             \         ['bufferline']
             \     ],
             \     'right': [
@@ -233,6 +234,7 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
             \ },
             \ 'component_function': {
             \     'mode'         : 'MyMode',
+            \     'fugitive'     : 'MyFugitive',
             \     'readonly'     : 'MyReadonly',
             \     'ctrlpmark'    : 'CtrlPMark',
             \     'bufferline'   : 'MyBufferline',
@@ -244,7 +246,7 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
             \     'syntastic': 'SyntasticStatuslineFlag',
             \ },
             \ 'component_type': {
-            \     'syntastic': 'middle',
+            \     'syntastic': 'error',
             \ },
             \ 'subseparator': {
             \     'left': '|', 'right': '|'
@@ -269,6 +271,18 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
             return fname == '__Tagbar__' ? 'Tagbar' :
                     \ fname == 'ControlP' ? 'CtrlP' :
                     \ winwidth('.') > 60 ? lightline#mode() : ''
+        endfunction
+
+        function! MyFugitive()
+            try
+                if expand('%:t') !~? 'Tagbar' && exists('*fugitive#head')
+                    let mark = '± '
+                    let _ = fugitive#head()
+                    return strlen(_) ? mark._ : ''
+                endif
+            catch
+            endtry
+            return ''
         endfunction
 
         function! MyReadonly()
