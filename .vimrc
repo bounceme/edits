@@ -361,6 +361,6 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
 
         augroup AutoSyntastic
             autocmd!
-            autocmd BufWritePost *.c,*.cpp,*.perl,*py call s:syntastic()
+            autocmd BufWritePost *.c,*.cpp,*.perl,*py,*js,*css call s:syntastic()
         augroup END
     """ }}}
