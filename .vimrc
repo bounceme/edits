@@ -21,6 +21,7 @@ set lazyredraw " to avoid scrolling problems
 " Allow netrw to remove non-empty local directories
 let g:netrw_localrmdir='rm -rf'
 runtime macros/matchit.vim
+map Q <nop>
 " set ttymouse=xterm2
 "------------------------------------------------------------
 " Usability options {{{1
@@ -84,7 +85,10 @@ map Y y$
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
 nnoremap <C-L> :nohl<CR><C-L>
-" hi MatchParen cterm=bold ctermbg=none ctermfg=none
+
+" using tab for autocomplete
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-g>u\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<c-p>" : "\<c-g>u\<tab>"
 
 "------------------------------------------------------------
 "
@@ -122,18 +126,19 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
 " Plugin 'othree/xml.vim'
-Plugin 'vim-scripts/L9'
+" Plugin 'vim-scripts/L9'
+" Plugin 'othree/vim-autocomplpop'
 Plugin 'ervandew/supertab'
-Plugin 'othree/vim-autocomplpop'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+Plugin 'honza/vim-snippets'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'tomtom/tcomment_vim'
 " Plugin 'scrooloose/nerdcommenter'
 " Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-vinegar'
-" Plugin 'drmingdrmer/xptemplate'
-" Plugin 'fholgado/minibufexpl.vim'
-" Plugin 'nemtsov/JavaScript-Indent'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'othree/javascript-libraries-syntax.vim'
 
@@ -169,20 +174,23 @@ let g:syntastic_enable_signs=1
 " sparkup
 " let g:sparkupExecuteMapping = '<tab>'
 
-"supertab
-let g:SuperTabDefaultCompletionType = "<c-n>"
-let b:SuperTabDisabled = 1
-" let g:SuperTabClosePreviewOnPopupClose = 1
-" let g:SuperTabDefaultCompletionType = 'context'
+" snipmate
 
-" xptemplate
-let g:xptemplate_brace_complete = ''
-let g:xptemplate_nav_next = '<C-n>'
-let g:xptemplate_nav_prev = '<C-p>'
+" supertab
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 "acp
 let g:AutoComplPopDontSelectFirst = 1
-
+let g:acp_behaviorSnipmateLength = 1
+" fun! GetSnipsInCurrentScope() 
+"     let snips = {} 
+"     for scope in [bufnr('%')] + split(&ft, '\.') + ['_'] 
+"       call extend(snips, get(s:snippets, scope, {}), 'keep') 
+"       call extend(snips, get(s:multi_snips, scope, {}), 'keep') 
+"     endfor 
+"     return snips 
+"   endf 
+ 
 " MatchTagAlways
 " let g:mta_use_matchparen_group = 0
 " let g:mta_set_default_matchtag_color = 0
