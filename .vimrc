@@ -129,9 +129,10 @@ Plugin 'kien/ctrlp.vim'
 " Plugin 'vim-scripts/L9'
 " Plugin 'othree/vim-autocomplpop'
 Plugin 'ervandew/supertab'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+" Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'marijnh/tern_for_vim'
@@ -174,10 +175,19 @@ let g:syntastic_enable_signs=1
 " sparkup
 " let g:sparkupExecuteMapping = '<tab>'
 
-" snipmate
+" ultisnips
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " supertab
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+" let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+" let g:SuperTabDefaultCompletionType = 'context'
+" let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+    " let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+    " let g:SuperTabContextDiscoverDiscovery =
+    "     \ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
 "acp
 let g:AutoComplPopDontSelectFirst = 1
