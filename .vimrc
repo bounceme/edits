@@ -11,67 +11,27 @@ set shiftwidth=4
 set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
-" mapping of <C-L> below)
 set autochdir		"autodirectory
 set clipboard=unnamed "clipboard
 set ttimeoutlen=50 " delay in ms
 set ttyfast " u got a fast terminal
-" set ttyscroll=3
 set lazyredraw " to avoid scrolling problems
-" Allow netrw to remove non-empty local directories
-let g:netrw_localrmdir='rm -rf'
+set ignorecase
+set smartcase
+set mouse=a
+set t_vb=
+set visualbell
+set confirm
+set laststatus=2
+set ruler
+set nostartofline
+set autoindent
+set backspace=indent,eol,start
+let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
+
 runtime macros/matchit.vim
 map Q <nop>
 " set ttymouse=xterm2
-"------------------------------------------------------------
-" Usability options {{{1
-"
-" These are options that users frequently set in their .vimrc. Some of them
-" change Vim's behaviour in ways which deviate from the true Vi way, but
-" which are considered to add usability. Which, if any, of these options to
-" use is very much a personal preference, but they are harmless.
-
-" Use case insensitive search, except when using capital letters
-set ignorecase
-set smartcase
-
-" Allow backspacing over autoindent, line breaks and start of insert action
-set backspace=indent,eol,start
-
-" When opening a new line and no filetype-specific indenting is enabled, keep
-" the same indent as the line you're currently on. Useful for READMEs, etc.
-set autoindent
-
-" Stop certain movements from always going to the first character of a line.
-" While this behaviour deviates from that of Vi, it does what most users
-" coming from other editors would expect.
-set nostartofline
-
-" Display the cursor position on the last line of the screen or in the status
-" line of a window
-set ruler
-
-" Always display the status line, even if only one window is displayed
-set laststatus=2
-
-" Instead of failing a command because of unsaved changes, instead raise a
-" dialogue asking if you wish to save changed files.
-set confirm
-
-" Use visual bell instead of beeping when doing something wrong
-set visualbell
-
-" And reset the terminal code for the visual bell. If visualbell is set, and
-" this line is also included, vim will neither flash nor beep. If visualbell
-" is unset, this does nothing.
-set t_vb=
-
-" Enable use of the mouse for all modes
-set mouse=a
-
-" Set the command window height to 2 lines, to avoid many cases of having to
-" "press <Enter> to continue"
-" set cmdheight=2
 
 "------------------------------------------------------------
 " Mappings {{{1
@@ -125,7 +85,6 @@ Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
-" Plugin 'othree/xml.vim'
 " Plugin 'vim-scripts/L9'
 " Plugin 'othree/vim-autocomplpop'
 Plugin 'ervandew/supertab'
@@ -134,7 +93,6 @@ Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
 " Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-" Plugin 'Valloric/YouCompleteMe'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'tomtom/tcomment_vim'
 " Plugin 'scrooloose/nerdcommenter'
@@ -167,17 +125,9 @@ let g:session_autosave="yes"
 " Syntastic
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
-" let g:syntastic_mode_map = {
-"         \ 'mode': 'active',
-"         \ 'active_filetypes':
-"             \ ['css', 'js', 'html'] }
 
 " sparkup
 " let g:sparkupExecuteMapping = '<tab>'
-
-" ultisnips
-" let g:UltiSnipsJumpForwardTrigger="<tab>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " supertab
 let g:SuperTabDefaultCompletionType = "context"
@@ -191,20 +141,7 @@ let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
 "acp
 let g:AutoComplPopDontSelectFirst = 1
 let g:acp_behaviorSnipmateLength = 1
-" fun! GetSnipsInCurrentScope() 
-"     let snips = {} 
-"     for scope in [bufnr('%')] + split(&ft, '\.') + ['_'] 
-"       call extend(snips, get(s:snippets, scope, {}), 'keep') 
-"       call extend(snips, get(s:multi_snips, scope, {}), 'keep') 
-"     endfor 
-"     return snips 
-"   endf 
  
-" MatchTagAlways
-" let g:mta_use_matchparen_group = 0
-" let g:mta_set_default_matchtag_color = 0
-" hi MatchTag cterm=bold ctermbg=none ctermfg=none
-
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
