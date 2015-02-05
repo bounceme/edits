@@ -20,6 +20,7 @@ set ignorecase
 set smartcase
 set mouse=a
 set t_vb=
+set completeopt-=preview
 set visualbell
 set confirm
 set laststatus=2
