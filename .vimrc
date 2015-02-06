@@ -54,13 +54,11 @@ nnoremap <C-L> :nohl<CR><C-L>
 "
 "set nocompatible              " be iMproved, required
 filetype off                  " required
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
@@ -115,13 +113,13 @@ let g:syntastic_enable_signs=1
 " let g:sparkupExecuteMapping = '<tab>'
 
 " supertab
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
-"  let g:SuperTabDefaultCompletionType = 'context'
-"   autocmd FileType *
-"     \ if &omnifunc != '' |
-"     \   call SuperTabChain(&omnifunc, "<c-p>") |
-"     \ endif
+let g:SuperTabCrMapping = 1
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = '<c-x><c-u>'
+autocmd FileType *
+    \ if &omnifunc != '' |
+    \     call SuperTabChain(&omnifunc, '<c-p>') |
+    \ endif
 
 "acp
 let g:AutoComplPopDontSelectFirst = 1
