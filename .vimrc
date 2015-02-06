@@ -7,7 +7,6 @@ set number              " line numbers
 set relativenumber
 set tabstop=4
 set shiftwidth=4
-" colorscheme xterm16,busierbee/mustang,candyman
 set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
@@ -29,10 +28,10 @@ set nostartofline
 set autoindent
 set backspace=indent,eol,start
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
-
-runtime macros/matchit.vim
+runtime macros/matchit.vim 		"matching tags
 map Q <nop>
 " set ttymouse=xterm2
+" colorscheme xterm16,busierbee/mustang,candyman
 
 "------------------------------------------------------------
 " Mappings {{{1
@@ -65,9 +64,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
 Plugin 'rstacruz/sparkup'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
@@ -103,20 +99,8 @@ Plugin 'jelera/vim-javascript-syntax'
 Plugin 'othree/javascript-libraries-syntax.vim'
 
 
-" " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 " Vim Session
 let g:session_autoload="yes"
