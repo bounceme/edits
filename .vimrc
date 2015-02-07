@@ -80,8 +80,6 @@ Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
-" Plugin 'vim-scripts/L9'
-" Plugin 'othree/vim-autocomplpop'
 Plugin 'ervandew/supertab'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
@@ -99,6 +97,7 @@ Plugin 'othree/javascript-libraries-syntax.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 
 " Vim Session
 let g:session_autoload="yes"
@@ -121,10 +120,6 @@ autocmd FileType *
     \     call SuperTabChain(&omnifunc, '<c-p>') |
     \ endif
 
-"acp
-let g:AutoComplPopDontSelectFirst = 1
-let g:acp_behaviorSnipmateLength = 1
- 
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
