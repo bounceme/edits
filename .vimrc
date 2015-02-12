@@ -72,7 +72,6 @@ Plugin 'kristijanhusak/vim-multiple-cursors'
 Plugin 'scrooloose/syntastic'
 Plugin 'bling/vim-bufferline'
 Plugin 'moll/vim-bbye'
-Plugin 'terryma/vim-expand-region'
 Plugin 'Raimondi/delimitMate'
 Plugin 'sukima/xmledit'
 Plugin 'lfilho/cosco.vim'
@@ -112,7 +111,6 @@ let g:syntastic_enable_signs=1
 " let g:sparkupExecuteMapping = '<tab>'
 
 " supertab
-let g:SuperTabCrMapping = 1
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabContextDefaultCompletionType = '<c-x><c-u>'
 autocmd FileType *
