@@ -80,15 +80,13 @@ Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'ervandew/supertab'
-" Plugin 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
+" Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'tomtom/tcomment_vim'
-" Plugin 'scrooloose/nerdcommenter'
-" Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-vinegar'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'othree/javascript-libraries-syntax.vim'
@@ -110,9 +108,6 @@ let g:syntastic_enable_signs=1
 " emmet
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,php EmmetInstall
-
-" snipmate
-:imap <C-e> <Plug>snipMateTrigger 
 
 " supertab
 let g:SuperTabDefaultCompletionType = 'context'
