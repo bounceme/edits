@@ -32,7 +32,6 @@ runtime macros/matchit.vim 		"matching tags
 map Q <nop>
 " set ttymouse=xterm2
 " colorscheme xterm16,busierbee/mustang,candyman
-
 "------------------------------------------------------------
 " Mappings {{{1
 "
@@ -75,15 +74,17 @@ Plugin 'moll/vim-bbye'
 Plugin 'Raimondi/delimitMate'
 Plugin 'sukima/xmledit'
 Plugin 'lfilho/cosco.vim'
+Plugin 'tommcdo/vim-exchange'
+Plugin 'junegunn/vim-easy-align'
 Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
 Plugin 'ervandew/supertab'
+" Plugin 'SirVer/ultisnips'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
-" Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'tomtom/tcomment_vim'
@@ -107,8 +108,8 @@ let g:session_autosave="yes"
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 
-" sparkup
-" let g:sparkupExecuteMapping = '<tab>'
+" snipmate
+:imap <C-e> <Plug>snipMateTrigger 
 
 " supertab
 let g:SuperTabDefaultCompletionType = 'context'
@@ -137,6 +138,10 @@ let g:used_javascript_libs = 'jquery'
 " cosco
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
 " autocmd FileType javascript,css,YOUR_LANG inoremap <silent> <Leader>; <c-o>:call cosco#commaOrSemiColon()<CR>
+
+" easyalign
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 " lightline (from https://github.com/timss/vimconf/blob/master/.vimrc)
     """ Lightline {{{
