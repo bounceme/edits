@@ -61,7 +61,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'rstacruz/sparkup'
+Plugin 'mattn/emmet-vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'tpope/vim-surround'
@@ -78,7 +78,6 @@ Plugin 'tommcdo/vim-exchange'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'tpope/vim-repeat'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'vim-scripts/loremipsum'
 Plugin 'kien/ctrlp.vim'
 Plugin 'ervandew/supertab'
 " Plugin 'SirVer/ultisnips'
@@ -107,6 +106,10 @@ let g:session_autosave="yes"
 " Syntastic
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
+
+" emmet
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,php EmmetInstall
 
 " snipmate
 :imap <C-e> <Plug>snipMateTrigger 
