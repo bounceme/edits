@@ -5,6 +5,7 @@ filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
 set relativenumber
+set noshowmode
 set tabstop=4
 set shiftwidth=4
 set backspace=2         " backspace in insert mode works like normal editor
@@ -81,20 +82,28 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'ervandew/supertab'
 Plugin 'SirVer/ultisnips'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-" Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'tpope/vim-vinegar'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'maxbrunsfeld/vim-yankstack'
+Plugin 'justinmk/vim-sneak'
+Plugin 'AndrewRadev/splitjoin.vim'
 
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+
+" sneak
+nmap f <Plug>Sneak_s
+nmap F <Plug>Sneak_S
+xmap f <Plug>Sneak_s
+xmap F <Plug>Sneak_S
+omap f <Plug>Sneak_s
+omap F <Plug>Sneak_S
 
 " Vim Session
 let g:session_autoload="yes"
@@ -125,6 +134,7 @@ let g:ctrlp_working_path_mode = 'c'
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
 " let delimitMate_expand_space = 1
+" let delimitMate_autoclose = 0
 
 " xml
 let g:xmledit_enable_html = 1
@@ -140,6 +150,10 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
 " easyalign
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
+" yankstack
+let g:yankstack_map_keys = 0
+nmap <leader>p <Plug>yankstack_substitute_older_paste
 
 " lightline (from https://github.com/timss/vimconf/blob/master/.vimrc)
     """ Lightline {{{
