@@ -31,6 +31,10 @@ set backspace=indent,eol,start
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
+
+if has('win32') || has('win64')
+	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
 " set ttymouse=xterm2
 " colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
@@ -52,49 +56,39 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 "------------------------------------------------------------
 "
-"set nocompatible              " be iMproved, required
-filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/bundle')
 
-Plugin 'mattn/emmet-vim'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-session'
-Plugin 'tpope/vim-surround'
-Plugin 'itchyny/lightline.vim'
-Plugin 'valloric/MatchTagAlways'
-Plugin 'kristijanhusak/vim-multiple-cursors'
-Plugin 'scrooloose/syntastic'
-Plugin 'bling/vim-bufferline'
-Plugin 'moll/vim-bbye'
-Plugin 'Raimondi/delimitMate'
-Plugin 'sukima/xmledit'
-Plugin 'lfilho/cosco.vim'
-Plugin 'tommcdo/vim-exchange'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'tpope/vim-repeat'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'kien/ctrlp.vim'
-Plugin 'ervandew/supertab'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'marijnh/tern_for_vim'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-vinegar'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'othree/javascript-libraries-syntax.vim'
-Plugin 'maxbrunsfeld/vim-yankstack'
-Plugin 'justinmk/vim-sneak'
-Plugin 'AndrewRadev/splitjoin.vim'
+Plug 'mattn/emmet-vim'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
+Plug 'tpope/vim-surround'
+Plug 'itchyny/lightline.vim'
+Plug 'valloric/MatchTagAlways'
+Plug 'kristijanhusak/vim-multiple-cursors'
+Plug 'scrooloose/syntastic'
+Plug 'bling/vim-bufferline'
+Plug 'moll/vim-bbye'
+Plug 'Raimondi/delimitMate'
+Plug 'sukima/xmledit'
+Plug 'lfilho/cosco.vim'
+Plug 'tommcdo/vim-exchange'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-repeat'
+Plug 'flazz/vim-colorschemes'
+Plug 'kien/ctrlp.vim'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-vinegar'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'justinmk/vim-sneak'
+Plug 'AndrewRadev/splitjoin.vim'
 
-
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
 
 
 " sneak
