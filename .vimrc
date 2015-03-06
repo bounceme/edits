@@ -75,7 +75,7 @@ Plug 'tommcdo/vim-exchange'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-repeat'
 Plug 'flazz/vim-colorschemes'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -87,9 +87,13 @@ Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'nefo-mi/nyan-modoki.vim'
 
 call plug#end()
 
+" nyan
+let g:nyan_modoki_select_cat_face_number = 2
+let g:nayn_modoki_animation_enabled= 1
 
 " sneak
 nmap f <Plug>Sneak_s
@@ -151,11 +155,10 @@ nmap <leader>p <Plug>yankstack_substitute_older_paste
     """ Lightline {{{
         let g:lightline = {
             \ 'colorscheme': 'jellybeans',
-            \ 'active': {
+			\ 'active': {
             \     'left': [
             \         ['mode', 'paste'],
-            \         ['ctrlpmark', 'readonly', 'fugitive'],
-            \         ['bufferline']
+            \         ['ctrlpmark', 'readonly' , 'filename', 'modified', 'fugitive'],['nyan']
             \     ],
             \     'right': [
             \         ['lineinfo'],
@@ -164,7 +167,7 @@ nmap <leader>p <Plug>yankstack_substitute_older_paste
             \     ]
             \ },
             \ 'component': {
-            \     'paste': '%{&paste?"!":""}'
+            \     'paste': '%{&paste?"!":""}', 'nyan':'%{g:NyanModoki()}'
             \ },
             \ 'component_function': {
             \     'mode'         : 'MyMode',
@@ -230,25 +233,6 @@ nmap <leader>p <Plug>yankstack_substitute_older_paste
                     \ , g:lightline.ctrlp_next], 0)
             else
                 return ''
-            endif
-        endfunction
-
-        function! MyBufferline()
-            call bufferline#refresh_status()
-            let b = g:bufferline_status_info.before
-            let c = g:bufferline_status_info.current
-            let a = g:bufferline_status_info.after
-            let alen = strlen(a)
-            let blen = strlen(b)
-            let clen = strlen(c)
-            let w = winwidth(0) * 4 / 11
-            if w < alen+blen+clen
-                let whalf = (w - strlen(c)) / 2
-                let aa = alen > whalf && blen > whalf ? a[:whalf] : alen + blen < w - clen || alen < whalf ? a : a[:(w - clen - blen)]
-                let bb = alen > whalf && blen > whalf ? b[-(whalf):] : alen + blen < w - clen || blen < whalf ? b : b[-(w - clen - alen):]
-                return (strlen(bb) < strlen(b) ? '...' : '') . bb . c . aa . (strlen(aa) < strlen(a) ? '...' : '')
-            else
-                return b . c . a
             endif
         endfunction
 
