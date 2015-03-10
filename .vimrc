@@ -28,6 +28,7 @@ set ruler
 set nostartofline
 set autoindent
 set backspace=indent,eol,start
+set gcr=a:blinkon0
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
@@ -88,6 +89,12 @@ Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nefo-mi/nyan-modoki.vim'
+Plug 'djjcast/mirodark'
+Plug 'oplatek/Conque-Shell'
+Plug 'tarruda/vim-conque-repl'
+Plug 'chrisbra/NrrwRgn'
+Plug 'mtth/scratch.vim'
+Plug 'mtglsk/mushroom'
 
 call plug#end()
 
