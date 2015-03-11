@@ -5,7 +5,7 @@ filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
 set relativenumber
-set noshowmode
+set showmode
 set tabstop=4
 set shiftwidth=4
 set backspace=2         " backspace in insert mode works like normal editor
@@ -29,13 +29,30 @@ set nostartofline
 set autoindent
 set backspace=indent,eol,start
 set gcr=a:blinkon0
+set synmaxcol=1200
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
+autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
 
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
+
+
+set statusline=%F
+" set statusline+=[%{&ff}]
+set statusline+=%h      "help file flag
+set statusline+=%m      "modified flag
+set statusline+=%r      "read only flag
+set statusline+=%{g:NyanModoki()}
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+set statusline+=%=      "left/right separator
+set statusline+=%l/%L   "cursor line/total lines
+set statusline+=\ %P    "percent through file
+
 " set ttymouse=xterm2
 " colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
@@ -63,7 +80,6 @@ Plug 'mattn/emmet-vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'tpope/vim-surround'
-Plug 'itchyny/lightline.vim'
 Plug 'valloric/MatchTagAlways'
 Plug 'kristijanhusak/vim-multiple-cursors'
 Plug 'scrooloose/syntastic'
@@ -77,6 +93,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-repeat'
 Plug 'flazz/vim-colorschemes'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tacahiroy/ctrlp-funky'
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -92,9 +109,10 @@ Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'djjcast/mirodark'
 Plug 'oplatek/Conque-Shell'
 Plug 'tarruda/vim-conque-repl'
-Plug 'chrisbra/NrrwRgn'
 Plug 'mtth/scratch.vim'
 Plug 'mtglsk/mushroom'
+Plug 'jonathanfilip/vim-lucius'
+
 
 call plug#end()
 
@@ -134,6 +152,7 @@ autocmd FileType *
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_extensions = ['funky']
 
 " delimitMate
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
@@ -157,135 +176,3 @@ nmap ga <Plug>(EasyAlign)
 " yankstack
 let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
-
-" lightline (from https://github.com/timss/vimconf/blob/master/.vimrc)
-    """ Lightline {{{
-        let g:lightline = {
-            \ 'colorscheme': 'jellybeans',
-			\ 'active': {
-            \     'left': [
-            \         ['mode', 'paste'],
-            \         ['ctrlpmark', 'readonly' , 'filename', 'modified', 'fugitive'],['nyan']
-            \     ],
-            \     'right': [
-            \         ['lineinfo'],
-            \         ['percent'],
-            \         ['fileformat', 'fileencoding', 'filetype', 'syntastic']
-            \     ]
-            \ },
-            \ 'component': {
-            \     'paste': '%{&paste?"!":""}', 'nyan':'%{g:NyanModoki()}'
-            \ },
-            \ 'component_function': {
-            \     'mode'         : 'MyMode',
-            \     'fugitive'     : 'MyFugitive',
-            \     'readonly'     : 'MyReadonly',
-            \     'ctrlpmark'    : 'CtrlPMark',
-            \     'bufferline'   : 'MyBufferline',
-            \     'fileformat'   : 'MyFileformat',
-            \     'fileencoding' : 'MyFileencoding',
-            \     'filetype'     : 'MyFiletype'
-            \ },
-            \ 'component_expand': {
-            \     'syntastic': 'SyntasticStatuslineFlag',
-            \ },
-            \ 'component_type': {
-            \     'syntastic': 'error',
-            \ },
-            \ 'subseparator': {
-            \     'left': '|', 'right': '|'
-            \ }
-            \ }
-
-        " let g:lightline.mode_map = {
-        "     \ 'n'      : ' N ',
-        "     \ 'i'      : ' I ',
-        "     \ 'R'      : ' R ',
-        "     \ 'v'      : ' V ',
-        "     \ 'V'      : 'V-L',
-        "     \ 'c'      : ' C ',
-        "     \ "\<C-v>" : 'V-B',
-        "     \ 's'      : ' S ',
-        "     \ 'S'      : 'S-L',
-        "     \ "\<C-s>" : 'S-B',
-        "     \ '?'      : '      ' }
-
-        function! MyMode()
-            let fname = expand('%:t')
-            return fname == '__Tagbar__' ? 'Tagbar' :
-                    \ fname == 'ControlP' ? 'CtrlP' :
-                    \ winwidth('.') > 60 ? lightline#mode() : ''
-        endfunction
-
-        function! MyFugitive()
-            try
-                if expand('%:t') !~? 'Tagbar' && exists('*fugitive#head')
-                    let mark = '± '
-                    let _ = fugitive#head()
-                    return strlen(_) ? mark._ : ''
-                endif
-            catch
-            endtry
-            return ''
-        endfunction
-
-        function! MyReadonly()
-            return &ft !~? 'help' && &readonly ? '≠' : '' " or ⭤
-        endfunction
-
-        function! CtrlPMark()
-            if expand('%:t') =~ 'ControlP'
-                call lightline#link('iR'[g:lightline.ctrlp_regex])
-                return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-                    \ , g:lightline.ctrlp_next], 0)
-            else
-                return ''
-            endif
-        endfunction
-
-        function! MyFileformat()
-            return winwidth('.') > 90 ? &fileformat : ''
-        endfunction
-
-        function! MyFileencoding()
-            return winwidth('.') > 80 ? (strlen(&fenc) ? &fenc : &enc) : ''
-        endfunction
-
-        function! MyFiletype()
-            return winwidth('.') > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-        endfunction
-
-        let g:ctrlp_status_func = {
-            \ 'main': 'CtrlPStatusFunc_1',
-            \ 'prog': 'CtrlPStatusFunc_2',
-            \ }
-
-        function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-            let g:lightline.ctrlp_regex = a:regex
-            let g:lightline.ctrlp_prev = a:prev
-            let g:lightline.ctrlp_item = a:item
-            let g:lightline.ctrlp_next = a:next
-            return lightline#statusline(0)
-        endfunction
-
-        function! CtrlPStatusFunc_2(str)
-            return lightline#statusline(0)
-        endfunction
-
-        let g:tagbar_status_func = 'TagbarStatusFunc'
-
-        function! TagbarStatusFunc(current, sort, fname, ...) abort
-            let g:lightline.fname = a:fname
-            return lightline#statusline(0)
-        endfunction
-
-        function! s:syntastic()
-            SyntasticCheck
-            call lightline#update()
-        endfunction
-
-        augroup AutoSyntastic
-            autocmd!
-            autocmd BufWritePost *.py,*.js,*.css,*.html call s:syntastic()
-        augroup END
-    """ }}}
