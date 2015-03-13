@@ -41,7 +41,7 @@ endif
 
 
 set statusline=%F
-" set statusline+=[%{&ff}]
+set statusline+=[%{&ff}]
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
@@ -56,22 +56,6 @@ set statusline+=\ %P    "percent through file
 " set ttymouse=xterm2
 " colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
-" Mappings {{{1
-"
-" Useful mappings
-
-" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
-" which is the default
-map Y y$
-
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" next search
-nnoremap <C-L> :nohl<CR><C-L>
-
-" using tab for autocomplete
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-g>u\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<c-p>" : "\<c-g>u\<tab>"
-
 "------------------------------------------------------------
 "
 call plug#begin('~/.vim/bundle')
@@ -109,12 +93,32 @@ Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'djjcast/mirodark'
 Plug 'oplatek/Conque-Shell'
 Plug 'tarruda/vim-conque-repl'
+Plug 'zweifisch/pipe2eval'
 Plug 'mtth/scratch.vim'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
-
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
 
 call plug#end()
+
+
+" Useful mappings
+
+" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
+" which is the default
+call yankstack#setup()
+map Y y$
+" Map <C-L> (redraw screen) to also turn off search highlighting until the
+" next search
+nnoremap <C-L> :nohl<CR><C-L>
+" prevent yank from moving cursor
+xnoremap <silent> y ygv<Esc>
+nnoremap <silent>]x m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
+nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
 
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
