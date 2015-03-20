@@ -29,19 +29,21 @@ set nostartofline
 set autoindent
 set backspace=indent,eol,start
 set gcr=a:blinkon0
-set synmaxcol=1200
+set synmaxcol=80
+set ffs=unix,dos
+set autoread
+set background=dark
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
-
+let g:netrw_liststyle=1
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
-
 set statusline=%F
-set statusline+=[%{&ff}]
+set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
@@ -53,7 +55,6 @@ set statusline+=%=      "left/right separator
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
-" set ttymouse=xterm2
 " colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
 "------------------------------------------------------------
@@ -84,6 +85,7 @@ Plug 'honza/vim-snippets'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-vinegar'
+Plug 'vim-scripts/renamer.vim', { 'on':  'Renamer' }
 Plug 'jelera/vim-javascript-syntax'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
@@ -91,20 +93,21 @@ Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'djjcast/mirodark'
-Plug 'oplatek/Conque-Shell'
-Plug 'tarruda/vim-conque-repl'
-Plug 'zweifisch/pipe2eval'
+Plug 'bounceme/pipe2eval'
+" Plug 'zweifisch/pipe2eval'
 Plug 'mtth/scratch.vim'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
+Plug 'romainl/flattened'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript'
 
 call plug#end()
 
 
 " Useful mappings
-
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
 call yankstack#setup()
@@ -118,7 +121,6 @@ nnoremap <silent>]x m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
-
 
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
@@ -139,7 +141,7 @@ let g:session_autosave="yes"
 
 " Syntastic
 let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
+let g:syntastic_enable_signs=0
 
 " emmet
 let g:user_emmet_install_global = 0
@@ -171,7 +173,6 @@ let g:used_javascript_libs = 'jquery'
 
 " cosco
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
-" autocmd FileType javascript,css,YOUR_LANG inoremap <silent> <Leader>; <c-o>:call cosco#commaOrSemiColon()<CR>
 
 " easyalign
 vmap <Enter> <Plug>(EasyAlign)
