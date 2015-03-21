@@ -1,0 +1,140 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sat Mar 21 12:34:00 2015
+;; Desktop file format version 206
+;; Emacs version 24.4.1
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (21773 51112 556121 0) (desktop . "206") "mac@macs-mbp.attlocal.net" nil nil ((((font-backend mac-ct ns) (fontsize . 15) (font . "-*-Anonymous Pro-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1") (border-width . 0) (internal-border-width . 2) (vertical-scroll-bars) (foreground-color . "#839496") (background-color . "#002b36") (line-spacing) (left-fringe . 11) (right-fringe . 13) (menu-bar-lines . 1) (tool-bar-lines . 1) (title) (icon-type) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 0) (alpha) (fullscreen) (horizontal-scroll-bars . t) (display-type . color) (background-mode . dark) (cursor-color . "#839496") (environment) (mouse-color . "#839496") (frameset--id . "BCAC-BA0A-7F3B-DD00") (frameset--mini t . t) (modeline . t) (minibuffer . t) (unsplittable) (right-divider-width . 0) (bottom-divider-width . 0) (icon-name) (display . "macs-mbp.attlocal.net") (explicit-name) (tool-bar-position . top) (visibility . t) (height . 45) (width . 115) (left . 157) (top . 23)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 5) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 60) (min-pixel-width . 80) (min-pixel-height-ignore . 45) (min-pixel-width-ignore . 40) (min-pixel-height-safe . 15) (min-pixel-width-safe . 16)) leaf (pixel-width . 944) (pixel-height . 660) (total-width . 118) (total-height . 44) (normal-height . 1.0) (normal-width . 1.0) (buffer "firstattempt.html" (selected . t) (hscroll . 0) (fringes 11 13 nil) (margins 3) (scroll-bars 0 0 t nil) (vscroll . 0) (dedicated) (point . 61) (start . 1))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring '("i``" "intro" "\\<\n\\>"))
+(setq register-alist '((48 . "// provided code to test above constructor and method\n")))
+(setq file-name-history '("~/Downloads/intro/" "~/Documents/" "~/Downloads/intro/" "/Users/mac/Downloads/intro/academia.js" "~/Documents/"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/Users/mac/Downloads/intro/firstattempt.html"
+  "firstattempt.html"
+  'html-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode emmet-mode linum-mode flycheck-mode skewer-html-mode)
+  61
+  '(101 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . utf-8-unix)))
+
+(desktop-create-buffer 206
+  "/Users/mac/Documents/webdesign/client2/winery.css"
+  "winery.css"
+  'css-mode
+  '(auto-complete-mode yas-minor-mode skewer-mode undo-tree-mode evil-snipe-mode linum-mode flycheck-mode skewer-css-mode)
+  3321
+  '(3419 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/Users/mac/Documents/webdesign/homework.html"
+  "homework.html"
+  'html-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode emmet-mode linum-mode flycheck-mode skewer-html-mode)
+  206
+  '(400 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . iso-latin-1-unix)))
+
+(desktop-create-buffer 206
+  nil
+  "client2"
+  'dired-mode
+  '(yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  825
+  '(nil nil)
+  t
+  '("/Users/mac/Documents/webdesign/client2/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "mac"
+  'dired-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  1709
+  '(nil nil)
+  t
+  '("/Users/mac/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "webdesign"
+  'dired-mode
+  '(yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  401
+  '(nil nil)
+  t
+  '("/Users/mac/Documents/webdesign/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "intro"
+  'dired-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  442
+  '(nil nil)
+  t
+  '("/Users/mac/Downloads/intro/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "Downloads"
+  'dired-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  9161
+  '(9110 nil)
+  t
+  '("/Users/mac/Downloads/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "Documents"
+  'dired-mode
+  '(yas-minor-mode undo-tree-mode evil-snipe-mode linum-mode)
+  1337
+  '(nil nil)
+  t
+  '("/Users/mac/Documents/")
+  nil)
+
+(desktop-create-buffer 206
+  "/Users/mac/Downloads/intro/academia.js"
+  "academia.js"
+  'js2-mode
+  '(auto-complete-mode yas-minor-mode skewer-mode undo-tree-mode evil-snipe-mode linum-mode flycheck-mode)
+  249
+  '(249 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/Users/mac/Downloads/intro/a.html"
+  "a.html"
+  'html-mode
+  '(auto-complete-mode yas-minor-mode undo-tree-mode evil-snipe-mode emmet-mode linum-mode flycheck-mode skewer-html-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  nil)
+
