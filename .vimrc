@@ -29,7 +29,7 @@ set nostartofline
 set autoindent
 set backspace=indent,eol,start
 set gcr=a:blinkon0
-set synmaxcol=80
+set synmaxcol=1200
 set ffs=unix,dos
 set autoread
 set background=dark
@@ -71,7 +71,6 @@ Plug 'scrooloose/syntastic'
 Plug 'bling/vim-bufferline'
 Plug 'moll/vim-bbye'
 Plug 'Raimondi/delimitMate'
-Plug 'sukima/xmledit'
 Plug 'lfilho/cosco.vim'
 Plug 'tommcdo/vim-exchange'
 Plug 'junegunn/vim-easy-align'
@@ -103,9 +102,9 @@ Plug 'kana/vim-textobj-entire'
 Plug 'romainl/flattened'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
+Plug 'ap/vim-css-color' 
 
 call plug#end()
-
 
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
@@ -127,12 +126,12 @@ let g:nyan_modoki_select_cat_face_number = 2
 let g:nayn_modoki_animation_enabled= 1
 
 " sneak
-nmap f <Plug>Sneak_s
-nmap F <Plug>Sneak_S
-xmap f <Plug>Sneak_s
-xmap F <Plug>Sneak_S
-omap f <Plug>Sneak_s
-omap F <Plug>Sneak_S
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
 
 " Vim Session
 let g:session_autoload="yes"
@@ -163,6 +162,7 @@ let g:ctrlp_extensions = ['funky']
 " delimitMate
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
+au FileType javascript let b:delimitMate_autoclose = 0
 
 " xml
 let g:xmledit_enable_html = 1
