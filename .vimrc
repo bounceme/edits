@@ -20,7 +20,9 @@ set ignorecase
 set smartcase
 set mouse=a
 set t_vb=
-set completeopt-=preview
+" set completeopt-=preview
+set splitright
+set splitbelow
 set visualbell
 set confirm
 set laststatus=2
@@ -55,6 +57,12 @@ set statusline+=%=      "left/right separator
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
+" fun! PsWrapper(text)
+"      let view=winsaveview()
+"      exe 'ps' a:text
+"      call winrestview(view)
+" endfun
+
 " colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
 "------------------------------------------------------------
@@ -86,6 +94,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-scripts/renamer.vim', { 'on':  'Renamer' }
 Plug 'jelera/vim-javascript-syntax'
+" Plug 'othree/yajs.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
@@ -94,7 +103,6 @@ Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'djjcast/mirodark'
 Plug 'bounceme/pipe2eval'
 " Plug 'zweifisch/pipe2eval'
-Plug 'mtth/scratch.vim'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'kana/vim-textobj-user'
@@ -103,6 +111,9 @@ Plug 'romainl/flattened'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'ap/vim-css-color' 
+Plug 'notpratheek/vim-luna'
+Plug 'othree/jspc.vim'
+Plug 'pangloss/vim-javascript'
 
 call plug#end()
 
@@ -120,23 +131,34 @@ nnoremap <silent>]x m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+" common mistakes
+cnoreabbrev E! e!
+cnoreabbrev W w
+cnoreabbrev Q q
 
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
 let g:nayn_modoki_animation_enabled= 1
 
 " sneak
+"replace 'f' with 1-char Sneak
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 xmap f <Plug>Sneak_f
 xmap F <Plug>Sneak_F
 omap f <Plug>Sneak_f
 omap F <Plug>Sneak_F
+"replace 't' with 1-char Sneak
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
 
 " Vim Session
 let g:session_autoload="yes"
 let g:session_autosave="yes"
-" let g:session_default_overwrite=1
 
 " Syntastic
 let g:syntastic_check_on_open=1
@@ -153,6 +175,7 @@ autocmd FileType *
     \ if &omnifunc != '' |
     \     call SuperTabChain(&omnifunc, '<c-p>') |
     \ endif
+" let g:SuperTabClosePreviewOnPopupClose=1
 
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
@@ -181,3 +204,9 @@ nmap ga <Plug>(EasyAlign)
 " yankstack
 let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
+
+" scratch
+nmap <leader>gs <plug>(scratch-insert-reuse)
+nmap <leader>gS <plug>(scratch-insert-clear)
+xmap <leader>gs <plug>(scratch-selection-reuse)
+xmap <leader>gS <plug>(scratch-selection-clear)

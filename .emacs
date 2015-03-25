@@ -16,6 +16,7 @@
 (require-package 'auto-complete)
 (require-package 'yasnippet)
 (require-package 'js2-mode)
+(require-package 'ac-js2)
 (require-package 'expand-region)
 (require-package 'evil)
 (require-package 'evil-leader)
@@ -86,6 +87,8 @@
 
  (add-hook 'html-mode-hook 'ac-html-enable)
 (add-hook 'css-mode-hook 'rainbow-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)		
+; (setq ac-js2-evaluate-calls t)
 
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
