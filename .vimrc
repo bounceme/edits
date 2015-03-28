@@ -94,7 +94,6 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-scripts/renamer.vim', { 'on':  'Renamer' }
 Plug 'jelera/vim-javascript-syntax'
-" Plug 'othree/yajs.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
@@ -114,8 +113,11 @@ Plug 'ap/vim-css-color'
 Plug 'notpratheek/vim-luna'
 Plug 'othree/jspc.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'junegunn/vim-pseudocl'
+Plug 'junegunn/vim-oblique'
 
 call plug#end()
+
 
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
@@ -127,10 +129,16 @@ map Y y$
 nnoremap <C-L> :nohl<CR><C-L>
 " prevent yank from moving cursor
 xnoremap <silent> y ygv<Esc>
+" Adding and deleting empty lines
 nnoremap <silent>]x m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+" Bubbling
+nnoremap <silent> [e   :move-2<CR>==
+nnoremap <silent> ]e :move+<CR>==
+xnoremap <silent> [e   :move-2<CR>gv=gv
+xnoremap <silent> ]e :move'>+<CR>gv=gv
 " common mistakes
 cnoreabbrev E! e!
 cnoreabbrev W w
@@ -204,9 +212,3 @@ nmap ga <Plug>(EasyAlign)
 " yankstack
 let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
-
-" scratch
-nmap <leader>gs <plug>(scratch-insert-reuse)
-nmap <leader>gS <plug>(scratch-insert-clear)
-xmap <leader>gs <plug>(scratch-selection-reuse)
-xmap <leader>gS <plug>(scratch-selection-clear)
