@@ -48,6 +48,7 @@ set statusline=%F
 set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
+set statusline+=%{fugitive#statusline()}      "modified flag
 set statusline+=%r      "read only flag
 set statusline+=%{g:NyanModoki()}
 set statusline+=%#warningmsg#
@@ -115,6 +116,7 @@ Plug 'othree/jspc.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
