@@ -202,10 +202,6 @@ au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
 au FileType javascript let b:delimitMate_autoclose = 0
 
-" xml
-let g:xmledit_enable_html = 1
-let xml_no_comment_map=1
-
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
 
