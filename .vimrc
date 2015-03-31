@@ -20,7 +20,7 @@ set ignorecase
 set smartcase
 set mouse=a
 set t_vb=
-" set completeopt-=preview
+set completeopt-=preview
 set splitright
 set splitbelow
 set visualbell
@@ -39,7 +39,6 @@ let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local director
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
 autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
-let g:netrw_liststyle=1
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
@@ -48,7 +47,6 @@ set statusline=%F
 set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
-set statusline+=%{fugitive#statusline()}      "modified flag
 set statusline+=%r      "read only flag
 set statusline+=%{g:NyanModoki()}
 set statusline+=%#warningmsg#
@@ -58,13 +56,7 @@ set statusline+=%=      "left/right separator
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
-" fun! PsWrapper(text)
-"      let view=winsaveview()
-"      exe 'ps' a:text
-"      call winrestview(view)
-" endfun
 
-" colorscheme xterm16,busierbee/mustang,candyman
 "------------------------------------------------------------
 "------------------------------------------------------------
 "
@@ -75,14 +67,13 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'tpope/vim-surround'
 Plug 'valloric/MatchTagAlways'
-Plug 'kristijanhusak/vim-multiple-cursors'
+Plug 'terryma/vim-multiple-cursors'
 Plug 'scrooloose/syntastic'
-Plug 'bling/vim-bufferline'
+" Plug 'bling/vim-bufferline'
 Plug 'moll/vim-bbye'
 Plug 'Raimondi/delimitMate'
 Plug 'lfilho/cosco.vim'
 Plug 'tommcdo/vim-exchange'
-Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-repeat'
 Plug 'flazz/vim-colorschemes'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -93,7 +84,7 @@ Plug 'honza/vim-snippets'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-vinegar'
-Plug 'vim-scripts/renamer.vim', { 'on':  'Renamer' }
+Plug 'idbrii/renamer.vim'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
@@ -117,10 +108,15 @@ Plug 'pangloss/vim-javascript'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'tpope/vim-fugitive'
+Plug 'Shougo/echodoc.vim'
+" Plug 'Shougo/context_filetype.vim'
 
 call plug#end()
 
-
+set cmdheight=2
+      set completeopt+=menuone
+      "set completeopt-=preview
+      let g:echodoc_enable_at_startup=1
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
@@ -145,6 +141,15 @@ xnoremap <silent> ]e :move'>+<CR>gv=gv
 cnoreabbrev E! e!
 cnoreabbrev W w
 cnoreabbrev Q q
+" fixcss
+function! FixCSS()
+    let pos = line( "." )
+    silent :%s/{/{\r/g
+    silent :%s/}/}\r\r/g
+    silent :%s/;/;\r/g
+    exe pos
+endfunction
+command! Fixcss call FixCSS()
 
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
@@ -206,10 +211,6 @@ let g:used_javascript_libs = 'jquery'
 
 " cosco
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
-
-" easyalign
-vmap <Enter> <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
 
 " yankstack
 let g:yankstack_map_keys = 0
