@@ -35,6 +35,7 @@ set synmaxcol=1200
 set ffs=unix,dos
 set autoread
 set background=dark
+set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
@@ -62,61 +63,64 @@ set statusline+=\ %P    "percent through file
 "
 call plug#begin('~/.vim/bundle')
 
-Plug 'mattn/emmet-vim'
+" libraries, &c.
 Plug 'xolox/vim-misc'
+Plug 'junegunn/vim-pseudocl'
+Plug 'kana/vim-textobj-user'
 Plug 'xolox/vim-session'
-Plug 'tpope/vim-surround'
-Plug 'valloric/MatchTagAlways'
-Plug 'terryma/vim-multiple-cursors'
-Plug 'scrooloose/syntastic'
-" Plug 'bling/vim-bufferline'
 Plug 'moll/vim-bbye'
-Plug 'Raimondi/delimitMate'
-Plug 'lfilho/cosco.vim'
-Plug 'tommcdo/vim-exchange'
-Plug 'tpope/vim-repeat'
-Plug 'flazz/vim-colorschemes'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
-Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
-Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'tpope/vim-fugitive'
+
+" editing features
+Plug 'junegunn/vim-oblique'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-surround'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tommcdo/vim-exchange'
+Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-repeat'
+Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'nefo-mi/nyan-modoki.vim'
-Plug 'djjcast/mirodark'
-Plug 'bounceme/pipe2eval'
+
+" syntax,indent &c.
+Plug 'jelera/vim-javascript-syntax'
+Plug 'pangloss/vim-javascript'
+Plug 'lfilho/cosco.vim'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'scrooloose/syntastic'
 " Plug 'zweifisch/pipe2eval'
+Plug 'bounceme/pipe2eval'
+
+" color,appearance
+Plug 'ap/vim-css-color' 
+Plug 'bling/vim-bufferline'
+Plug 'notpratheek/vim-luna'
+Plug 'djjcast/mirodark'
+Plug 'flazz/vim-colorschemes'
+Plug 'romainl/flattened'
+Plug 'valloric/MatchTagAlways'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
-Plug 'romainl/flattened'
-Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript'
-Plug 'ap/vim-css-color' 
-Plug 'notpratheek/vim-luna'
+Plug 'nefo-mi/nyan-modoki.vim'
+
+" autocompleting
+Plug 'ervandew/supertab'
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 Plug 'othree/jspc.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'junegunn/vim-pseudocl'
-Plug 'junegunn/vim-oblique'
-Plug 'tpope/vim-fugitive'
-Plug 'Shougo/echodoc.vim'
-" Plug 'Shougo/context_filetype.vim'
+Plug 'Raimondi/delimitMate'
 
 call plug#end()
 
-set cmdheight=2
-      set completeopt+=menuone
-      "set completeopt-=preview
-      let g:echodoc_enable_at_startup=1
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
