@@ -18,9 +18,10 @@ set ttyfast " u got a fast terminal
 set lazyredraw " to avoid scrolling problems
 set ignorecase
 set smartcase
+set incsearch
 set mouse=a
 set t_vb=
-set completeopt-=preview
+" set completeopt-=preview
 set splitright
 set splitbelow
 set visualbell
@@ -39,7 +40,7 @@ set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
-autocmd FileType css,scss set iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
+autocmd FileType css,scss setlocal iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
@@ -95,9 +96,12 @@ Plug 'jelera/vim-javascript-syntax'
 Plug 'pangloss/vim-javascript'
 Plug 'lfilho/cosco.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
+" Plug 'bigfish/vim-js-context-coloring', { 'do': 'npm install' }
+" Plug 'othree/yajs.vim'
 
 " color,appearance
 Plug 'ap/vim-css-color' 
@@ -110,16 +114,34 @@ Plug 'valloric/MatchTagAlways'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'nefo-mi/nyan-modoki.vim'
+" Plug 'luochen1990/rainbow'
+Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+" Plug 'Shougo/neocomplete.vim'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'othree/jspc.vim'
 Plug 'Raimondi/delimitMate'
+" Plug 'Shougo/echodoc.vim'
 
 call plug#end()
+
+" let g:neocomplete#enable_at_startup = 1
+" let g:neocomplete#auto_completion_start_length = 1
+" let g:neocomplete#sources#buffer#cache_limit_size = 50000
+" let g:neocomplete#data_directory = $HOME.'/.vim/cache/noecompl'
+" let g:neocomplete#enable_smart_case = 1
+" let g:neocomplete#sources#syntax#min_keyword_length = 2
+" if !exists('g:neocomplete#force_omni_input_patterns')
+"   let g:neocomplete#force_omni_input_patterns = {}
+" endif
+" let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
+" set cmdheight=2
+" 	let g:echodoc_enable_at_startup = 1
 
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
@@ -194,7 +216,7 @@ autocmd FileType *
     \ if &omnifunc != '' |
     \     call SuperTabChain(&omnifunc, '<c-p>') |
     \ endif
-" let g:SuperTabClosePreviewOnPopupClose=1
+let g:SuperTabClosePreviewOnPopupClose=1
 
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
@@ -204,7 +226,7 @@ let g:ctrlp_extensions = ['funky']
 " delimitMate
 au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
-au FileType javascript let b:delimitMate_autoclose = 0
+" au FileType javascript let b:delimitMate_autoclose = 0
 
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
@@ -215,3 +237,8 @@ autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosc
 " yankstack
 let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
+
+" rainbow parentheses
+autocmd VimEnter * RainbowParentheses
+let g:rainbow#max_level = 16
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
