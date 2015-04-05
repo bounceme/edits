@@ -35,12 +35,11 @@ set gcr=a:blinkon0
 set synmaxcol=1200
 set ffs=unix,dos
 set autoread
-set background=dark
 set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
 map Q <nop>
-autocmd FileType css,scss setlocal iskeyword=@,48-57,_,-,?,!,192-255 " Autocomplete ids and classes in CSS
+
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
@@ -108,40 +107,28 @@ Plug 'ap/vim-css-color'
 Plug 'bling/vim-bufferline'
 Plug 'notpratheek/vim-luna'
 Plug 'djjcast/mirodark'
-Plug 'flazz/vim-colorschemes'
+" Plug 'flazz/vim-colorschemes'
 Plug 'romainl/flattened'
 Plug 'valloric/MatchTagAlways'
 Plug 'mtglsk/mushroom'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'nefo-mi/nyan-modoki.vim'
-" Plug 'luochen1990/rainbow'
+Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
-" Plug 'Shougo/neocomplete.vim'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'othree/jspc.vim'
-Plug 'Raimondi/delimitMate'
-" Plug 'Shougo/echodoc.vim'
+Plug 'cohama/lexima.vim'
 
 call plug#end()
 
-" let g:neocomplete#enable_at_startup = 1
-" let g:neocomplete#auto_completion_start_length = 1
-" let g:neocomplete#sources#buffer#cache_limit_size = 50000
-" let g:neocomplete#data_directory = $HOME.'/.vim/cache/noecompl'
-" let g:neocomplete#enable_smart_case = 1
-" let g:neocomplete#sources#syntax#min_keyword_length = 2
-" if !exists('g:neocomplete#force_omni_input_patterns')
-"   let g:neocomplete#force_omni_input_patterns = {}
-" endif
-" let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
-" set cmdheight=2
-" 	let g:echodoc_enable_at_startup = 1
+set background=dark
+colorscheme solarized
+
 
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
@@ -176,10 +163,17 @@ function! FixCSS()
     exe pos
 endfunction
 command! Fixcss call FixCSS()
-
+" arrows
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
 let g:nayn_modoki_animation_enabled= 1
+
+" oblique
+let g:oblique#incsearch_highlight_all=1
 
 " sneak
 "replace 'f' with 1-char Sneak
@@ -198,6 +192,7 @@ omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
 " Vim Session
+let g:session_persist_colors = 0
 let g:session_autoload="yes"
 let g:session_autosave="yes"
 
@@ -222,11 +217,6 @@ let g:SuperTabClosePreviewOnPopupClose=1
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_extensions = ['funky']
-
-" delimitMate
-au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
-let delimitMate_expand_cr = 1
-" au FileType javascript let b:delimitMate_autoclose = 0
 
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
