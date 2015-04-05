@@ -87,7 +87,6 @@ Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'maxbrunsfeld/vim-yankstack'
-Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
 
 " syntax,indent &c.
@@ -121,7 +120,6 @@ Plug 'ervandew/supertab'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'othree/jspc.vim'
 Plug 'cohama/lexima.vim'
 
 call plug#end()
@@ -163,33 +161,13 @@ function! FixCSS()
     exe pos
 endfunction
 command! Fixcss call FixCSS()
-" arrows
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
 let g:nayn_modoki_animation_enabled= 1
 
 " oblique
 let g:oblique#incsearch_highlight_all=1
-
-" sneak
-"replace 'f' with 1-char Sneak
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-"replace 't' with 1-char Sneak
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
 
 " Vim Session
 let g:session_persist_colors = 0
