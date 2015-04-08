@@ -1,6 +1,5 @@
 set nocompatible
 set hidden
-syntax on              	" syntax highlighting!
 filetype indent plugin on     " activates indenting for files
 set autoindent          " auto indenting
 set number              " line numbers
@@ -8,7 +7,6 @@ set relativenumber
 set showmode
 set tabstop=4
 set shiftwidth=4
-set backspace=2         " backspace in insert mode works like normal editor
 set wildmenu		" Better command-line completion
 set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
 set autochdir		"autodirectory
@@ -88,6 +86,8 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'zweifisch/pipe2eval'
+Plug 'bounceme/pipe2eval'
 
 " syntax,indent &c.
 Plug 'jelera/vim-javascript-syntax'
@@ -96,23 +96,17 @@ Plug 'lfilho/cosco.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
-" Plug 'zweifisch/pipe2eval'
-Plug 'bounceme/pipe2eval'
 " Plug 'bigfish/vim-js-context-coloring', { 'do': 'npm install' }
 " Plug 'othree/yajs.vim'
 
 " color,appearance
 Plug 'ap/vim-css-color' 
 Plug 'bling/vim-bufferline'
-Plug 'notpratheek/vim-luna'
-Plug 'djjcast/mirodark'
 " Plug 'flazz/vim-colorschemes'
-Plug 'romainl/flattened'
 Plug 'valloric/MatchTagAlways'
-Plug 'mtglsk/mushroom'
-Plug 'jonathanfilip/vim-lucius'
 Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
@@ -124,6 +118,7 @@ Plug 'cohama/lexima.vim'
 
 call plug#end()
 
+syntax on 
 set background=dark
 colorscheme solarized
 
@@ -165,9 +160,6 @@ command! Fixcss call FixCSS()
 " nyan
 let g:nyan_modoki_select_cat_face_number = 2
 let g:nayn_modoki_animation_enabled= 1
-
-" oblique
-let g:oblique#incsearch_highlight_all=1
 
 " Vim Session
 let g:session_persist_colors = 0
