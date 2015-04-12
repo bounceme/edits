@@ -33,6 +33,7 @@ set gcr=a:blinkon0
 set synmaxcol=1200
 set ffs=unix,dos
 set autoread
+set fillchars=vert:┃
 set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim 		"matching tags
@@ -72,6 +73,7 @@ Plug 'tacahiroy/ctrlp-funky'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
 Plug 'tpope/vim-fugitive'
+" Plug 'airblade/vim-gitgutter'
 
 " editing features
 Plug 'junegunn/vim-oblique'
@@ -93,7 +95,7 @@ Plug 'bounceme/pipe2eval'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'pangloss/vim-javascript'
 Plug 'lfilho/cosco.vim'
-Plug 'othree/javascript-libraries-syntax.vim'
+" Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
 " Plug 'bigfish/vim-js-context-coloring', { 'do': 'npm install' }
@@ -122,7 +124,6 @@ syntax on
 set background=dark
 colorscheme solarized
 
-
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
@@ -147,6 +148,14 @@ xnoremap <silent> ]e :move'>+<CR>gv=gv
 cnoreabbrev E! e!
 cnoreabbrev W w
 cnoreabbrev Q q
+" colon replacement
+nnoremap <Space> :
+vnoremap <Space> :
+" window movement
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 " fixcss
 function! FixCSS()
     let pos = line( "." )
@@ -165,6 +174,11 @@ let g:nayn_modoki_animation_enabled= 1
 let g:session_persist_colors = 0
 let g:session_autoload="yes"
 let g:session_autosave="yes"
+
+" ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="jj"
+let g:UltiSnipsJumpBackwardTrigger="kk"
 
 " Syntastic
 let g:syntastic_check_on_open=1
@@ -202,3 +216,6 @@ nmap <leader>p <Plug>yankstack_substitute_older_paste
 autocmd VimEnter * RainbowParentheses
 let g:rainbow#max_level = 16
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+
+" pipe2eval
+let g:pipe2eval_map_key = '<cr>'
