@@ -1,19 +1,19 @@
 set nocompatible
 set hidden
-filetype indent plugin on     " activates indenting for files
-set autoindent          " auto indenting
-set number              " line numbers
+filetype indent plugin on
+set autoindent
+set number
 set relativenumber
 set showmode
 set tabstop=4
 set shiftwidth=4
-set wildmenu		" Better command-line completion
-set hlsearch		" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
-set autochdir		"autodirectory
-set clipboard=unnamed "clipboard
-set ttimeoutlen=50 " delay in ms
-set ttyfast " u got a fast terminal
-set lazyredraw " to avoid scrolling problems
+set wildmenu
+set hlsearch
+set autochdir
+set clipboard=unnamed
+set ttimeoutlen=50
+set ttyfast
+set lazyredraw
 set ignorecase
 set smartcase
 set incsearch
@@ -36,7 +36,7 @@ set autoread
 set fillchars=vert:┃
 set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
-runtime macros/matchit.vim 		"matching tags
+runtime macros/matchit.vim
 map Q <nop>
 
 if has('win32') || has('win64')
@@ -70,10 +70,11 @@ Plug 'xolox/vim-session'
 Plug 'moll/vim-bbye'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
+Plug 'sgur/ctrlp-extensions.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
 Plug 'tpope/vim-fugitive'
-" Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 
 " editing features
 Plug 'junegunn/vim-oblique'
@@ -86,7 +87,6 @@ Plug 'tpope/vim-repeat'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
-Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
@@ -98,8 +98,6 @@ Plug 'lfilho/cosco.vim'
 " Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
-" Plug 'bigfish/vim-js-context-coloring', { 'do': 'npm install' }
-" Plug 'othree/yajs.vim'
 
 " color,appearance
 Plug 'ap/vim-css-color' 
@@ -109,6 +107,7 @@ Plug 'valloric/MatchTagAlways'
 Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
+Plug 'freeo/vim-kalisi'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
@@ -124,10 +123,17 @@ syntax on
 set background=dark
 colorscheme solarized
 
+set undodir=~/.vim/undodir
+set undofile
+
+nnoremap k gk
+nnoremap j gj
+nnoremap gk k
+nnoremap gj j
+
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
-call yankstack#setup()
 map Y y$
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
@@ -201,16 +207,13 @@ let g:SuperTabClosePreviewOnPopupClose=1
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_extensions = ['funky']
+nnoremap <leader>p :CtrlPYankring<cr>
 
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
 
 " cosco
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
-
-" yankstack
-let g:yankstack_map_keys = 0
-nmap <leader>p <Plug>yankstack_substitute_older_paste
 
 " rainbow parentheses
 autocmd VimEnter * RainbowParentheses
