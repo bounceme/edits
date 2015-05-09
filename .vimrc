@@ -9,8 +9,8 @@ set tabstop=4
 set shiftwidth=4
 set wildmenu
 set hlsearch
-set autochdir
-set clipboard=unnamed
+autocmd BufEnter * silent! lcd %:p:h
+set clipboard=unnamed,unnamedplus
 set ttimeoutlen=50
 set ttyfast
 set lazyredraw
@@ -35,6 +35,8 @@ set ffs=unix,dos
 set autoread
 set fillchars=vert:┃
 set completeopt+=menuone
+set foldmethod=marker
+set foldlevel=0
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim
 map Q <nop>
@@ -73,8 +75,10 @@ Plug 'tacahiroy/ctrlp-funky'
 Plug 'sgur/ctrlp-extensions.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
+Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+" Plug 'mhinz/vim-signify'
 
 " editing features
 Plug 'junegunn/vim-oblique'
@@ -87,13 +91,21 @@ Plug 'tpope/vim-repeat'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
+Plug 'sgur/vim-textobj-parameter'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'AndrewRadev/switch.vim'
+Plug 'AndrewRadev/sideways.vim'
+" Plug 'PeterRincker/vim-argumentative'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/vimshell.vim'
 
 " syntax,indent &c.
-Plug 'jelera/vim-javascript-syntax'
-Plug 'pangloss/vim-javascript'
+" Plug 'jelera/vim-javascript-syntax'
+" Plug 'othree/yajs.vim'
+" Plug 'pangloss/vim-javascript'
+Plug 'jason0x43/vim-js-indent'
 Plug 'lfilho/cosco.vim'
 " Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'hail2u/vim-css3-syntax'
@@ -107,34 +119,45 @@ Plug 'valloric/MatchTagAlways'
 Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
-Plug 'freeo/vim-kalisi'
+Plug 'mrkn/mrkn256.vim'
+Plug 'chriskempson/base16-vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
+" Plug 'neitanod/vim-clevertab'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'bonsaiben/bootstrap-snippets'
 Plug 'cohama/lexima.vim'
 
 call plug#end()
 
-syntax on 
+syntax enable 
 set background=dark
 colorscheme solarized
 
 set undodir=~/.vim/undodir
 set undofile
 
-nnoremap k gk
-nnoremap j gj
-nnoremap gk k
-nnoremap gj j
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+vnoremap < <gv
+vnoremap > >gv
 
 " Useful mappings
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
 map Y y$
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
 nnoremap <C-L> :nohl<CR><C-L>
@@ -164,11 +187,11 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " fixcss
 function! FixCSS()
-    let pos = line( "." )
-    silent :%s/{/{\r/g
-    silent :%s/}/}\r\r/g
-    silent :%s/;/;\r/g
-    exe pos
+	let pos = line( "." )
+	silent :%s/{/{\r/g
+	silent :%s/}/}\r\r/g
+	silent :%s/;/;\r/g
+	exe pos
 endfunction
 command! Fixcss call FixCSS()
 
@@ -195,12 +218,14 @@ let g:user_emmet_install_global = 0
 autocmd FileType html,css,php EmmetInstall
 
 " supertab
-let g:SuperTabDefaultCompletionType = 'context'
-let g:SuperTabContextDefaultCompletionType = '<c-x><c-u>'
-autocmd FileType *
+ let g:SuperTabDefaultCompletionType = 'context'
+  autocmd FileType *
     \ if &omnifunc != '' |
-    \     call SuperTabChain(&omnifunc, '<c-p>') |
+    \   call SuperTabChain(&omnifunc, "<c-p>") |
     \ endif
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextDiscoverDiscovery =
+        \ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 let g:SuperTabClosePreviewOnPopupClose=1
 
 " ctrp
@@ -222,3 +247,11 @@ let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 
 " pipe2eval
 let g:pipe2eval_map_key = '<cr>'
+
+" vimshell
+let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+let g:vimshell_prompt =  '$ '
+
+" sideways
+nnoremap [s :SidewaysLeft<CR>
+nnoremap ]s :SidewaysRight<CR>
