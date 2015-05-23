@@ -8,7 +8,7 @@ set showmode
 set tabstop=4
 set shiftwidth=4
 set wildmenu
-set hlsearch
+" set hlsearch
 autocmd BufEnter * silent! lcd %:p:h
 set clipboard=unnamed,unnamedplus
 set ttimeoutlen=50
@@ -45,12 +45,18 @@ if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
+augroup reload_vimrc " {
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END " }
+
 set statusline=%F
 set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
 set statusline+=%{g:NyanModoki()}
+" set statusline+=%=%-20.30{tagbar#currenttag('%s','')}
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -72,11 +78,11 @@ Plug 'xolox/vim-session'
 Plug 'moll/vim-bbye'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
-Plug 'sgur/ctrlp-extensions.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
 Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify'
 
@@ -95,7 +101,7 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'AndrewRadev/sideways.vim'
-" Plug 'PeterRincker/vim-argumentative'
+Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
@@ -105,8 +111,10 @@ Plug 'Shougo/vimshell.vim'
 " Plug 'jelera/vim-javascript-syntax'
 " Plug 'othree/yajs.vim'
 " Plug 'pangloss/vim-javascript'
-Plug 'jason0x43/vim-js-indent'
+Plug 'rschmukler/pangloss-vim-indent'
+" Plug 'jason0x43/vim-js-indent'
 Plug 'lfilho/cosco.vim'
+Plug 'groenewege/vim-less'
 " Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
@@ -114,18 +122,21 @@ Plug 'scrooloose/syntastic'
 " color,appearance
 Plug 'ap/vim-css-color' 
 Plug 'bling/vim-bufferline'
-" Plug 'flazz/vim-colorschemes'
+Plug 'itchyny/landscape.vim'
+Plug 'ciaranm/inkpot'
+Plug 'flazz/vim-colorschemes'
 Plug 'valloric/MatchTagAlways'
-Plug 'nefo-mi/nyan-modoki.vim'
+" Plug 'nefo-mi/nyan-modoki.vim'
+Plug 'bounceme/nyan-modoki.vim'
 Plug 'altercation/vim-colors-solarized'
-Plug 'junegunn/seoul256.vim'
-Plug 'mrkn/mrkn256.vim'
+Plug 'mtglsk/mushroom'
+Plug 'romainl/flattened'
 Plug 'chriskempson/base16-vim'
+Plug 'vext01/theunixzoo-vim-colorscheme'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
-" Plug 'neitanod/vim-clevertab'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -136,19 +147,26 @@ call plug#end()
 
 syntax enable 
 set background=dark
-colorscheme solarized
+colorscheme base16-ocean
+" hi clear SignColumn
+
+if has('nvim')
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 
 set undodir=~/.vim/undodir
 set undofile
+
+nnoremap <Leader>m :w <BAR> !lessc % --autoprefix="last 2 versions" > %:t:r.css<CR><space>
+" npm install -g less
+" npm install -g less-plugin-autoprefix
 
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 vnoremap < <gv
 vnoremap > >gv
 
-" Useful mappings
-" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
-" which is the default
+call yankstack#setup()
 map Y y$
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -178,6 +196,7 @@ cnoreabbrev E! e!
 cnoreabbrev W w
 cnoreabbrev Q q
 " colon replacement
+nnoremap ! :!
 nnoremap <Space> :
 vnoremap <Space> :
 " window movement
@@ -196,8 +215,8 @@ endfunction
 command! Fixcss call FixCSS()
 
 " nyan
-let g:nyan_modoki_select_cat_face_number = 2
-let g:nayn_modoki_animation_enabled= 1
+let g:nyan_modoki_select_cat_face_number = 1
+let g:nayn_modoki_animation_enabled= 0
 
 " Vim Session
 let g:session_persist_colors = 0
@@ -232,7 +251,6 @@ let g:SuperTabClosePreviewOnPopupClose=1
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_extensions = ['funky']
-nnoremap <leader>p :CtrlPYankring<cr>
 
 " JavaScript syntax
 let g:used_javascript_libs = 'jquery'
@@ -255,3 +273,12 @@ let g:vimshell_prompt =  '$ '
 " sideways
 nnoremap [s :SidewaysLeft<CR>
 nnoremap ]s :SidewaysRight<CR>
+
+" yankstack
+let g:yankstack_map_keys = 0
+nmap <leader>p <Plug>yankstack_substitute_older_paste
+nmap <leader>P <Plug>yankstack_substitute_newer_paste
+
+" oblique
+" autocmd! User ObliqueStar
+" autocmd User ObliqueStar normal n
