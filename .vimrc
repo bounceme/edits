@@ -46,8 +46,8 @@ if has('win32') || has('win64')
 endif
 
 augroup reload_vimrc " {
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+	autocmd!
+	autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END " }
 
 set statusline=%F
@@ -56,7 +56,6 @@ set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
 set statusline+=%{g:NyanModoki()}
-" set statusline+=%=%-20.30{tagbar#currenttag('%s','')}
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -76,14 +75,21 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-textobj-user'
 Plug 'xolox/vim-session'
 Plug 'moll/vim-bbye'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
+Plug 'jaxbot/browserlink.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'tacahiroy/ctrlp-funky'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/neomru.vim'
+Plug 'Shougo/unite-outline'
+Plug 'lambdalisue/unite-grep-vcs'
+Plug 'kmnk/vim-unite-giti'
 Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
 Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
+Plug 'bling/vim-airline'
 " Plug 'mhinz/vim-signify'
 
 " editing features
@@ -104,7 +110,6 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/vimshell.vim'
 
 " syntax,indent &c.
@@ -116,23 +121,21 @@ Plug 'rschmukler/pangloss-vim-indent'
 Plug 'lfilho/cosco.vim'
 Plug 'groenewege/vim-less'
 " Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'thinca/vim-quickrun'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
 
 " color,appearance
-Plug 'ap/vim-css-color' 
+Plug 'ap/vim-css-color'
 Plug 'bling/vim-bufferline'
-Plug 'itchyny/landscape.vim'
-Plug 'ciaranm/inkpot'
+Plug 'freeo/vim-kalisi'
 Plug 'flazz/vim-colorschemes'
 Plug 'valloric/MatchTagAlways'
 " Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'bounceme/nyan-modoki.vim'
 Plug 'altercation/vim-colors-solarized'
-Plug 'mtglsk/mushroom'
 Plug 'romainl/flattened'
 Plug 'chriskempson/base16-vim'
-Plug 'vext01/theunixzoo-vim-colorscheme'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
@@ -145,13 +148,26 @@ Plug 'cohama/lexima.vim'
 
 call plug#end()
 
-syntax enable 
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_keymaps()
+function! s:unite_keymaps()
+    let b:SuperTabDisabled=1
+	nmap <buffer> <esc> <Plug>(unite_exit)
+endfunction
+let g:unite_enable_start_insert=1
+call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_hidden_files'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+nnoremap <silent> <c-p> :Unite -auto-resize buffer file_mru<cr>
+nnoremap <silent> <c-u> :Unite -auto-resize<cr>
+
+syntax enable
 set background=dark
-colorscheme base16-ocean
+colorscheme kalisi
 " hi clear SignColumn
 
 if has('nvim')
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+	colorscheme flattened_dark
 endif
 
 set undodir=~/.vim/undodir
@@ -176,9 +192,6 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" next search
-nnoremap <C-L> :nohl<CR><C-L>
 " prevent yank from moving cursor
 xnoremap <silent> y ygv<Esc>
 " Adding and deleting empty lines
@@ -237,14 +250,14 @@ let g:user_emmet_install_global = 0
 autocmd FileType html,css,php EmmetInstall
 
 " supertab
- let g:SuperTabDefaultCompletionType = 'context'
-  autocmd FileType *
-    \ if &omnifunc != '' |
-    \   call SuperTabChain(&omnifunc, "<c-p>") |
-    \ endif
+let g:SuperTabDefaultCompletionType = 'context'
+autocmd FileType *
+			\ if &omnifunc != '' |
+			\   call SuperTabChain(&omnifunc, "<c-p>") |
+			\ endif
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery =
-        \ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+			\ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 let g:SuperTabClosePreviewOnPopupClose=1
 
 " ctrp
