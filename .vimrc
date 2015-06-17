@@ -19,7 +19,7 @@ set smartcase
 set incsearch
 set mouse=a
 set t_vb=
-" set completeopt-=preview
+set completeopt-=preview
 set splitright
 set splitbelow
 set visualbell
@@ -34,12 +34,15 @@ set synmaxcol=1200
 set ffs=unix,dos
 set autoread
 set fillchars=vert:┃
+set cmdheight=2
 set completeopt+=menuone
 set foldmethod=marker
 set foldlevel=0
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
+let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 runtime macros/matchit.vim
 map Q <nop>
+autocmd BufNewFile,BufRead *.txt set spell spelllang=en_gb
 
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
@@ -49,6 +52,10 @@ augroup reload_vimrc " {
 	autocmd!
 	autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END " }
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
 set statusline=%F
 set statusline+=%y
@@ -80,16 +87,18 @@ Plug 'jaxbot/browserlink.vim'
 " Plug 'tacahiroy/ctrlp-funky'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/unite.vim'
+Plug 'Shougo/neossh.vim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
+Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/vimfiler.vim'
 Plug 'lambdalisue/unite-grep-vcs'
 Plug 'kmnk/vim-unite-giti'
-Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
 Plug 'idbrii/renamer.vim'
 Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'bling/vim-airline'
 " Plug 'mhinz/vim-signify'
 
 " editing features
@@ -110,32 +119,41 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
-Plug 'Shougo/vimshell.vim'
 
 " syntax,indent &c.
+" Plug 'marcelbeumer/javascript-syntax.vim'
+" Plug 'isRuslan/vim-es6'
 " Plug 'jelera/vim-javascript-syntax'
 " Plug 'othree/yajs.vim'
 " Plug 'pangloss/vim-javascript'
 Plug 'rschmukler/pangloss-vim-indent'
-" Plug 'jason0x43/vim-js-indent'
+" Plug '1995eaton/vim-better-javascript-highlighting'
 Plug 'lfilho/cosco.vim'
 Plug 'groenewege/vim-less'
 " Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'thinca/vim-quickrun'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
 
 " color,appearance
 Plug 'ap/vim-css-color'
+Plug 'chriskempson/base16-vim'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'w0ng/vim-hybrid'
+Plug 'jasonlollback/vim-tomorrow-theme'
+Plug 'mtglsk/mushroom'
 Plug 'bling/vim-bufferline'
-Plug 'freeo/vim-kalisi'
+Plug 'itchyny/landscape.vim'
+Plug 'jnurmine/Zenburn'
+Plug 'tomasr/molokai'
+Plug 'crusoexia/vim-monokai'
+Plug 'junegunn/seoul256.vim'
+Plug 'romainl/flattened'
 Plug 'flazz/vim-colorschemes'
+Plug 'ujihisa/unite-colorscheme'
+" Plug 'godlygeek/csapprox'
 Plug 'valloric/MatchTagAlways'
 " Plug 'nefo-mi/nyan-modoki.vim'
 Plug 'bounceme/nyan-modoki.vim'
-Plug 'altercation/vim-colors-solarized'
-Plug 'romainl/flattened'
-Plug 'chriskempson/base16-vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
@@ -144,11 +162,36 @@ Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'bonsaiben/bootstrap-snippets'
-Plug 'cohama/lexima.vim'
+Plug 'Raimondi/delimitMate'
 
 call plug#end()
 
+
+" au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+" let g:tern_show_argument_hints='on_hold'
+let g:tern_show_argument_hints = 'on_move'
+
+" delimitMate
+au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
+let delimitMate_expand_cr = 1
+
+autocmd! FileType vimfiler call s:my_vimfiler_settings() 
+function! s:my_vimfiler_settings()
+	nmap <buffer> - <Plug>(vimfiler_switch_to_parent_directory)
+	nmap <buffer> <bs> <Plug>(vimfiler_close)
+	nmap <buffer> Q <Plug>(vimfiler_hide)
+	nmap <buffer> q <Plug>(vimfiler_exit)
+endfunction
+nnoremap - :VimFiler -force-quit<cr>
+let g:vimfiler_as_default_explorer = 1
+call vimfiler#custom#profile('default', 'context', {
+  \ 'safe' : 0,
+  \ 'sort_type': 'filename',
+  \ })
+
 " Custom mappings for the unite buffer
+let g:unite_cursor_line_highlight = 'CursorLine'
 autocmd FileType unite call s:unite_keymaps()
 function! s:unite_keymaps()
     let b:SuperTabDisabled=1
@@ -159,15 +202,27 @@ call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_hidden_fi
 call unite#filters#sorter_default#use(['sorter_rank'])
 nnoremap <silent> <c-p> :Unite -auto-resize buffer file_mru<cr>
 nnoremap <silent> <c-u> :Unite -auto-resize<cr>
+nnoremap <silent> <c-f> :Unite -auto-resize file<cr>
 
 syntax enable
 set background=dark
-colorscheme kalisi
-" hi clear SignColumn
+let g:zenburn_old_Visual = 1
+let g:zenburn_alternate_Visual = 1
+let g:seoul256_background = 237
+let g:zenburn_high_Contrast=1
+
+colorscheme tomorrow-night
+
+" " hybrid
+" colorscheme hybrid
+" highlight Normal ctermbg=235
+" highlight linenr ctermfg=239
+" highlight function ctermfg=222
+" highlight statusline ctermbg=222 ctermfg=240
 
 if has('nvim')
+	tnoremap <Esc><Esc> <C-\><C-N>
 	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-	colorscheme flattened_dark
 endif
 
 set undodir=~/.vim/undodir
@@ -258,7 +313,7 @@ autocmd FileType *
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextDiscoverDiscovery =
 			\ ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
-let g:SuperTabClosePreviewOnPopupClose=1
+" let g:SuperTabClosePreviewOnPopupClose=1
 
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
@@ -282,6 +337,11 @@ let g:pipe2eval_map_key = '<cr>'
 " vimshell
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_prompt =  '$ '
+autocmd! FileType vimshell call s:my_vimshell_settings() 
+function! s:my_vimshell_settings()
+	nmap <buffer> Q <Plug>(vimshell_hide)
+	nmap <buffer> q <Plug>(vimshell_exit)
+endfunction
 
 " sideways
 nnoremap [s :SidewaysLeft<CR>
@@ -291,7 +351,3 @@ nnoremap ]s :SidewaysRight<CR>
 let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
-
-" oblique
-" autocmd! User ObliqueStar
-" autocmd User ObliqueStar normal n
