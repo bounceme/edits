@@ -9,9 +9,8 @@ set tabstop=4
 set shiftwidth=4
 set wildmenu
 " set hlsearch
-autocmd BufEnter * silent! lcd %:p:h
+set autochdir
 set clipboard=unnamed,unnamedplus
-set ttimeoutlen=50
 set ttyfast
 set lazyredraw
 set ignorecase
@@ -29,9 +28,9 @@ set ruler
 set nostartofline
 set autoindent
 set backspace=indent,eol,start
-set gcr=a:blinkon0
 set synmaxcol=1200
 set ffs=unix,dos
+set ttimeoutlen=50
 set autoread
 set fillchars=vert:┃
 set cmdheight=2
@@ -62,13 +61,12 @@ set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
-set statusline+=%{g:NyanModoki()}
+set statusline+=\ %P    "percent through file
+set statusline+=%=      "left/right separator
+set statusline+=%l/%L   "cursor line/total lines
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-set statusline+=%=      "left/right separator
-set statusline+=%l/%L   "cursor line/total lines
-set statusline+=\ %P    "percent through file
 
 
 "------------------------------------------------------------
@@ -81,128 +79,89 @@ Plug 'xolox/vim-misc'
 Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-textobj-user'
 Plug 'xolox/vim-session'
+" Plug 'mhinz/vim-startify'
 Plug 'moll/vim-bbye'
 Plug 'jaxbot/browserlink.vim'
-" Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'tacahiroy/ctrlp-funky'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/neossh.vim'
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/unite-outline'
-Plug 'Shougo/vimshell.vim'
-Plug 'Shougo/vimfiler.vim'
-Plug 'lambdalisue/unite-grep-vcs'
-Plug 'kmnk/vim-unite-giti'
-" Plug 'tpope/vim-vinegar'
-Plug 'idbrii/renamer.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tacahiroy/ctrlp-funky'
+Plug 'tpope/vim-vinegar'
 Plug 'mopp/autodirmake.vim'
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify'
 
 " editing features
 Plug 'junegunn/vim-oblique'
-Plug 'tomtom/tcomment_vim'
+Plug 'justinmk/vim-sneak'
+" Plug 'tomtom/tcomment_vim'
+" Plug 'tyru/caw.vim'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tommcdo/vim-exchange'
 Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-repeat'
+Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
-Plug 'sgur/vim-textobj-parameter'
+" Plug 'glts/vim-textobj-comment'
+Plug 'thinca/vim-textobj-comment'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'AndrewRadev/sideways.vim'
-Plug 'maxbrunsfeld/vim-yankstack'
+" Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'zweifisch/pipe2eval'
 Plug 'bounceme/pipe2eval'
 
 " syntax,indent &c.
-" Plug 'marcelbeumer/javascript-syntax.vim'
-" Plug 'isRuslan/vim-es6'
-" Plug 'jelera/vim-javascript-syntax'
-" Plug 'othree/yajs.vim'
 " Plug 'pangloss/vim-javascript'
 Plug 'rschmukler/pangloss-vim-indent'
 " Plug '1995eaton/vim-better-javascript-highlighting'
 Plug 'lfilho/cosco.vim'
-Plug 'groenewege/vim-less'
+Plug 'JulesWang/css.vim'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'genoma/vim-less'
 " Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'hail2u/vim-css3-syntax'
 Plug 'scrooloose/syntastic'
 
 " color,appearance
-Plug 'ap/vim-css-color'
 Plug 'chriskempson/base16-vim'
-Plug 'Lokaltog/vim-easymotion'
 Plug 'w0ng/vim-hybrid'
 Plug 'jasonlollback/vim-tomorrow-theme'
-Plug 'mtglsk/mushroom'
-Plug 'bling/vim-bufferline'
-Plug 'itchyny/landscape.vim'
-Plug 'jnurmine/Zenburn'
-Plug 'tomasr/molokai'
-Plug 'crusoexia/vim-monokai'
-Plug 'junegunn/seoul256.vim'
 Plug 'romainl/flattened'
-Plug 'flazz/vim-colorschemes'
-Plug 'ujihisa/unite-colorscheme'
+" Plug 'flazz/vim-colorschemes'
 " Plug 'godlygeek/csapprox'
+" Plug 'calebsmith/vim-lambdify'
+Plug 'ap/vim-css-color'
+Plug 'bling/vim-bufferline'
 Plug 'valloric/MatchTagAlways'
-" Plug 'nefo-mi/nyan-modoki.vim'
-Plug 'bounceme/nyan-modoki.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+" Plug 'mattn/jscomplete-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'bonsaiben/bootstrap-snippets'
 Plug 'Raimondi/delimitMate'
 
 call plug#end()
+" call yankstack#setup()
 
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
 
-" au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-
-" let g:tern_show_argument_hints='on_hold'
-let g:tern_show_argument_hints = 'on_move'
-
-" delimitMate
-au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
-let delimitMate_expand_cr = 1
-
-autocmd! FileType vimfiler call s:my_vimfiler_settings() 
-function! s:my_vimfiler_settings()
-	nmap <buffer> - <Plug>(vimfiler_switch_to_parent_directory)
-	nmap <buffer> <bs> <Plug>(vimfiler_close)
-	nmap <buffer> Q <Plug>(vimfiler_hide)
-	nmap <buffer> q <Plug>(vimfiler_exit)
-endfunction
-nnoremap - :VimFiler -force-quit<cr>
-let g:vimfiler_as_default_explorer = 1
-call vimfiler#custom#profile('default', 'context', {
-  \ 'safe' : 0,
-  \ 'sort_type': 'filename',
-  \ })
-
-" Custom mappings for the unite buffer
-let g:unite_cursor_line_highlight = 'CursorLine'
-autocmd FileType unite call s:unite_keymaps()
-function! s:unite_keymaps()
-    let b:SuperTabDisabled=1
-	nmap <buffer> <esc> <Plug>(unite_exit)
-endfunction
-let g:unite_enable_start_insert=1
-call unite#filters#matcher_default#use(['matcher_fuzzy', 'matcher_hide_hidden_files'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-nnoremap <silent> <c-p> :Unite -auto-resize buffer file_mru<cr>
-nnoremap <silent> <c-u> :Unite -auto-resize<cr>
-nnoremap <silent> <c-f> :Unite -auto-resize file<cr>
+let g:sneak#streak = 1
 
 syntax enable
 set background=dark
@@ -212,13 +171,27 @@ let g:seoul256_background = 237
 let g:zenburn_high_Contrast=1
 
 colorscheme tomorrow-night
+highlight special ctermfg=109
+highlight linenr ctermfg=240
 
 " " hybrid
 " colorscheme hybrid
 " highlight Normal ctermbg=235
-" highlight linenr ctermfg=239
 " highlight function ctermfg=222
 " highlight statusline ctermbg=222 ctermfg=240
+
+
+" au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+" let g:tern_show_argument_hints='on_hold'
+let g:tern_show_argument_hints = 'on_move'
+
+" let g:jscomplete_use = ['dom']
+
+" delimitMate
+au FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
+let delimitMate_expand_cr = 1
+
 
 if has('nvim')
 	tnoremap <Esc><Esc> <C-\><C-N>
@@ -237,41 +210,42 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 vnoremap < <gv
 vnoremap > >gv
 
-call yankstack#setup()
 map Y y$
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-" prevent yank from moving cursor
+
 xnoremap <silent> y ygv<Esc>
+
 " Adding and deleting empty lines
 nnoremap <silent>]x m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
+" quickfix
+nnoremap ]q :cclose<cr>
+nnoremap [q :copen<cr>
+
 " Bubbling
 nnoremap <silent> [e   :move-2<CR>==
 nnoremap <silent> ]e :move+<CR>==
 xnoremap <silent> [e   :move-2<CR>gv=gv
 xnoremap <silent> ]e :move'>+<CR>gv=gv
+
 " common mistakes
 cnoreabbrev E! e!
 cnoreabbrev W w
 cnoreabbrev Q q
-" colon replacement
+
+"command
 nnoremap ! :!
 nnoremap <Space> :
 vnoremap <Space> :
+
 " window movement
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
 " fixcss
 function! FixCSS()
 	let pos = line( "." )
@@ -281,10 +255,6 @@ function! FixCSS()
 	exe pos
 endfunction
 command! Fixcss call FixCSS()
-
-" nyan
-let g:nyan_modoki_select_cat_face_number = 1
-let g:nayn_modoki_animation_enabled= 0
 
 " Vim Session
 let g:session_persist_colors = 0
@@ -334,20 +304,6 @@ let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 " pipe2eval
 let g:pipe2eval_map_key = '<cr>'
 
-" vimshell
-let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-let g:vimshell_prompt =  '$ '
-autocmd! FileType vimshell call s:my_vimshell_settings() 
-function! s:my_vimshell_settings()
-	nmap <buffer> Q <Plug>(vimshell_hide)
-	nmap <buffer> q <Plug>(vimshell_exit)
-endfunction
-
 " sideways
 nnoremap [s :SidewaysLeft<CR>
 nnoremap ]s :SidewaysRight<CR>
-
-" yankstack
-let g:yankstack_map_keys = 0
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
