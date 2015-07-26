@@ -1,42 +1,37 @@
  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setq exec-path (append exec-path '("/usr/local/bin")))
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-     (require 'el-get)
-
-     ;; local sources
-     (setq el-get-sources
-      '(
-
-(:name evil-smartparens :type github :pkgname "evil-smartparens" :url "https://github.com/expez/evil-smartparens.git")
-(:name snippjs :type github :pkgname "snippjs" :url "https://github.com/bounceme/turbo-javascript-yas.git")
-))
-     (setq my-packages
-           (append
-            '(exec-path-from-shell popwin moe-theme solarized-emacs less-css-mode js-comint evil-nerd-commenter evil-plugins auto-complete yasnippet js2-mode tern expand-region evil evil-leader evil-matchit evil-surround evil-exchange skewer-mode emmet-mode ac-html linum-relative helm flycheck rainbow-mode rainbow-delimiters smartparens color-theme-zenburn)
-            (mapcar 'el-get-source-name el-get-sources)))
-
+  (require 'package)
+  (add-to-list 'package-archives
+			   '("melpa" . "http://melpa.org/packages/"))
+  (package-refresh-contents)
+  (package-initialize)
+  (package-install 'el-get)
+  (require 'el-get))
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+(setq my-packages
+	  (append
+		'(smartparens exec-path-from-shell moe-theme solarized-emacs less-css-mode js-comint evil-nerd-commenter evil-plugins auto-complete yasnippet js2-mode tern expand-region evil evil-leader evil-matchit evil-surround evil-exchange skewer-mode emmet-mode ac-html linum-relative helm rainbow-mode rainbow-delimiters smartparens color-theme-zenburn)
+		(mapcar 'el-get-source-name el-get-sources)))
 (el-get-cleanup my-packages)
-     (el-get 'sync my-packages)
+(el-get 'sync my-packages)
 
-;; (load-theme 'solarized-dark t)
-;; ------------------------------------------------------------------------------
+; Two items still need installing:evil-smartparens and flycheck
+
 (when (memq window-system '(mac ns))
+  (require 'exec-path-from-shell)
   (exec-path-from-shell-initialize))
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 (display-time-mode 1)
 ;; (setq display-time-default-load-average nil)
- ;; ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
- ;; (set-frame-parameter (selected-frame) 'alpha '(85 50))
- ;; (add-to-list 'default-frame-alist '(alpha 85 50))
+;; ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
+;; (set-frame-parameter (selected-frame) 'alpha '(85 50))
+;; (add-to-list 'default-frame-alist '(alpha 85 50))
 
 (require 'js-comint)
 (setenv "NODE_NO_READLINE" "1")
@@ -61,7 +56,7 @@
 
 (evilnc-default-hotkeys)
 (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
-    (define-key evil-visual-state-map "gc" 'evilnc-comment-operator)
+(define-key evil-visual-state-map "gc" 'evilnc-comment-operator)
 ; (require 'evil-operator-comment)
 ; (global-evil-operator-comment-mode 1)
 
@@ -90,13 +85,13 @@
 
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  In Delete Selection mode, if the mark is active, just deactivate it;
+  then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
+	(setq deactivate-mark  t)
+	(when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+	(abort-recursive-edit)))
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -146,7 +141,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;yasnippet
 (yas-global-mode 1)
 (setq yas-snippet-dirs
-      '("~/.emacs.d/el-get/snippjs/js-mode/"))
+	  '("~/.emacs.d/el-get/snippjs/js-mode/"))
 
 
 (require 'auto-complete-config)
@@ -170,7 +165,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (eval-after-load 'tern
 				 '(progn
 					(require 'tern-auto-complete)
@@ -188,7 +183,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "Evaluate the region as JavaScript code."
   (interactive "r")
   (skewer-eval (buffer-substring-no-properties start end)
-               #'skewer-post-minibuffer))
+			   #'skewer-post-minibuffer))
 
 (add-hook 'js2-mode-hook 'skewer-mode)
 (add-hook 'css-mode-hook 'skewer-css-mode)
@@ -229,7 +224,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'evil)
 (evil-mode 1)
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
 ;; (require 'multiple-cursors)
 ;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 ;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
@@ -271,80 +265,80 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
- '(compilation-message-face (quote default))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#839496")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes (quote (moe-dark)))
- '(custom-safe-themes
-   (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "823ea71cd79048ec98ba0bd131d969fa51ff595f8bdb25640b92e84653d72fb6" "a776135e3d68ebb9c5033799a86290e2243e352f5b8fe6b3b96fbf80c65acd0c" default)))
- '(evil-search-module (quote evil-search))
- '(fci-rule-color "#073642")
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#002b36" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
- '(highlight-symbol-foreground-color "#93a1a1")
- '(highlight-tail-colors
-   (quote
-    (("#073642" . 0)
-     ("#546E00" . 20)
-     ("#00736F" . 30)
-     ("#00629D" . 50)
-     ("#7B6000" . 60)
-     ("#8B2C02" . 70)
-     ("#93115C" . 85)
-     ("#073642" . 100))))
- '(hl-bg-colors
-   (quote
-    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
- '(hl-fg-colors
-   (quote
-    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
- '(magit-diff-use-overlays nil)
- '(pos-tip-background-color "#073642")
- '(pos-tip-foreground-color "#93a1a1")
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2"))))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   (quote
-    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83"))))
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(ansi-color-names-vector
+	 ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
+  '(compilation-message-face (quote default))
+  '(cua-global-mark-cursor-color "#2aa198")
+  '(cua-normal-cursor-color "#839496")
+  '(cua-overwrite-cursor-color "#b58900")
+  '(cua-read-only-cursor-color "#859900")
+  '(custom-enabled-themes (quote (solarized-dark)))
+  '(custom-safe-themes
+	 (quote
+	   ("d7088a7105aa09cc68e3d058f89917e07e0505e0f4ab522a6045ec8092d67c44" "9d0a9ef96b610c7097bde76d077359d464408bc9913bed0318594efdd8811fb6" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "823ea71cd79048ec98ba0bd131d969fa51ff595f8bdb25640b92e84653d72fb6" "a776135e3d68ebb9c5033799a86290e2243e352f5b8fe6b3b96fbf80c65acd0c" default)))
+  '(evil-search-module (quote evil-search))
+  '(fci-rule-color "#073642")
+  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+  '(highlight-symbol-colors
+	 (--map
+	   (solarized-color-blend it "#002b36" 0.25)
+	   (quote
+		 ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+  '(highlight-symbol-foreground-color "#93a1a1")
+  '(highlight-tail-colors
+	 (quote
+	   (("#073642" . 0)
+		("#546E00" . 20)
+		("#00736F" . 30)
+		("#00629D" . 50)
+		("#7B6000" . 60)
+		("#8B2C02" . 70)
+		("#93115C" . 85)
+		("#073642" . 100))))
+  '(hl-bg-colors
+	 (quote
+	   ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+  '(hl-fg-colors
+	 (quote
+	   ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+  '(magit-diff-use-overlays nil)
+  '(pos-tip-background-color "#073642")
+  '(pos-tip-foreground-color "#93a1a1")
+  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+  '(term-default-bg-color "#002b36")
+  '(term-default-fg-color "#839496")
+  '(vc-annotate-background nil)
+  '(vc-annotate-color-map
+	 (quote
+	   ((20 . "#dc322f")
+		(40 . "#c85d17")
+		(60 . "#be730b")
+		(80 . "#b58900")
+		(100 . "#a58e00")
+		(120 . "#9d9100")
+		(140 . "#959300")
+		(160 . "#8d9600")
+		(180 . "#859900")
+		(200 . "#669b32")
+		(220 . "#579d4c")
+		(240 . "#489e65")
+		(260 . "#399f7e")
+		(280 . "#2aa198")
+		(300 . "#2898af")
+		(320 . "#2793ba")
+		(340 . "#268fc6")
+		(360 . "#268bd2"))))
+  '(vc-annotate-very-old-color nil)
+  '(weechat-color-list
+	 (quote
+	   (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83"))))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
