@@ -1,29 +1,76 @@
  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (require 'package)
-  (add-to-list 'package-archives
-			   '("melpa" . "http://melpa.org/packages/"))
-  (package-refresh-contents)
-  (package-initialize)
-  (package-install 'el-get)
-  (require 'el-get))
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-(el-get 'sync)
-(setq my-packages
-	  (append
-		'(smartparens exec-path-from-shell moe-theme solarized-emacs less-css-mode js-comint evil-nerd-commenter evil-plugins auto-complete yasnippet js2-mode tern expand-region evil evil-leader evil-matchit evil-surround evil-exchange skewer-mode emmet-mode ac-html linum-relative helm rainbow-mode rainbow-delimiters smartparens color-theme-zenburn)
-		(mapcar 'el-get-source-name el-get-sources)))
-(el-get-cleanup my-packages)
-(el-get 'sync my-packages)
-
-; Two items still need installing:evil-smartparens and flycheck
+(require 'package)
+(add-to-list 'package-archives
+			 '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+			 '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
+(defvar my-packages '(exec-path-from-shell
+					   evil
+					   evil-indent-textobject
+					   evil-matchit
+					   evil-nerd-commenter
+					   evil-leader
+					   monokai-theme
+					   ;; elscreen
+					   ; elm-mode
+					   ; org-present
+					   ; use-package
+					   ; go-mode
+					   ; go-eldoc
+					   ; company-go
+					   linum-relative
+					   smartparens
+					   evil-smartparens
+					   less-css-mode
+					   js-comint
+					   auto-complete
+					   yasnippet
+					   js2-mode
+					   tern
+					   tern-auto-complete
+					   expand-region
+					   evil-surround
+					   evil-exchange
+					   skewer-mode
+					   emmet-mode
+					   ac-html
+					   rainbow-mode
+					   rainbow-delimiters
+					   wgrep
+					   ; volatile-highlights
+					   ; know-your-http-well
+					   ; company
+					   ; alchemist
+					   ; quack
+					   ; evil-god-state
+					   ; geiser
+					   ; graphviz-dot-mode
+					   ;; diff-hl
+					   ; bison-mode
+					   ; ghc
+					   ; company-ghc
+					   ; guide-key
+					   highlight-numbers
+					   helm
+					   flycheck
+					   solarized-theme))
+(dolist (p my-packages)
+  (when (not (package-installed-p p)) (package-install p)))
 
 (when (memq window-system '(mac ns))
   (require 'exec-path-from-shell)
   (exec-path-from-shell-initialize))
+
+(require 'evil)
+(evil-mode 1)
+(evil-mode)
+
+(add-hook 'prog-mode-hook 'highlight-numbers-mode)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
@@ -51,6 +98,9 @@
 ;; (setq interprogram-cut-function 'paste-to-osx)
 ;; (setq interprogram-paste-function 'copy-from-osx) 
 
+(require 'wgrep)
+(setq wgrep-auto-save-buffer t)
+
 (global-set-key (kbd "M-x") 'helm-M-x)
 (setq helm-M-x-fuzzy-match t)
 
@@ -60,7 +110,7 @@
 ; (require 'evil-operator-comment)
 ; (global-evil-operator-comment-mode 1)
 
-; (global-linum-mode t)
+(global-linum-mode t)
 ; (ac-linum-workaround)
 (require 'linum-relative)
 (setq linum-relative-current-symbol "")
@@ -77,10 +127,16 @@
 
 
 (define-key evil-normal-state-map (kbd "-") 'dired-jump)
-(define-key dired-mode-map (kbd "-") 'dired-up-directory)
+(eval-after-load "dired" '(progn
+  (define-key dired-mode-map (kbd "-") 'dired-up-directory) ))
 
 (define-key evil-normal-state-map (kbd "SPC") 'evil-ex)
 (define-key evil-visual-state-map (kbd "SPC") 'evil-ex)
+
+(global-set-key (kbd "C-l") 'evil-window-right)
+(global-set-key (kbd "C-h") 'evil-window-left)
+(global-set-key (kbd "C-j") 'evil-window-down)
+(global-set-key (kbd "C-k") 'evil-window-up)
 
 
 (defun minibuffer-keyboard-quit ()
@@ -144,6 +200,7 @@
 	  '("~/.emacs.d/el-get/snippjs/js-mode/"))
 
 
+(require 'auto-complete)
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
@@ -152,6 +209,7 @@
 ;;; activate, otherwise, auto-complete will
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
+(define-key ac-complete-mode-map (kbd "<backtab>") 'ac-expand-previous)
 ;;; use quick help
 (setq ac-use-quick-help t
 	  ac-quick-help-delay 0.5)
@@ -164,15 +222,21 @@
 ; (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
+(setq-default js2-mode-show-parse-errors nil
+                js2-mode-show-strict-warnings nil)
+  (autoload 'flycheck-get-checker-for-buffer "flycheck")
+  (defun sanityinc/disable-js2-checks-if-flycheck-active ()
+    (unless (flycheck-get-checker-for-buffer)
+      (set (make-local-variable 'js2-mode-show-parse-errors) t)
+      (set (make-local-variable 'js2-mode-show-strict-warnings) t)))
+  (add-hook 'js2-mode-hook 'sanityinc/disable-js2-checks-if-flycheck-active)
+  (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (eval-after-load 'tern
 				 '(progn
 					(require 'tern-auto-complete)
 					(tern-ac-setup)))
-
-; (add-hook 'js2-mode-hook 'ac-js2-mode)
-; (setq ac-js2-evaluate-calls t)
 
 ;; (defun skewer-eval-region (beg end)
 ;;   "Execute the region as JavaScript code in the attached browsers."
@@ -221,37 +285,6 @@
 (global-evil-leader-mode)
 (require 'evil-surround)
 (global-evil-surround-mode 1)
-(require 'evil)
-(evil-mode 1)
-
-;; (require 'multiple-cursors)
-;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-;; (defvar my-mc-evil-previous-state nil)
-;; (defun my-mc-evil-switch-to-insert-state ()
-;;   (when (and (bound-and-true-p evil-mode)
-;;              (not (memq evil-state '(insert emacs))))
-;;     (setq my-mc-evil-previous-state evil-state)
-;;     (evil-insert 1)))
-;; (defun my-mc-evil-back-to-previous-state ()
-;;   (when my-mc-evil-previous-state
-;;     (unwind-protect
-;;         (case my-mc-evil-previous-state
-;;           ((normal visual) (evil-force-normal-state))
-;;           (t (message "Don't know how to handle previous state: %S"
-;;                       my-mc-evil-previous-state)))
-;;       (setq my-mc-evil-previous-state nil))))
-;; (add-hook 'multiple-cursors-mode-enabled-hook
-;;           'my-mc-evil-switch-to-insert-state)
-;; (add-hook 'multiple-cursors-mode-disabled-hook
-;;           'my-mc-evil-back-to-previous-state)
-;; (defun my-rrm-evil-switch-state ()
-;;   (if rectangular-region-mode
-;;       (my-mc-evil-switch-to-insert-state)
-;;     ;; (my-mc-evil-back-to-previous-state)  ; does not work...
-;;     (setq my-mc-evil-previous-state nil)))
-;; (add-hook 'rectangular-region-mode-hook 'my-rrm-evil-switch-state)
 
 ;; Set default font
 (set-face-attribute 'default nil
@@ -265,80 +298,80 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  '(ansi-color-names-vector
-	 ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
-  '(compilation-message-face (quote default))
-  '(cua-global-mark-cursor-color "#2aa198")
-  '(cua-normal-cursor-color "#839496")
-  '(cua-overwrite-cursor-color "#b58900")
-  '(cua-read-only-cursor-color "#859900")
-  '(custom-enabled-themes (quote (solarized-dark)))
-  '(custom-safe-themes
-	 (quote
-	   ("d7088a7105aa09cc68e3d058f89917e07e0505e0f4ab522a6045ec8092d67c44" "9d0a9ef96b610c7097bde76d077359d464408bc9913bed0318594efdd8811fb6" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "823ea71cd79048ec98ba0bd131d969fa51ff595f8bdb25640b92e84653d72fb6" "a776135e3d68ebb9c5033799a86290e2243e352f5b8fe6b3b96fbf80c65acd0c" default)))
-  '(evil-search-module (quote evil-search))
-  '(fci-rule-color "#073642")
-  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
-  '(highlight-symbol-colors
-	 (--map
-	   (solarized-color-blend it "#002b36" 0.25)
-	   (quote
-		 ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
-  '(highlight-symbol-foreground-color "#93a1a1")
-  '(highlight-tail-colors
-	 (quote
-	   (("#073642" . 0)
-		("#546E00" . 20)
-		("#00736F" . 30)
-		("#00629D" . 50)
-		("#7B6000" . 60)
-		("#8B2C02" . 70)
-		("#93115C" . 85)
-		("#073642" . 100))))
-  '(hl-bg-colors
-	 (quote
-	   ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
-  '(hl-fg-colors
-	 (quote
-	   ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
-  '(magit-diff-use-overlays nil)
-  '(pos-tip-background-color "#073642")
-  '(pos-tip-foreground-color "#93a1a1")
-  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
-  '(term-default-bg-color "#002b36")
-  '(term-default-fg-color "#839496")
-  '(vc-annotate-background nil)
-  '(vc-annotate-color-map
-	 (quote
-	   ((20 . "#dc322f")
-		(40 . "#c85d17")
-		(60 . "#be730b")
-		(80 . "#b58900")
-		(100 . "#a58e00")
-		(120 . "#9d9100")
-		(140 . "#959300")
-		(160 . "#8d9600")
-		(180 . "#859900")
-		(200 . "#669b32")
-		(220 . "#579d4c")
-		(240 . "#489e65")
-		(260 . "#399f7e")
-		(280 . "#2aa198")
-		(300 . "#2898af")
-		(320 . "#2793ba")
-		(340 . "#268fc6")
-		(360 . "#268bd2"))))
-  '(vc-annotate-very-old-color nil)
-  '(weechat-color-list
-	 (quote
-	   (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83"))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#839496")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
+ '(custom-enabled-themes (quote (solarized-dark)))
+ '(custom-safe-themes
+   (quote
+    ("866be962f0a48c2fe648ea23a3f3c0148e5747d05626d75b6eaa9cd55a44c592" "d7088a7105aa09cc68e3d058f89917e07e0505e0f4ab522a6045ec8092d67c44" "9d0a9ef96b610c7097bde76d077359d464408bc9913bed0318594efdd8811fb6" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "823ea71cd79048ec98ba0bd131d969fa51ff595f8bdb25640b92e84653d72fb6" "a776135e3d68ebb9c5033799a86290e2243e352f5b8fe6b3b96fbf80c65acd0c" default)))
+ '(evil-search-module (quote evil-search))
+ '(fci-rule-color "#073642")
+ '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#002b36" 0.25)
+    (quote
+     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#93a1a1")
+ '(highlight-tail-colors
+   (quote
+    (("#073642" . 0)
+     ("#546E00" . 20)
+     ("#00736F" . 30)
+     ("#00629D" . 50)
+     ("#7B6000" . 60)
+     ("#8B2C02" . 70)
+     ("#93115C" . 85)
+     ("#073642" . 100))))
+ '(hl-bg-colors
+   (quote
+    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
+ '(hl-fg-colors
+   (quote
+    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
+ '(magit-diff-use-overlays nil)
+ '(pos-tip-background-color "#073642")
+ '(pos-tip-foreground-color "#93a1a1")
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(term-default-bg-color "#002b36")
+ '(term-default-fg-color "#839496")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#c85d17")
+     (60 . "#be730b")
+     (80 . "#b58900")
+     (100 . "#a58e00")
+     (120 . "#9d9100")
+     (140 . "#959300")
+     (160 . "#8d9600")
+     (180 . "#859900")
+     (200 . "#669b32")
+     (220 . "#579d4c")
+     (240 . "#489e65")
+     (260 . "#399f7e")
+     (280 . "#2aa198")
+     (300 . "#2898af")
+     (320 . "#2793ba")
+     (340 . "#268fc6")
+     (360 . "#268bd2"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (quote
+    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83"))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
