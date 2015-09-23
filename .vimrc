@@ -36,12 +36,13 @@ set cmdheight=2
 set completeopt+=menuone
 set foldmethod=marker
 set foldlevel=0
-" set virtualedit=block
+set virtualedit=block
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim
-noremap Q gq
 autocmd BufNewFile,BufRead *.txt set spell spelllang=en_gb
+nnoremap Q <Nop>
 
+" Numbering
 set number
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 set relativenumber
@@ -50,14 +51,24 @@ if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
-augroup reload_vimrc " {
-	autocmd!
-	autocmd BufWritePost $MYVIMRC source $MYVIMRC
-augroup END " }
-
 " Save Position in buffer
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+set undofile
+set undodir=~/.vim/tmp/undo//     " undo files
+set backupdir=~/.vim/tmp/backup// " backups
+set directory=~/.vim/tmp/swap//   " swap files
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
 endif
 
 set statusline=%F
@@ -82,19 +93,15 @@ Plug 'xolox/vim-misc'
 Plug 'junegunn/vim-pseudocl'
 Plug 'kana/vim-textobj-user'
 Plug 'xolox/vim-session'
-Plug 'moll/vim-bbye'
 Plug 'tpope/vim-repeat'
-" Plug 'jaxbot/browserlink.vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
 Plug 'sgur/ctrlp-extensions.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'mopp/autodirmake.vim'
-" Plug 'travisjeffery/vim-auto-mkdir'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-dispatch'
 " Plug 'mhinz/vim-signify'
 
 " editing features
@@ -104,15 +111,13 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tommcdo/vim-exchange'
-Plug 'mattn/emmet-vim'
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'thinca/vim-textobj-comment'
-Plug 'Julian/vim-textobj-variable-segment'
-Plug 'reedes/vim-textobj-sentence'
 Plug 'kana/vim-textobj-fold'
+Plug 'Julian/vim-textobj-variable-segment'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 " Plug 'zweifisch/pipe2eval'
@@ -134,18 +139,19 @@ Plug 'scrooloose/syntastic'
 Plug 'jasonlollback/vim-tomorrow-theme'
 Plug 'romainl/Apprentice'
 Plug 'morhetz/gruvbox'
+Plug 'tejr/sahara'
 Plug 'flazz/vim-colorschemes'
 Plug 'ap/vim-css-color'
 Plug 'bling/vim-bufferline'
 Plug 'valloric/MatchTagAlways'
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'gilgigilgil/anderson.vim'
 
 " autocompleting
 Plug 'ervandew/supertab'
 Plug 'Raimondi/delimitMate'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 " Plug 'mattn/jscomplete-vim'
+Plug 'mattn/emmet-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'bonsaiben/bootstrap-snippets'
@@ -158,19 +164,11 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
-au FileType vim setl keywordprg=:help
-" au FileType javascript setl keywordprg=:terndoc
-au FileType javascript nnoremap <silent> <buffer> K <esc>:TernDoc<CR>
-" close any preview windows
-au FileType javascript nnoremap <silent> <buffer> <esc> <C-W>z
-
-" if executable('pt')
-" 	set grepprg=pt\ --nogroup\ --nocolor
-" 	let g:ctrlp_user_command = 'pt %s -l --nocolor -g ""'
-" 	let g:ctrlp_use_caching = 0
-" endif
-
 " set grepprg=ack\ --nogroup\ --nocolor
+
+au FileType vim setl keywordprg=:help
+au FileType javascript nnoremap <silent> <buffer> K <esc>:TernDoc<CR>
+au FileType javascript nnoremap <silent> <buffer> <esc> <C-W>z
 
 let g:sneak#streak = 1
 
@@ -180,13 +178,16 @@ let g:sneak#streak = 1
 " " let g:gruvbox_contrast_dark = 'hard'
 " colorscheme gruvbox
 
+" colorscheme sahara
+
+" colorscheme xoria256
+" hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
+" hi Todo guifg=#8f6f8f guibg=#202020 gui=italic,underline,bold
+
 colorscheme apprentice
 hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
-hi link JavascriptNumber Number
 
-" colorscheme tomorrow-night
-" highlight special ctermfg=109
-" highlight linenr ctermfg=240
+hi link JavascriptNumber Number
 
 " let g:tern_show_argument_hints='on_hold'
 let g:tern_show_argument_hints = 'on_move'
@@ -198,10 +199,9 @@ let delimitMate_expand_cr = 1
 if has('nvim')
 	tnoremap <Esc><Esc> <C-\><C-N>
 	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+	" colorscheme dracula
 endif
 
-set undodir=~/.vim/undodir
-set undofile
 
 nnoremap <Leader>m :w <BAR> !lessc % --autoprefix="last 2 versions" > %:t:r.css<CR><space>
 " npm install -g less
@@ -227,8 +227,6 @@ nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 " quickfix,location
 nnoremap ]q :cclose<cr>
 nnoremap [q :copen<cr>
-" nnoremap ]a :lclose<cr>
-" nnoremap [a :lopen<cr>
 
 " Bubbling
 nnoremap <silent> [e   :move-2<CR>==
@@ -243,8 +241,7 @@ cnoreabbrev Q q
 
 "command
 nnoremap ! :!
-nnoremap <Space> :
-vnoremap <Space> :
+noremap <Space> :
 
 " window movement
 nnoremap <C-J> <C-W><C-J>
