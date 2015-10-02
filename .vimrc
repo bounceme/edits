@@ -6,7 +6,6 @@ set showmode
 set tabstop=4
 set shiftwidth=4
 set wildmenu
-" set wildmode=list:longest,full
 " set hlsearch
 " set autochdir
 autocmd BufEnter * silent! lcd %:p:h
@@ -18,7 +17,6 @@ set smartcase
 set incsearch
 set mouse=a
 set t_vb=
-set completeopt-=preview
 set splitright
 set splitbelow
 set visualbell
@@ -32,7 +30,8 @@ set synmaxcol=1200
 set ffs=unix,dos
 set ttimeoutlen=50
 set autoread
-set cmdheight=2
+" set cmdheight=2
+set completeopt-=preview
 set completeopt+=menuone
 set foldmethod=marker
 set foldlevel=0
@@ -50,6 +49,11 @@ set relativenumber
 if has('win32') || has('win64')
 	set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
+
+augroup myvimrchooks
+    au!
+    autocmd bufwritepost .vimrc source ~/.vimrc
+augroup END
 
 " Save Position in buffer
 if has("autocmd")
@@ -76,7 +80,6 @@ set statusline+=%y
 set statusline+=%h      "help file flag
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
-" set statusline+=%{fugitive#statusline()}
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=%=      "left/right separator
 set statusline+=\ %P    "percent through file
@@ -95,8 +98,6 @@ Plug 'kana/vim-textobj-user'
 Plug 'xolox/vim-session'
 Plug 'tpope/vim-repeat'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
-Plug 'sgur/ctrlp-extensions.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-eunuch'
@@ -112,12 +113,14 @@ Plug 'tpope/vim-surround'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tommcdo/vim-exchange'
 Plug 'wellle/targets.vim'
+Plug 'kana/vim-operator-user'
+Plug 'kana/vim-operator-replace'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'thinca/vim-textobj-comment'
 Plug 'kana/vim-textobj-fold'
-Plug 'Julian/vim-textobj-variable-segment'
+Plug 'kana/vim-textobj-line'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 " Plug 'zweifisch/pipe2eval'
@@ -126,20 +129,14 @@ Plug 'idbrii/renamer.vim'
 
 " syntax,indent &c.
 " Plug 'pangloss/vim-javascript'
-Plug 'rschmukler/pangloss-vim-indent'
+Plug 'gavocanov/vim-js-indent'
 Plug 'moll/vim-node'
 " Plug '1995eaton/vim-better-javascript-highlighting'
 Plug 'lfilho/cosco.vim'
-Plug 'JulesWang/css.vim'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'genoma/vim-less'
 Plug 'scrooloose/syntastic'
 
 " color,appearance
 Plug 'jasonlollback/vim-tomorrow-theme'
-Plug 'romainl/Apprentice'
-Plug 'morhetz/gruvbox'
-Plug 'tejr/sahara'
 Plug 'flazz/vim-colorschemes'
 Plug 'ap/vim-css-color'
 Plug 'bling/vim-bufferline'
@@ -150,13 +147,14 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'ervandew/supertab'
 Plug 'Raimondi/delimitMate'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
-" Plug 'mattn/jscomplete-vim'
 Plug 'mattn/emmet-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'bonsaiben/bootstrap-snippets'
 
 call plug#end()
+
+map _ <Plug>(operator-replace)
 
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
@@ -172,19 +170,7 @@ au FileType javascript nnoremap <silent> <buffer> <esc> <C-W>z
 
 let g:sneak#streak = 1
 
-" syntax enable
-" set background=dark
-" let g:gruvbox_invert_selection = 0
-" " let g:gruvbox_contrast_dark = 'hard'
-" colorscheme gruvbox
-
-" colorscheme sahara
-
-" colorscheme xoria256
-" hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
-" hi Todo guifg=#8f6f8f guibg=#202020 gui=italic,underline,bold
-
-colorscheme apprentice
+colorscheme xoria256
 hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
 
 hi link JavascriptNumber Number
@@ -199,9 +185,7 @@ let delimitMate_expand_cr = 1
 if has('nvim')
 	tnoremap <Esc><Esc> <C-\><C-N>
 	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-	" colorscheme dracula
 endif
-
 
 nnoremap <Leader>m :w <BAR> !lessc % --autoprefix="last 2 versions" > %:t:r.css<CR><space>
 " npm install -g less
@@ -215,7 +199,6 @@ vnoremap < <gv
 vnoremap > >gv
 
 map Y y$
-
 xnoremap <silent> y ygv<Esc>
 
 " Adding and deleting empty lines
@@ -224,7 +207,7 @@ nnoremap <silent>[x m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent>]<space> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent>[<space> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
-" quickfix,location
+" quickfix
 nnoremap ]q :cclose<cr>
 nnoremap [q :copen<cr>
 
@@ -265,7 +248,7 @@ let g:session_autoload="yes"
 let g:session_autosave="yes"
 
 " ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="jj"
 let g:UltiSnipsJumpForwardTrigger="jj"
 let g:UltiSnipsJumpBackwardTrigger="kk"
 
@@ -291,9 +274,7 @@ let g:SuperTabContextDiscoverDiscovery =
 " ctrp
 let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:ctrlp_working_path_mode = 'c'
-let g:ctrlp_extensions = ['funky']
-nnoremap `p :CtrlPYankring<cr>
-" let g:ctrlp_show_hidden = 1
+let g:ctrlp_show_hidden = 1
 
 " cosco
 autocmd FileType javascript,css,YOUR_LANG nnoremap <silent> <Leader>; :call cosco#commaOrSemiColon()<CR>
