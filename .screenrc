@@ -1,0 +1,5 @@
+term "screen-256color"
+maptimeout 0
+altscreen on
+startup_message off
+hardstatus alwayslastline "%{=}%-w%{+b w}%n %t%{-b w}%+w %=%c"
