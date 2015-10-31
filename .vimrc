@@ -1,7 +1,7 @@
 filetype indent plugin on
 set hidden
-set autoindent
 set showmode
+set autoindent
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
@@ -37,7 +37,6 @@ set completeopt-=preview
 set completeopt+=menuone
 let g:netrw_localrmdir='rm -rf' " Allow netrw to remove non-empty local directories
 runtime macros/matchit.vim
-autocmd BufNewFile,BufRead *.txt,*.md setlocal spell spelllang=en_gb
 au FileType vim setl keywordprg=:help
 
 set number
@@ -63,14 +62,7 @@ set undodir=~/.vim/tmp/undo//     " undo files
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap//   " swap files
 
-set statusline=%F
-set statusline+=%y
-set statusline+=%h      "help file flag
-set statusline+=%m      "modified flag
-set statusline+=%r      "read only flag
-set statusline+=%=      "left/right separator
-set statusline+=%l/%L   "cursor line/total lines
-set statusline+=\ %P    "percent through file
+set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 nnoremap Q <Nop>
 
@@ -131,8 +123,6 @@ Plug 'tpope/vim-vinegar'
 Plug 'mopp/autodirmake.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-" Plug 'mhinz/vim-signify'
 
 " editing features
 Plug 'junegunn/vim-oblique'
@@ -163,11 +153,14 @@ Plug 'lfilho/cosco.vim'
 Plug 'scrooloose/syntastic'
 
 " color,appearance
+Plug 'ajh17/Spacegray.vim'
+Plug 'duythinht/inori'
 Plug 'flazz/vim-colorschemes'
 Plug 'ap/vim-css-color'
 Plug 'bling/vim-bufferline'
 Plug 'valloric/MatchTagAlways'
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'crusoexia/vim-dracula'
 
 " autocompleting
 Plug 'ervandew/supertab'
@@ -191,8 +184,10 @@ if executable('ag')
 	let g:ctrlp_use_caching = 0
 endif
 
-colorscheme xoria256
-hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
+colorscheme Spacegray
+
+" colorscheme xoria256
+" hi Todo cterm=bold,underline ctermbg=234 ctermfg=96
 
 hi link JavascriptNumber Number
 
