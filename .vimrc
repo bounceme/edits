@@ -114,38 +114,36 @@ autocmd FileType less nnoremap <Leader>m :w <BAR> !lessc % --autoprefix="last 2 
 " npm install -g less
 " npm install -g less-plugin-autoprefix
 
-function! MyFollowSymlink(...)
-	if exists('w:no_resolve_symlink') && w:no_resolve_symlink
-		return
-	endif
-	let fname = a:0 ? a:1 : expand('%')
-	if fname =~ '^\w\+:/'
-		" Do not mess with 'fugitive://' etc.
-		return
-	endif
-	let fname = simplify(fname)
-
-	let resolvedfile = resolve(fname)
-	if resolvedfile == fname
-		return
-	endif
-	let resolvedfile = fnameescape(resolvedfile)
-	let sshm = &shm
-	set shortmess+=A  " silence ATTENTION message about swap file (would get displayed twice)
-	exec 'file ' . resolvedfile
-	let &shm=sshm
-
-	" Re-init fugitive.
-	call fugitive#detect(resolvedfile)
-	if &modifiable
-		" Only display a note when editing a file, especially not for `:help`.
-		redraw  " Redraw now, to avoid hit-enter prompt.
-		echomsg 'Resolved symlink: =>' resolvedfile
-	endif
-endfunction
-command! FollowSymlink call MyFollowSymlink()
-command! ToggleFollowSymlink let w:no_resolve_symlink = !get(w:, 'no_resolve_symlink', 0) | echo "w:no_resolve_symlink =>" w:no_resolve_symlink
-au BufReadPost * nested call MyFollowSymlink(expand('%'))
+" function! MyFollowSymlink(...)
+" 	if exists('w:no_resolve_symlink') && w:no_resolve_symlink
+" 		return
+" 	endif
+" 	let fname = a:0 ? a:1 : expand('%')
+" 	if fname =~ '^\w\+:/'
+" 		" Do not mess with 'fugitive://' etc.
+" 		return
+" 	endif
+" 	let fname = simplify(fname)
+" 	let resolvedfile = resolve(fname)
+" 	if resolvedfile == fname
+" 		return
+" 	endif
+" 	let resolvedfile = fnameescape(resolvedfile)
+" 	let sshm = &shm
+" 	set shortmess+=A  " silence ATTENTION message about swap file (would get displayed twice)
+" 	exec 'file ' . resolvedfile
+" 	let &shm=sshm
+" 	" Re-init fugitive.
+" 	call fugitive#detect(resolvedfile)
+" 	if &modifiable
+" 		" Only display a note when editing a file, especially not for `:help`.
+" 		redraw  " Redraw now, to avoid hit-enter prompt.
+" 		echomsg 'Resolved symlink: =>' resolvedfile
+" 	endif
+" endfunction
+" command! FollowSymlink call MyFollowSymlink()
+" command! ToggleFollowSymlink let w:no_resolve_symlink = !get(w:, 'no_resolve_symlink', 0) | echo "w:no_resolve_symlink =>" w:no_resolve_symlink
+" au BufReadPost * nested call MyFollowSymlink(expand('%'))
 
 "------------------------------------------------------------
 "------------------------------------------------------------
