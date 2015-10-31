@@ -61,6 +61,15 @@ set undofile
 set undodir=~/.vim/tmp/undo//     " undo files
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap//   " swap files
+if !isdirectory(expand(&undodir))		
+	call mkdir(expand(&undodir), "p")		
+endif		
+if !isdirectory(expand(&backupdir))		
+	call mkdir(expand(&backupdir), "p")		
+endif		
+if !isdirectory(expand(&directory))		
+	call mkdir(expand(&directory), "p")		
+endif
 
 set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
@@ -105,11 +114,46 @@ autocmd FileType less nnoremap <Leader>m :w <BAR> !lessc % --autoprefix="last 2 
 " npm install -g less
 " npm install -g less-plugin-autoprefix
 
+function! MyFollowSymlink(...)
+	if exists('w:no_resolve_symlink') && w:no_resolve_symlink
+		return
+	endif
+	let fname = a:0 ? a:1 : expand('%')
+	if fname =~ '^\w\+:/'
+		" Do not mess with 'fugitive://' etc.
+		return
+	endif
+	let fname = simplify(fname)
+
+	let resolvedfile = resolve(fname)
+	if resolvedfile == fname
+		return
+	endif
+	let resolvedfile = fnameescape(resolvedfile)
+	let sshm = &shm
+	set shortmess+=A  " silence ATTENTION message about swap file (would get displayed twice)
+	exec 'file ' . resolvedfile
+	let &shm=sshm
+
+	" Re-init fugitive.
+	call fugitive#detect(resolvedfile)
+	if &modifiable
+		" Only display a note when editing a file, especially not for `:help`.
+		redraw  " Redraw now, to avoid hit-enter prompt.
+		echomsg 'Resolved symlink: =>' resolvedfile
+	endif
+endfunction
+command! FollowSymlink call MyFollowSymlink()
+command! ToggleFollowSymlink let w:no_resolve_symlink = !get(w:, 'no_resolve_symlink', 0) | echo "w:no_resolve_symlink =>" w:no_resolve_symlink
+au BufReadPost * nested call MyFollowSymlink(expand('%'))
+
 "------------------------------------------------------------
 "------------------------------------------------------------
 
-" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+autocmd VimEnter *
+			\| if !empty(filter(copy(g:plugs), '!isdirectory(v:val.dir)'))
+				\|   PlugInstall | q
+				\| endif
 call plug#begin('~/.vim/bundle')
 
 " libraries, &c.
