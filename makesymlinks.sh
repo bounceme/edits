@@ -1,14 +1,14 @@
 #!/bin/bash
 ############################
 # .make.sh
-# This script creates symlinks from the home directory to any desired dotfiles in ~/dotfiles
+# This script creates symlinks from the home directory to any desired dotfiles in ~/edits
 ############################
 
 ########## Variables
 
 dir=~/edits                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files=".bashrc .vimrc .screen .bash_profile"    # list of files/folders to symlink in homedir
+files=".bashrc .vimrc .screen .bash_profile .tern-config"
 
 ##########
 

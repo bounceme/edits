@@ -1,64 +1,45 @@
- (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
 (require 'package)
 (add-to-list 'package-archives
-			 '("marmalade" . "http://marmalade-repo.org/packages/"))
+	     '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-			 '("melpa" . "http://melpa.org/packages/") t)
+	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
 (defvar my-packages '(exec-path-from-shell
-					   evil
-					   evil-indent-textobject
-					   evil-matchit
-					   evil-nerd-commenter
-					   evil-leader
-					   monokai-theme
-					   ;; elscreen
-					   ; elm-mode
-					   ; org-present
-					   ; use-package
-					   ; go-mode
-					   ; go-eldoc
-					   ; company-go
-					   linum-relative
-					   smartparens
-					   evil-smartparens
-					   less-css-mode
-					   js-comint
-					   auto-complete
-					   yasnippet
-					   js2-mode
-					   tern
-					   tern-auto-complete
-					   expand-region
-					   evil-surround
-					   evil-exchange
-					   skewer-mode
-					   emmet-mode
-					   ac-html
-					   rainbow-mode
-					   rainbow-delimiters
-					   wgrep
-					   ; volatile-highlights
-					   ; know-your-http-well
-					   ; company
-					   ; alchemist
-					   ; quack
-					   ; evil-god-state
-					   ; geiser
-					   ; graphviz-dot-mode
-					   ;; diff-hl
-					   ; bison-mode
-					   ; ghc
-					   ; company-ghc
-					   ; guide-key
-					   highlight-numbers
-					   helm
-					   flycheck
-					   solarized-theme))
+		      evil
+		      evil-indent-textobject
+		      evil-matchit
+		      evil-nerd-commenter
+		      evil-leader
+		      evil-snipe
+		      monokai-theme
+		      ;; linum-relative
+		      smartparens
+		      evil-smartparens
+		      less-css-mode
+		      js-comint
+		      company
+		      company-tern
+		      yasnippet
+		      js2-mode
+		      expand-region
+		      evil-surround
+		      evil-exchange
+		      skewer-mode
+		      emmet-mode
+		      rainbow-mode
+		      rainbow-delimiters
+		      wgrep
+		      highlight-numbers
+		      helm
+		      warm-night-theme
+		      magit
+		      flycheck
+		      solarized-theme))
 (dolist (p my-packages)
   (when (not (package-installed-p p)) (package-install p)))
 
@@ -85,38 +66,68 @@
 
 (setq less-css-lessc-options '("--autoprefix=\"last 2 versions\""))
 
-(setq x-select-enable-clipboard t)
+(setq-default ediff-window-setup-function 'ediff-setup-windows-plain)
+;; emacs is evil and decrees that horizontal shall henceforth be vertical
+(setq-default ediff-split-window-function 'split-window-horizontally)
+(setq-default ediff-merge-split-window-function 'split-window-horizontally)
+
+(require 'simpleclip)
+
+;; (setq x-select-enable-clipboard t)
 ;; (setq interprogram-paste-function 'x-selection-value)
 
-;; (defun copy-from-osx ()
-;; (shell-command-to-string "pbpaste"))
-;; (defun paste-to-osx (text &optional push)
-;; (let ((process-connection-type nil))
-;; (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-;; (process-send-string proc text)
-;; (process-send-eof proc))))
-;; (setq interprogram-cut-function 'paste-to-osx)
-;; (setq interprogram-paste-function 'copy-from-osx) 
+;; (fset 'evil-visual-update-x-selection 'ignore)
+					; (enable 'evil-visual-update-x-selection 'ignore)
+
+;; (defun x-select-text (text))
+;; (setq x-select-enable-clipboard nil)
+;; (setq x-select-enable-primary nil)
+;; (setq mouse-drag-copy-region nil)
+
+;; (define-key evil-visual-state-map "p" (lambda () (interactive) (evil-paste-from-register ?\")))
+
+(setq interprogram-cut-function 'simpleclip-set-contents)
+(setq interprogram-paste-function 'simpleclip-get-contents) 
 
 (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
 
-(global-set-key (kbd "M-x") 'helm-M-x)
+;; (global-linum-mode 1)
+;; (require 'linum-relative)
+;; (setq linum-relative-current-symbol "")
+;; (linum-relative-on)
+
+(global-relative-line-numbers-mode)
+(setq relative-line-numbers-format #'abs-rel-numbers)
+(defun abs-rel-numbers (offset)
+  (if (= offset 0)
+      ;; current line
+      (format "%4d " (line-number-at-pos))
+    ;; not the current line
+    (format "%4d " (abs offset))
+    ))
+
+(show-paren-mode 1)
+(setq ring-bell-function 'ignore)
+
+;; (helm-mode 1)
+(require 'helm-config)
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-recentf-fuzzy-match    t)
+(define-key evil-normal-state-map (kbd "C-p") 'helm-mini)
+(setq helm-locate-command
+      (case system-type
+        ('gnu/linux "locate -i -r %s")
+        ('berkeley-unix "locate -i %s")
+        ('windows-nt "es %s")
+        ('darwin "mdfind -name %s %s")
+        (t "locate %s")))
 (setq helm-M-x-fuzzy-match t)
+(global-set-key (kbd "M-x") 'helm-M-x)
 
 (evilnc-default-hotkeys)
 (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
 (define-key evil-visual-state-map "gc" 'evilnc-comment-operator)
-; (require 'evil-operator-comment)
-; (global-evil-operator-comment-mode 1)
-
-(global-linum-mode t)
-; (ac-linum-workaround)
-(require 'linum-relative)
-(setq linum-relative-current-symbol "")
-(show-paren-mode 1)
-;  (nyan-mode 1)
-(setq ring-bell-function 'ignore)
 
 ;; yes or no becomes y or n
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -125,10 +136,10 @@
 (define-key evil-insert-state-map (kbd "C-h") 'emmet-prev-edit-point)		
 (define-key evil-insert-state-map (kbd "C-l") 'emmet-next-edit-point)
 
-
 (define-key evil-normal-state-map (kbd "-") 'dired-jump)
 (eval-after-load "dired" '(progn
-  (define-key dired-mode-map (kbd "-") 'dired-up-directory) ))
+			    (define-key dired-mode-map (kbd "-") 'dired-up-directory) ))
+
 
 (define-key evil-normal-state-map (kbd "SPC") 'evil-ex)
 (define-key evil-visual-state-map (kbd "SPC") 'evil-ex)
@@ -145,9 +156,9 @@
   then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (if (and delete-selection-mode transient-mark-mode mark-active)
-	(setq deactivate-mark  t)
-	(when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-	(abort-recursive-edit)))
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -165,7 +176,7 @@
 (setq evil-replace-state-cursor `(box))
 (setq evil-motion-state-cursor `(box))
 
-; (define-key global-map (kbd "RET") 'newline-and-indent)
+					; (define-key global-map (kbd "RET") 'newline-and-indent)
 
 (evil-leader/set-key
   "e" 'find-file
@@ -176,12 +187,20 @@
   "m" 'compile-less-css
   "c" 'helm-M-x)
 
-
-(require 'helm-config)
-(define-key evil-normal-state-map (kbd "C-p") 'helm-mini)
-(setq helm-buffers-fuzzy-matching t
-	  helm-recentf-fuzzy-match    t)
-; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(defmacro define-and-bind-text-object (key start-regex end-regex)
+  (let ((inner-name (make-symbol "inner-name"))
+	(outer-name (make-symbol "outer-name")))
+    `(progn
+       (evil-define-text-object ,inner-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+       (evil-define-text-object ,outer-name (count &optional beg end type)
+	 (evil-select-paren ,start-regex ,end-regex beg end type count t))
+       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+;; create "il"/"al" (inside/around) line text objects:
+(define-and-bind-text-object "l" "^\\s-*" "\\s-*$")
+;; create "ie"/"ae" (inside/around) entire buffer text objects:
+(define-and-bind-text-object "e" "\\`\\s-*" "\\s-*\\'")
 
 (require 'smartparens-config)
 (smartparens-global-mode 1)
@@ -194,49 +213,38 @@
   (forward-line -1)
   (indent-according-to-mode))
 
-;;yasnippet
+(add-to-list 'load-path
+	     "~/.emacs.d/plugins/yasnippet")
+(require 'yasnippet)
 (yas-global-mode 1)
-(setq yas-snippet-dirs
-	  '("~/.emacs.d/el-get/snippjs/js-mode/"))
+(yas-reload-all)
+(add-hook 'js2-mode #'yas-minor-mode)
 
-
-(require 'auto-complete)
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-;;; set the trigger key so that it can work together with yasnippet on tab key,
-;;; if the word exists in yasnippet, pressing tab will cause yasnippet to
-;;; activate, otherwise, auto-complete will
-(ac-set-trigger-key "TAB")
-(ac-set-trigger-key "<tab>")
-(define-key ac-complete-mode-map (kbd "<backtab>") 'ac-expand-previous)
-;;; use quick help
-(setq ac-use-quick-help t
-	  ac-quick-help-delay 0.5)
-;;; complete in string
-(delete 'font-lock-string-face ac-disable-faces)
-
-
-
-
-; (autoload 'js2-mode "js2" nil t)
+					; (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 (setq-default js2-mode-show-parse-errors nil
-                js2-mode-show-strict-warnings nil)
-  (autoload 'flycheck-get-checker-for-buffer "flycheck")
-  (defun sanityinc/disable-js2-checks-if-flycheck-active ()
-    (unless (flycheck-get-checker-for-buffer)
-      (set (make-local-variable 'js2-mode-show-parse-errors) t)
-      (set (make-local-variable 'js2-mode-show-strict-warnings) t)))
-  (add-hook 'js2-mode-hook 'sanityinc/disable-js2-checks-if-flycheck-active)
-  (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
+	      js2-mode-show-strict-warnings nil)
+(autoload 'flycheck-get-checker-for-buffer "flycheck")
+(defun sanityinc/disable-js2-checks-if-flycheck-active ()
+  (unless (flycheck-get-checker-for-buffer)
+    (set (make-local-variable 'js2-mode-show-parse-errors) t)
+    (set (make-local-variable 'js2-mode-show-strict-warnings) t)))
+(add-hook 'js2-mode-hook 'sanityinc/disable-js2-checks-if-flycheck-active)
+(add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(eval-after-load 'tern
-				 '(progn
-					(require 'tern-auto-complete)
-					(tern-ac-setup)))
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+(add-to-list 'company-backends 'company-tern)
+
+(eval-after-load 'company
+  '(progn
+     (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+     (define-key company-active-map [tab] 'company-complete-common-or-cycle)))
+(setq company-selection t)
+(setq company-idle-delay 0)
 
 ;; (defun skewer-eval-region (beg end)
 ;;   "Execute the region as JavaScript code in the attached browsers."
@@ -247,13 +255,12 @@
   "Evaluate the region as JavaScript code."
   (interactive "r")
   (skewer-eval (buffer-substring-no-properties start end)
-			   #'skewer-post-minibuffer))
+	       #'skewer-post-minibuffer))
 
 (add-hook 'js2-mode-hook 'skewer-mode)
 (add-hook 'css-mode-hook 'skewer-css-mode)
 (add-hook 'html-mode-hook 'skewer-html-mode)
 (add-to-list 'auto-mode-alist '("\.less$" . less-css-mode))
-(add-hook 'html-mode-hook 'ac-html-enable)
 (add-hook 'css-mode-hook 'rainbow-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
@@ -265,21 +272,26 @@
 (define-key evil-visual-state-map (kbd "+") 'er/expand-region)
 (define-key evil-visual-state-map (kbd "_") 'er/contract-region)
 
-(define-key evil-normal-state-map (kbd "gs") 'transpose-sexps)
-
-
-;disable backup
+					;disable backup
 (setq backup-inhibited t)
-;disable auto save
+					;disable auto save
 (setq auto-save-default nil)
 (desktop-save-mode 1)
+(add-to-list 'desktop-locals-to-save 'buffer-undo-list)
+(require 'undohist)
+(undohist-initialize)
 
 (require 'evil-exchange)
 (setq evil-exchange-key (kbd "zx"))
 (setq evil-exchange-cancel-key (kbd "zX"))
 (evil-exchange-install)
-; (require 'evil-snipe)
-; (global-evil-snipe-mode 1)
+(require 'evil-snipe)
+(evil-snipe-mode 1)
+(setq evil-snipe-scope 'buffer
+      evil-snipe-repeat-scope 'buffer
+      evil-snipe-enable-highlight t
+      evil-snipe-enable-incremental-highlight t
+      evil-snipe-smart-case t)
 (require 'evil-matchit)
 (global-evil-matchit-mode 1)
 (global-evil-leader-mode)
@@ -288,90 +300,28 @@
 
 ;; Set default font
 (set-face-attribute 'default nil
-					:family "Anonymous Pro"
-					:height 170
-					:weight 'normal
-					:width 'normal)
-
-
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
+		    :family "Source Code Pro"
+		    :height 140
+		    :weight 'normal
+		    :width 'normal)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
- '(compilation-message-face (quote default))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#839496")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes (quote (solarized-dark)))
+   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(custom-enabled-themes (quote (warm-night)))
  '(custom-safe-themes
    (quote
-    ("866be962f0a48c2fe648ea23a3f3c0148e5747d05626d75b6eaa9cd55a44c592" "d7088a7105aa09cc68e3d058f89917e07e0505e0f4ab522a6045ec8092d67c44" "9d0a9ef96b610c7097bde76d077359d464408bc9913bed0318594efdd8811fb6" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "823ea71cd79048ec98ba0bd131d969fa51ff595f8bdb25640b92e84653d72fb6" "a776135e3d68ebb9c5033799a86290e2243e352f5b8fe6b3b96fbf80c65acd0c" default)))
- '(evil-search-module (quote evil-search))
- '(fci-rule-color "#073642")
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#002b36" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
- '(highlight-symbol-foreground-color "#93a1a1")
- '(highlight-tail-colors
-   (quote
-    (("#073642" . 0)
-     ("#546E00" . 20)
-     ("#00736F" . 30)
-     ("#00629D" . 50)
-     ("#7B6000" . 60)
-     ("#8B2C02" . 70)
-     ("#93115C" . 85)
-     ("#073642" . 100))))
- '(hl-bg-colors
-   (quote
-    ("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00")))
- '(hl-fg-colors
-   (quote
-    ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
- '(magit-diff-use-overlays nil)
- '(pos-tip-background-color "#073642")
- '(pos-tip-foreground-color "#93a1a1")
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2"))))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   (quote
-    (unspecified "#002b36" "#073642" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#839496" "#657b83"))))
+    ("ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" default)))
+ '(evil-want-Y-yank-to-eol t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
