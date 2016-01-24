@@ -3,6 +3,8 @@
 export PATH=/usr/local/bin:$PATH
 export PIP2EVAL_TMP_FILE_PATH=/tmp/
 
+set -o vi
+
 # Alias vi to $EDITOR, which in turn call editor()
 alias vi=editor
 
