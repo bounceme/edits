@@ -21,11 +21,12 @@
 		      smartparens
 		      evil-smartparens
 		      less-css-mode
-		      js-comint
+		      ;; js-comint
 		      company
 		      company-tern
 		      yasnippet
 		      js2-mode
+		      js3-mode
 		      expand-region
 		      evil-surround
 		      evil-exchange
@@ -97,15 +98,15 @@
 ;; (setq linum-relative-current-symbol "")
 ;; (linum-relative-on)
 
-(global-relative-line-numbers-mode)
-(setq relative-line-numbers-format #'abs-rel-numbers)
-(defun abs-rel-numbers (offset)
-  (if (= offset 0)
-      ;; current line
-      (format "%4d " (line-number-at-pos))
-    ;; not the current line
-    (format "%4d " (abs offset))
-    ))
+;; (global-relative-line-numbers-mode)
+;; (setq relative-line-numbers-format #'abs-rel-numbers)
+;; (defun abs-rel-numbers (offset)
+;;   (if (= offset 0)
+;;       ;; current line
+;;       (format "%4d " (line-number-at-pos))
+;;     ;; not the current line
+;;     (format "%4d " (abs offset))
+;;     ))
 
 (show-paren-mode 1)
 (setq ring-bell-function 'ignore)
@@ -114,7 +115,7 @@
 (require 'helm-config)
 (setq helm-buffers-fuzzy-matching t)
 (setq helm-recentf-fuzzy-match    t)
-(define-key evil-normal-state-map (kbd "C-p") 'helm-mini)
+(define-key evil-normal-state-map (kbd "C-p") 'helm-for-files)
 (setq helm-locate-command
       (case system-type
         ('gnu/linux "locate -i -r %s")
@@ -131,6 +132,17 @@
 
 ;; yes or no becomes y or n
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; (evil-define-key 'normal js2-mode (kbd "K")
+;;   'tern-get-docs)
+;; (evil-define-key 'normal js2-mode (kbd "C-]")
+;;   'tern-find-definition)
+;; ( define-key evil-normal-state-local-map  (kbd "C-]") 'tern-find-definition )
+(add-hook 'js2-mode-hook
+	  '(lambda ()
+	     ( define-key evil-normal-state-local-map  (kbd "C-]") 'tern-find-definition )
+	     ( define-key evil-normal-state-local-map  (kbd "K") 'tern-get-docs )
+	     ))
 
 (define-key evil-insert-state-map (kbd "C-j") 'emmet-expand-line)		
 (define-key evil-insert-state-map (kbd "C-h") 'emmet-prev-edit-point)		
@@ -276,8 +288,6 @@
 (setq backup-inhibited t)
 					;disable auto save
 (setq auto-save-default nil)
-(desktop-save-mode 1)
-(add-to-list 'desktop-locals-to-save 'buffer-undo-list)
 (require 'undohist)
 (undohist-initialize)
 
@@ -311,11 +321,54 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes (quote (warm-night)))
+ '(compilation-message-face (quote default))
+ '(custom-enabled-themes (quote (tao-yin)))
  '(custom-safe-themes
    (quote
-    ("ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" default)))
- '(evil-want-Y-yank-to-eol t))
+    ("603a9c7f3ca3253cb68584cb26c408afcf4e674d7db86badcfe649dd3c538656" "40bc0ac47a9bd5b8db7304f8ef628d71e2798135935eb450483db0dbbfff8b11" "98a619757483dc6614c266107ab6b19d315f93267e535ec89b7af3d62fb83cad" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "badc4f9ae3ee82a5ca711f3fd48c3f49ebe20e6303bba1912d4e2d19dd60ec98" "ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" default)))
+ '(evil-want-Y-yank-to-eol t)
+ '(fci-rule-color "#3E3D31")
+ '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
+ '(highlight-tail-colors
+   (quote
+    (("#3E3D31" . 0)
+     ("#67930F" . 20)
+     ("#349B8D" . 30)
+     ("#21889B" . 50)
+     ("#968B26" . 60)
+     ("#A45E0A" . 70)
+     ("#A41F99" . 85)
+     ("#3E3D31" . 100))))
+ '(js-flat-functions t)
+ '(js2-basic-offset 2)
+ '(js2-include-node-externs t)
+ '(magit-diff-use-overlays nil)
+ '(pos-tip-background-color "color-23")
+ '(pos-tip-foreground-color "color-230")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#F92672")
+     (40 . "#CF4F1F")
+     (60 . "#C26C0F")
+     (80 . "#E6DB74")
+     (100 . "#AB8C00")
+     (120 . "#A18F00")
+     (140 . "#989200")
+     (160 . "#8E9500")
+     (180 . "#A6E22E")
+     (200 . "#729A1E")
+     (220 . "#609C3C")
+     (240 . "#4E9D5B")
+     (260 . "#3C9F79")
+     (280 . "#A1EFE4")
+     (300 . "#299BA6")
+     (320 . "#2896B5")
+     (340 . "#2790C3")
+     (360 . "#66D9EF"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (unspecified "#272822" "#3E3D31" "#A20C41" "#F92672" "#67930F" "#A6E22E" "#968B26" "#E6DB74" "#21889B" "#66D9EF" "#A41F99" "#FD5FF0" "#349B8D" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

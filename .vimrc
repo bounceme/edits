@@ -4,15 +4,13 @@ set showmode
 set autoindent
 set wildmenu
 set hlsearch
-set clipboard=unnamed,unnamedplus
+" set clipboard=unnamed,unnamedplus
 set ttyfast
 set lazyredraw
 set ignorecase
 set smartcase
 set incsearch
 set mouse=a
-set splitright
-set splitbelow
 set vb t_vb=
 set confirm
 set laststatus=2
@@ -22,13 +20,19 @@ set synmaxcol=300
 set ffs=unix,dos
 set ttimeoutlen=50
 set autoread
-set completeopt-=preview
-set completeopt+=menuone
-set number
-set relativenumber
+set completeopt=menu,menuone
+set complete-=i
+set shortmess+=I
+" set number
+" set relativenumber
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 let g:netrw_localrmdir='rm -rf'
 runtime macros/matchit.vim
+
+set wildignore+=*.swp,*.bak
+set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
+set wildignore+=*/min/*,*/vendor/*,*/node_modules/*,*/bower_components/*
+set wildignorecase
 
 augroup vimrc
 	autocmd!
@@ -40,8 +44,8 @@ autocmd vimrc bufwritepost .vimrc source $MYVIMRC
 autocmd vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 set smarttab shiftround tabstop=4 shiftwidth=4 noexpandtab
-autocmd vimrc Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd vimrc FileType gitcommit setl tw=68 spell
+autocmd vimrc Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab iskeyword+=$
+autocmd vimrc FileType gitcommit setl tw=72 fo+=a spell
 
 set undofile
 set undodir=~/.vim/tmp/undo//
@@ -62,9 +66,6 @@ set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%(%l/%L%)
 nnoremap Q <Nop>
 
 nnoremap <Leader>cd :cd %:p:h<cr>
-nnoremap zn :n **/*
-nnoremap zm :ls<cr>:b<space>
-nnoremap zo :oldfiles!<cr>
 
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C-L>
 
@@ -98,6 +99,7 @@ endif
 
 if has('nvim')
 	tnoremap <Esc><Esc> <C-\><C-N>
+	" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -112,9 +114,12 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-repeat'
 Plug 'kana/vim-textobj-user'
 Plug 'ciaranm/detectindent'
+Plug 'baverman/vial-http'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'moll/vim-bbye'
 
 " editing features
 Plug 'justinmk/vim-sneak'
@@ -122,26 +127,35 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'tommcdo/vim-exchange'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'pgdouyon/vim-evanesco'
+" Plug 'justinmk/vim-dirvish'
+" let g:dirvish_hijack_netrw = 1
+" let g:dirvish_relative_paths = 1
 
 " syntax,indent &c.
-Plug 'pangloss/vim-javascript'
+Plug 'CandySunPlus/simple-javascript-indenter'
+" Plug 'pangloss/vim-javascript'
+" Plug 'pangloss/vim-javascript', { 'branch': 'develop' }
 Plug 'moll/vim-node'
-Plug 'lfilho/cosco.vim'
 Plug 'benekastah/neomake'
-Plug 'bounceme/pipe2eval'
-Plug 'kassio/neoterm'
+if has('nvim')
+	Plug 'kassio/neoterm'
+	nnoremap <silent> z: :call neoterm#do('.exit')\|call neoterm#do('node')<cr>
+	nnoremap <silent> z; :TREPLSend<cr>
+	xnoremap <silent> z; :TREPLSend<cr>
+endif
 
 " color,appearance
-Plug 'JarrodCTaylor/vim-256-color-schemes', {'commit':'7bfb294'}
-Plug 'romainl/Apprentice'
 Plug 'ap/vim-css-color'
 Plug 'valloric/MatchTagAlways'
+Plug 'fxn/vim-monochrome'
 
 " autocompleting
 Plug 'ervandew/supertab'
@@ -154,18 +168,34 @@ Plug 'bonsaiben/bootstrap-snippets'
 
 call plug#end()
 
-colo harlem-nights
+" colo desert
+" hi link netrwMarkFile CursorLine
+" hi! link Visual CursorColumn
 
-autocmd vimrc VimEnter * nested if filereadable(getcwd() . '/Session.vim') && !argc() | source Session.vim | endif
+colo monochrome
 
-" Neomake
+hi SneakPluginTarget           ctermfg=15    ctermbg=239
+hi SneakStreakMask             ctermfg=239    ctermbg=239
+hi SneakStreakTarget           ctermfg=15    ctermbg=239
+
 autocmd vimrc BufWritePost * Neomake
+
+" JsIndent
+" let g:SimpleJsIndenter_DisableAssignment = 1
+let g:SimpleJsIndenter_BriefMode = 1
 
 " Tern
 let g:tern_show_signature_in_pum = 1
 autocmd vimrc FileType javascript nnoremap <silent> <buffer> K :TernDoc<CR>
 autocmd vimrc FileType javascript nnoremap <silent> <buffer> <c-]> :TernDef<CR>
 autocmd vimrc FileType javascript nnoremap <silent> <buffer> [D :TernRefs<CR>
+
+" ctrlp
+let g:ctrlp_mruf_exclude = '\/var\/folders\|\/.git\/'
+let g:ctrlp_working_path_mode = 'w'
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_show_hidden = 0
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -185,12 +215,6 @@ let g:SuperTabContextDiscoverDiscovery =
 " delimitMate
 autocmd vimrc FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
-
-" cosco
-autocmd vimrc FileType javascript,css nnoremap <silent> <buffer> <Leader>; :call cosco#commaOrSemiColon()<CR>
-
-" pipe2eval
-let g:pipe2eval_map_key = '<cr>'
 
 " sneak
 let g:sneak#streak = 1

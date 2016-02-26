@@ -3,10 +3,11 @@
 export PATH=/usr/local/bin:$PATH
 export PIP2EVAL_TMP_FILE_PATH=/tmp/
 
-set -o vi
+# set -o vi
 
 # Alias vi to $EDITOR, which in turn call editor()
 alias vi=editor
+alias e=emacs
 
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
