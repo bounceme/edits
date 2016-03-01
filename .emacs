@@ -72,23 +72,22 @@
 (setq-default ediff-split-window-function 'split-window-horizontally)
 (setq-default ediff-merge-split-window-function 'split-window-horizontally)
 
-(require 'simpleclip)
+;; (require 'simpleclip)
 
 ;; (setq x-select-enable-clipboard t)
 ;; (setq interprogram-paste-function 'x-selection-value)
 
 ;; (fset 'evil-visual-update-x-selection 'ignore)
-					; (enable 'evil-visual-update-x-selection 'ignore)
 
-;; (defun x-select-text (text))
+;; ;; (defun x-select-text (text))
 ;; (setq x-select-enable-clipboard nil)
 ;; (setq x-select-enable-primary nil)
 ;; (setq mouse-drag-copy-region nil)
 
 ;; (define-key evil-visual-state-map "p" (lambda () (interactive) (evil-paste-from-register ?\")))
 
-(setq interprogram-cut-function 'simpleclip-set-contents)
-(setq interprogram-paste-function 'simpleclip-get-contents) 
+;; (setq interprogram-cut-function 'simpleclip-set-contents)
+;; (setq interprogram-paste-function 'simpleclip-get-contents) 
 
 (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
@@ -111,18 +110,12 @@
 (show-paren-mode 1)
 (setq ring-bell-function 'ignore)
 
-;; (helm-mode 1)
+(helm-mode 1)
 (require 'helm-config)
 (setq helm-buffers-fuzzy-matching t)
 (setq helm-recentf-fuzzy-match    t)
 (define-key evil-normal-state-map (kbd "C-p") 'helm-for-files)
-(setq helm-locate-command
-      (case system-type
-        ('gnu/linux "locate -i -r %s")
-        ('berkeley-unix "locate -i %s")
-        ('windows-nt "es %s")
-        ('darwin "mdfind -name %s %s")
-        (t "locate %s")))
+
 (setq helm-M-x-fuzzy-match t)
 (global-set-key (kbd "M-x") 'helm-M-x)
 
@@ -299,6 +292,7 @@
 (evil-snipe-mode 1)
 (setq evil-snipe-scope 'buffer
       evil-snipe-repeat-scope 'buffer
+      evil-snipe-repeat-keys 'nil
       evil-snipe-enable-highlight t
       evil-snipe-enable-incremental-highlight t
       evil-snipe-smart-case t)
@@ -322,10 +316,11 @@
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(compilation-message-face (quote default))
- '(custom-enabled-themes (quote (tao-yin)))
+ '(custom-enabled-themes (quote (emac)))
  '(custom-safe-themes
    (quote
-    ("603a9c7f3ca3253cb68584cb26c408afcf4e674d7db86badcfe649dd3c538656" "40bc0ac47a9bd5b8db7304f8ef628d71e2798135935eb450483db0dbbfff8b11" "98a619757483dc6614c266107ab6b19d315f93267e535ec89b7af3d62fb83cad" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "badc4f9ae3ee82a5ca711f3fd48c3f49ebe20e6303bba1912d4e2d19dd60ec98" "ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" default)))
+    ("20e359ef1818a838aff271a72f0f689f5551a27704bf1c9469a5c2657b417e6c" "96ed8a4273836a97fcf73811ae4edf32cfc63cd61bbcf64a2cf4305a5aa1953f" "636290b2641b6c6073ad9e5f3402c011fd846e972290758fc36139fb29066f38" "76a0fbbceefb800c78b38fcb9700567248d6514a2dbdb47b7c0578b27d4340f5" "9527feeeec43970b1d725bdc04e97eb2b03b15be982ac50089ad223d3c6f2920" "603a9c7f3ca3253cb68584cb26c408afcf4e674d7db86badcfe649dd3c538656" "40bc0ac47a9bd5b8db7304f8ef628d71e2798135935eb450483db0dbbfff8b11" "98a619757483dc6614c266107ab6b19d315f93267e535ec89b7af3d62fb83cad" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "badc4f9ae3ee82a5ca711f3fd48c3f49ebe20e6303bba1912d4e2d19dd60ec98" "ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" default)))
+ '(evil-snipe-repeat-keys nil)
  '(evil-want-Y-yank-to-eol t)
  '(fci-rule-color "#3E3D31")
  '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))

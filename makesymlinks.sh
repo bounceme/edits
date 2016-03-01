@@ -8,7 +8,7 @@
 
 dir=~/edits                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files=".bashrc .vimrc .screen .bash_profile .tern-config"
+files=".bashrc .vimrc .vim .screen .bash_profile .tern-config"
 
 ##########
 

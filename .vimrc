@@ -4,7 +4,6 @@ set showmode
 set autoindent
 set wildmenu
 set hlsearch
-" set clipboard=unnamed,unnamedplus
 set ttyfast
 set lazyredraw
 set ignorecase
@@ -23,9 +22,6 @@ set autoread
 set completeopt=menu,menuone
 set complete-=i
 set shortmess+=I
-" set number
-" set relativenumber
-let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 let g:netrw_localrmdir='rm -rf'
 runtime macros/matchit.vim
 
@@ -44,7 +40,7 @@ autocmd vimrc bufwritepost .vimrc source $MYVIMRC
 autocmd vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 set smarttab shiftround tabstop=4 shiftwidth=4 noexpandtab
-autocmd vimrc Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab iskeyword+=$
+autocmd vimrc Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd vimrc FileType gitcommit setl tw=72 fo+=a spell
 
 set undofile
@@ -99,7 +95,6 @@ endif
 
 if has('nvim')
 	tnoremap <Esc><Esc> <C-\><C-N>
-	" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -111,10 +106,10 @@ call plug#begin('~/.vim/bundle')
 
 " libraries, &c.
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-repeat'
 Plug 'kana/vim-textobj-user'
 Plug 'ciaranm/detectindent'
-Plug 'baverman/vial-http'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -126,6 +121,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-line'
@@ -141,6 +137,7 @@ Plug 'pgdouyon/vim-evanesco'
 
 " syntax,indent &c.
 Plug 'CandySunPlus/simple-javascript-indenter'
+Plug 'marcelbeumer/javascript-syntax.vim'
 " Plug 'pangloss/vim-javascript'
 " Plug 'pangloss/vim-javascript', { 'branch': 'develop' }
 Plug 'moll/vim-node'
@@ -155,7 +152,6 @@ endif
 " color,appearance
 Plug 'ap/vim-css-color'
 Plug 'valloric/MatchTagAlways'
-Plug 'fxn/vim-monochrome'
 
 " autocompleting
 Plug 'ervandew/supertab'
@@ -168,15 +164,7 @@ Plug 'bonsaiben/bootstrap-snippets'
 
 call plug#end()
 
-" colo desert
-" hi link netrwMarkFile CursorLine
-" hi! link Visual CursorColumn
-
-colo monochrome
-
-hi SneakPluginTarget           ctermfg=15    ctermbg=239
-hi SneakStreakMask             ctermfg=239    ctermbg=239
-hi SneakStreakTarget           ctermfg=15    ctermbg=239
+colo emacs
 
 autocmd vimrc BufWritePost * Neomake
 
