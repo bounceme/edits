@@ -13,6 +13,7 @@ set mouse=a
 set vb t_vb=
 set confirm
 set laststatus=2
+set numberwidth=3
 set autoindent
 set backspace=indent,eol,start
 set synmaxcol=300
@@ -21,7 +22,7 @@ set ttimeoutlen=50
 set autoread
 set completeopt=menu,menuone
 set complete-=i
-set shortmess+=I
+set shortmess+=Ic
 let g:netrw_localrmdir='rm -rf'
 runtime macros/matchit.vim
 
@@ -36,11 +37,14 @@ augroup END
 
 autocmd vimrc FileType vim setl keywordprg=:help
 autocmd vimrc bufwritepost .vimrc source $MYVIMRC
+autocmd vimrc FileType netrw nnoremap <buffer> g? :h netrw-quickhelp<cr>
+autocmd vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
 
 autocmd vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-set smarttab shiftround tabstop=4 shiftwidth=4 noexpandtab
-autocmd vimrc Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+			\ | wincmd p | diffthis
+
 autocmd vimrc FileType gitcommit setl tw=72 fo+=a spell
 
 set undofile
@@ -57,9 +61,9 @@ if !isdirectory(expand(&directory))
 	call mkdir(expand(&directory), "p")
 endif
 
-set statusline=%<%F\ %h%m%r%{fugitive#statusline()}%=%(%l/%L%)
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
-nnoremap Q <Nop>
+nnoremap Q %
 
 nnoremap <Leader>cd :cd %:p:h<cr>
 
@@ -68,10 +72,8 @@ nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C
 map Y y$
 xnoremap <silent> y ygv<Esc>
 
-" common mistakes
+" commonest mistake
 cnoreabbrev E! e!
-cnoreabbrev W w
-cnoreabbrev Q q
 
 " command
 nnoremap ! :!
@@ -94,7 +96,7 @@ if executable('ag')
 endif
 
 if has('nvim')
-	tnoremap <Esc><Esc> <C-\><C-N>
+	tnoremap <Esc> <C-\><C-N>
 endif
 
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -105,51 +107,38 @@ endif
 call plug#begin('~/.vim/bundle')
 
 " libraries, &c.
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-repeat'
-Plug 'kana/vim-textobj-user'
-Plug 'ciaranm/detectindent'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'kana/vim-textobj-user'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'moll/vim-bbye'
 
 " editing features
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'kana/vim-niceblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'tommcdo/vim-exchange'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'pgdouyon/vim-evanesco'
-" Plug 'justinmk/vim-dirvish'
-" let g:dirvish_hijack_netrw = 1
-" let g:dirvish_relative_paths = 1
+Plug 'bounceme/pipe2eval'
+Plug 'vim-utils/vim-husk'
 
 " syntax,indent &c.
 Plug 'CandySunPlus/simple-javascript-indenter'
 Plug 'marcelbeumer/javascript-syntax.vim'
-" Plug 'pangloss/vim-javascript'
-" Plug 'pangloss/vim-javascript', { 'branch': 'develop' }
 Plug 'moll/vim-node'
 Plug 'benekastah/neomake'
-if has('nvim')
-	Plug 'kassio/neoterm'
-	nnoremap <silent> z: :call neoterm#do('.exit')\|call neoterm#do('node')<cr>
-	nnoremap <silent> z; :TREPLSend<cr>
-	xnoremap <silent> z; :TREPLSend<cr>
-endif
 
 " color,appearance
+Plug 'sjl/badwolf'
 Plug 'ap/vim-css-color'
 Plug 'valloric/MatchTagAlways'
 
@@ -164,12 +153,13 @@ Plug 'bonsaiben/bootstrap-snippets'
 
 call plug#end()
 
-colo emacs
+colo badwolf
 
 autocmd vimrc BufWritePost * Neomake
 
 " JsIndent
-" let g:SimpleJsIndenter_DisableAssignment = 1
+let g:SimpleJsIndenter_DisableAssignment = 1
+let g:SimpleJsIndenter_CaseIndentLevel = -1
 let g:SimpleJsIndenter_BriefMode = 1
 
 " Tern
@@ -179,7 +169,7 @@ autocmd vimrc FileType javascript nnoremap <silent> <buffer> <c-]> :TernDef<CR>
 autocmd vimrc FileType javascript nnoremap <silent> <buffer> [D :TernRefs<CR>
 
 " ctrlp
-let g:ctrlp_mruf_exclude = '\/var\/folders\|\/.git\/'
+let g:ctrlp_mruf_exclude = '\/var\/folders\|\/.git\/\|\/$'
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cmd = 'CtrlPMixed'
@@ -203,6 +193,9 @@ let g:SuperTabContextDiscoverDiscovery =
 " delimitMate
 autocmd vimrc FileType vim,html,php let b:delimitMate_matchpairs = "(:),[:],{:}"
 let delimitMate_expand_cr = 1
+
+" pipe2eval
+let g:pipe2eval_map_key = '<cr>'
 
 " sneak
 let g:sneak#streak = 1
