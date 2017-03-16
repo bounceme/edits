@@ -35,6 +35,8 @@ set fo+=j fo-=o fo-=t fo-=r fo+=c
 
 set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude=tags
 
+let g:loaded_vimballPlugin = 1
+let g:loaded_getscriptPlugin = 1
 runtime macros/matchit.vim
 let g:netrw_use_errorwindow=0
 let g:netrw_dirhistmax=0
@@ -45,7 +47,7 @@ augroup vimrc
   au!
 augroup END
 
-if argc()
+if $BASHRC_ACTIVE == 1 && readfile($HOME.'/.bash_history')[-1] =~# '^\s*n\=vim\=\s\+\S' 
   au vimrc VimLeavePre * set viminfo=
 end
 set viminfo+=%25
@@ -83,7 +85,7 @@ nnoremap c* *``cgn
 nnoremap c# #``cgN
 
 nnoremap <LEADER>cd :cd %:p:h<cr>
-nnoremap <lEADER>cp :let @* = expand("%")"<cr>
+nnoremap <lEADER>cp :let @* = expand("%:p")"<cr>
 nnoremap <lEADER>v :e $MYVIMRC<cr>
 
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C-L>
@@ -169,7 +171,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'neomake/neomake'
 Plug 'justinmk/molokai'
 Plug 'bounceme/rjsx-compile'
-Plug 'bounceme/vim-cool'
+Plug 'romainl/vim-cool'
 Plug 'bounceme/poppy.vim'
 
 " autocompletion
@@ -204,13 +206,13 @@ au vimrc filetype text
       \ | ino <buffer> ; ;<c-g>u
       \ | ino <buffer> : :<c-g>u
 
-" let g:javascript_plugin_flow = 1
+let g:javascript_plugin_flow = 1
 
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.git', 'package.json', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/']
 
 if !exists('g:colors_name')
-  exe 'colo ' . ((strftime('%H') % 17) > 7 ? 'default' : 'molokai')
+  exe 'colo ' . ((strftime('%H') % 19) > 7 ? 'default' : 'molokai')
 endif
 
 let g:user_emmet_settings = {
