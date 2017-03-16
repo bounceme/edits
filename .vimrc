@@ -206,7 +206,7 @@ au vimrc filetype text
       \ | ino <buffer> ; ;<c-g>u
       \ | ino <buffer> : :<c-g>u
 
-let g:javascript_plugin_flow = 1
+" let g:javascript_plugin_flow = 1
 
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.git', 'package.json', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/']
