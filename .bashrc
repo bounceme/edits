@@ -37,6 +37,6 @@ if [ -f /usr/local/etc/bash_completion ]; then
 elif [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 	. /etc/bash_completion
 fi
-export HISTCONTROL=erasedups:ignoreboth
+HISTCONTROL=erasedups:ignoreboth
 HISTSIZE=20000
 HISTFILESIZE=20000
