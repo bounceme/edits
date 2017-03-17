@@ -18,7 +18,7 @@ alias vi=editor
 
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
-	trap '{ echo $BASH_COMMAND; history -a ;} >/dev/null 2>&1' DEBUG
+	trap ' history -a' DEBUG
 	if hash nvim >/dev/null 2>&1; then
 		nvim $@
 	elif hash vim >/dev/null 2>&1; then
