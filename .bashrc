@@ -1,8 +1,6 @@
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/node_modules/.bin:$PATH
 export BASHRC_ACTIVE=1
-
 PS1="\h:\W \u\$ "
 
 
@@ -14,17 +12,15 @@ shopt -s globstar &> /dev/null
 alias emacs='emacs -nw'
 alias vi=editor
 
-# alias node="env NODE_NO_READLINE=1 rlwrap node"
-
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
 	trap 'history -a' DEBUG
 	if hash nvim >/dev/null 2>&1; then
-		nvim $@
+		nvim "$@"
 	elif hash vim >/dev/null 2>&1; then
-		vim $@
+		vim "$@"
 	else
-		vi $@
+		vi "$@"
 	fi
 	trap - DEBUG
 }
@@ -37,6 +33,6 @@ if [ -f /usr/local/etc/bash_completion ]; then
 elif [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 	. /etc/bash_completion
 fi
-HISTCONTROL=erasedups:ignoreboth
+HISTCONTROL=erasedups:ignoredups
 HISTSIZE=20000
 HISTFILESIZE=20000

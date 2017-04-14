@@ -22,7 +22,7 @@ set synmaxcol=500
 set ffs=unix,dos
 set guioptions+=c
 set ttimeoutlen=50
-set completeopt=menu,menuone
+set completeopt=menu,menuone,noselect
 set complete-=i
 set complete-=u
 set shortmess+=IcT
@@ -32,6 +32,8 @@ set foldopen-=block
 set foldopen+=search
 set nojs
 set fo+=j fo-=o fo-=t fo-=r fo+=c
+set directory-=.
+set undofile
 
 set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude=tags
 
@@ -47,6 +49,7 @@ augroup vimrc
   au!
 augroup END
 
+set viminfo-=!
 if $BASHRC_ACTIVE == 1 && get(readfile($HOME.'/.bash_history'),-1) =~# '^\s*vi\s\+\S'
   au vimrc VimLeavePre * set viminfo=
 end
@@ -72,9 +75,6 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 
 au vimrc FileType gitcommit setl tw=72 fo+=a spell
 
-set directory-=.
-set undofile
-
 set statusline=%<%F\ %h%m%r%Y\ %{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 nmap Q %
@@ -85,7 +85,7 @@ nnoremap c* *``cgn
 nnoremap c# #``cgN
 
 nnoremap <LEADER>cd :cd %:p:h<cr>
-nnoremap <lEADER>cp :let @* = expand("%:p")"<cr>
+nnoremap <lEADER>cp :let @* = expand("%:p")<cr>
 nnoremap <lEADER>v :e $MYVIMRC<cr>
 
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C-L>
@@ -170,9 +170,11 @@ Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'neomake/neomake'
 Plug 'justinmk/molokai'
-Plug 'bounceme/rjsx-compile'
 Plug 'romainl/vim-cool'
+Plug 'bounceme/rjsx-compile'
 Plug 'bounceme/poppy.vim'
+Plug 'bounceme/restclient.vim'
+Plug 'bounceme/fairedit.vim'
 
 " autocompletion
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
@@ -180,15 +182,28 @@ Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
 
 call plug#end()
+silent! set inccommand=nosplit
 catch
   echom 'NO PLUGINS'
 endtry
 
-command! Jtags silent! exe '!find . -iname "*.js" | xargs ctags' | redraw!
+omap $ <Plug>Fair_M_dollar
+nmap C <Plug>Fair_M_C
+nmap D <Plug>Fair_M_D
+if maparg('Y','n') ==# 'y$'
+  nmap Y <Plug>Fair_M_yEOL
+endif
+
+command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
 au vimrc filetype javascript map Z! :w !node -p<cr>
-au vimrc bufwritepost *.jsx silent! Neomake
-au vimrc bufwritepost *.js silent! Neomake
+
+silent! if neomake#has_async_support()
+au vimrc bufwritepost * silent! Neomake
+else
+  au vimrc bufwritepost *.jsx silent! Neomake
+  au vimrc bufwritepost *.js silent! Neomake
+endif
 
 augroup Poppy
   au!
@@ -196,7 +211,7 @@ augroup END
 nnoremap <silent> <leader>hp :call clearmatches() \| let g:poppy = -get(g:,'poppy',-1) \|
       \ exe 'au! Poppy CursorMoved *' . (g:poppy > 0 ? ' call PoppyInit()' : '') <cr>
 
-au vimrc cmdWinEnter [:>] syntax clear
+au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
 
 au vimrc filetype text
       \   ino <buffer> . .<c-g>u
@@ -205,8 +220,6 @@ au vimrc filetype text
       \ | ino <buffer> , ,<c-g>u
       \ | ino <buffer> ; ;<c-g>u
       \ | ino <buffer> : :<c-g>u
-
-" let g:javascript_plugin_flow = 1
 
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.git', 'package.json', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/']
