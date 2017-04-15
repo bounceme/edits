@@ -14,15 +14,23 @@ alias vi=editor
 
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
-	trap 'history -a' DEBUG
-	if hash nvim >/dev/null 2>&1; then
-		nvim "$@"
-	elif hash vim >/dev/null 2>&1; then
-		vim "$@"
+	if [ $# -ne 0 ]; then
+		if hash nvim >/dev/null 2>&1; then
+			nvim "$@" "+set viminfo="
+		elif hash vim >/dev/null 2>&1; then
+			vim "$@" "+set viminfo="
+		else
+			vi "$@" "+set viminfo="
+		fi
 	else
-		vi "$@"
+		if hash nvim >/dev/null 2>&1; then
+			nvim
+		elif hash vim >/dev/null 2>&1; then
+			vim
+		else
+			vi
+		fi
 	fi
-	trap - DEBUG
 }
 
 GPG_TTY=`tty`

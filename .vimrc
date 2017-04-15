@@ -49,10 +49,9 @@ augroup vimrc
   au!
 augroup END
 
-if $BASHRC_ACTIVE == 1 && get(readfile($HISTFILE),-1) !~# '^\s*vi\s*$'
-  au vimrc VimLeavePre * set viminfo=
+if &viminfo isnot ''
+  set viminfo^=%25
 end
-set viminfo+=%25
 
 set wildignore+=*.swp,*.bak,*.un~
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
@@ -201,8 +200,7 @@ au vimrc filetype javascript setl path=.,node_modules,,
 silent! if neomake#has_async_support()
 au vimrc bufwritepost * Neomake
 else
-  au vimrc bufwritepost *.jsx silent! Neomake
-  au vimrc bufwritepost *.js silent! Neomake
+  au vimrc bufwritepost *.{js,jsx} silent! Neomake
 endif
 
 augroup Poppy
