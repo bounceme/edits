@@ -17,9 +17,9 @@ fi
 function editor() {
 	if [ $# -ne 0 ]; then
 		if hash nvim >/dev/null 2>&1; then
-			nvim "$@" "+set viminfo="
+			nvim -i NONE "$@"
 		else
-			vim "$@" "+set viminfo="
+			vim -i NONE "$@"
 		fi
 	else
 		if hash nvim >/dev/null 2>&1; then
