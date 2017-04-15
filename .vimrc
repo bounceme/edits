@@ -49,7 +49,7 @@ augroup vimrc
   au!
 augroup END
 
-if $BASHRC_ACTIVE == 1 && get(readfile($HOME.'/.bash_history'),-1) !~# '^\s*vi\s*$'
+if $BASHRC_ACTIVE == 1 && get(readfile($HISTFILE),-1) !~# '^\s*vi\s*$'
   au vimrc VimLeavePre * set viminfo=
 end
 set viminfo+=%25
