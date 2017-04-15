@@ -1,0 +1,7 @@
+music_directory         "~/Music"
+playlist_directory      "~/.mpd/playlists"
+db_file                 "~/.mpd/mpd.db"
+restore_paused          "yes"
+replaygain              "track"
+
+port              "6600"

@@ -49,7 +49,6 @@ augroup vimrc
   au!
 augroup END
 
-set viminfo-=!
 if $BASHRC_ACTIVE == 1 && get(readfile($HOME.'/.bash_history'),-1) =~# '^\s*vi\s\+\S'
   au vimrc VimLeavePre * set viminfo=
 end
@@ -184,7 +183,7 @@ Plug 'ervandew/supertab'
 call plug#end()
 silent! set inccommand=nosplit
 catch
-  echom 'NO PLUGINS'
+  echo 'NO PLUGINS'
 endtry
 
 omap $ <Plug>Fair_M_dollar
@@ -197,9 +196,10 @@ endif
 command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
 au vimrc filetype javascript map Z! :w !node -p<cr>
+au vimrc filetype javascript setl path=.,node_modules,,
 
 silent! if neomake#has_async_support()
-au vimrc bufwritepost * silent! Neomake
+au vimrc bufwritepost * Neomake
 else
   au vimrc bufwritepost *.jsx silent! Neomake
   au vimrc bufwritepost *.js silent! Neomake

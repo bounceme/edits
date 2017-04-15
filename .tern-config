@@ -2,7 +2,6 @@
 	"libs": [
 		"browser"
 	],
-	"dependencyBudget": 1,
 	"plugins": {
 		"node": {}
 	}
