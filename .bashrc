@@ -1,6 +1,5 @@
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/node_modules/.bin:$PATH
-export BASHRC_ACTIVE=1
 PS1="\h:\W \u\$ "
 
 
@@ -39,7 +38,6 @@ if [ -f /usr/local/etc/bash_completion ]; then
 elif [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 	. /etc/bash_completion
 fi
-export HISTFILE
 HISTCONTROL=erasedups:ignoredups
 HISTSIZE=20000
 HISTFILESIZE=20000
