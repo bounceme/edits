@@ -75,9 +75,7 @@ au vimrc FileType gitcommit setl tw=72 fo+=a spell
 
 set statusline=%<%F\ %h%m%r%Y\ %{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
-nmap Q %
-omap Q %
-xmap Q %
+map Q %
 
 nnoremap c* *``cgn
 nnoremap c# #``cgN
@@ -90,7 +88,7 @@ nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C
 
 nnoremap gV `[v`]
 
-map Y y$
+nnoremap Y y$
 xnoremap <silent> y ygv<Esc>
 inoremap <C-u> <C-g>u<C-u>
 
@@ -194,7 +192,7 @@ endif
 
 command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
-au vimrc filetype javascript map Z! :w !node -p<cr>
+au vimrc filetype javascript noremap <buffer> Z! :w !node -p<cr>
 au vimrc filetype javascript setl path=.,node_modules,,
 
 silent! if neomake#has_async_support()
