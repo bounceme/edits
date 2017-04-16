@@ -103,8 +103,7 @@ xnoremap <silent> ae GoggV
 onoremap <silent> ae :<C-U>execute "normal! m`"<Bar>keepjumps normal! ggVG<CR>
 
 " command
-nnoremap <space> :
-xnoremap <space> :
+noremap <space> :
 
 nnoremap <expr><C-P> ":Find . -iname '*'<left>"
 nnoremap zo :ls<CR>:b
@@ -183,11 +182,13 @@ catch
   echo 'NO PLUGINS'
 endtry
 
-omap $ <Plug>Fair_M_dollar
-nmap C <Plug>Fair_M_C
-nmap D <Plug>Fair_M_D
-if maparg('Y','n') ==# 'y$'
-  nmap Y <Plug>Fair_M_yEOL
+if exists('g:plugs["restclient.vim"]')
+  omap $ <Plug>Fair_M_dollar
+  nmap C <Plug>Fair_M_C
+  nmap D <Plug>Fair_M_D
+  if maparg('Y','n') ==# 'y$'
+    nmap Y <Plug>Fair_M_yEOL
+  endif
 endif
 
 command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
