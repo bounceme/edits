@@ -4,6 +4,8 @@ PS1="\h:\W \u\$ "
 
 
 alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
+alias mpdrefresh='{ killall mpd; rm ~/.mpd/mpd.db; touch ~/.mpd/mpd.db; mpd; \
+if ! ps -x | grep mpdkeys | grep python ; then ( mpdkeys & ) ; fi ;} &>/dev/null'
 
 shopt -s globstar &> /dev/null
 
