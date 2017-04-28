@@ -133,7 +133,7 @@ fun! s:MyCR()
     if &commentstring !~# '%s\s*\S'
       let commst = substitute(
             \ &commentstring, '\S\zs\s*%s\s*','','')
-      if getline('.') !~? '\V\^\s\*'.commst
+      if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
         let vcol = searchpairpos('\V'.escape(commst,'\').'\&','','\%#','bnW',
               \ 'synIDattr(synID(line("."),searchpos("\\m\\S","bWn")[1],0),"name") =~? "comment"',line('.'))[1]
         if vcol
@@ -150,8 +150,6 @@ fun! s:MyCR()
   return "\<CR>"
 endfun
 inoremap <expr> <CR> <SID>MyCR()
-
-
 
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
