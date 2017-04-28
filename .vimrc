@@ -134,8 +134,7 @@ fun! s:MyCR()
       let commst = substitute(
             \ &commentstring, '\S\zs\s*%s\s*','','')
       if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
-        let vcol = searchpairpos('\V'.escape(commst,'\').'\&','','\%#','bnW',
-              \ 'synIDattr(synID(line("."),searchpos("\\m\\S","bWn")[1],0),"name") =~? "comment"',line('.'))[1]
+        let vcol = stridx(getline('.'),commst) + 1
         if vcol
           let savev = &virtualedit
           set virtualedit=all
