@@ -144,7 +144,7 @@ fun! s:MyCR()
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
         \ syn !~? 'string\|regex\|comment'
     return "\<CR>}\<C-o>O"
-  end
+  endif
   return "\<CR>"
 endfun
 inoremap <expr> <CR> <SID>MyCR()
