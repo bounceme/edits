@@ -131,8 +131,9 @@ fun! s:MyCR()
   if syn =~? 'comment'
     let commst = matchstr(
           \ &commentstring, '^\s*\zs.*\S\ze\s*%s\s*$')
-    if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
-      let vcol = strdisplaywidth(matchstr(getline('.'),'\V\^\.\{-}\ze'.escape(commst,'\')))+1
+    let pretext = matchstr(getline('.'),'\V\^\.\{-}\ze'.escape(commst,'\'))
+    if pretext =~ '\S'
+      let vcol = strdisplaywidth(pretext)+1
       let align = matchstr(getline('.'),'\%'.(vcol+strlen(commst)).'v\s*')
       if vcol
         let savev = &virtualedit
