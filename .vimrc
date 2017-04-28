@@ -127,25 +127,31 @@ xnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 fun! s:MyCR()
-  if synIDattr(synID(line('.'),col('.') - 1,0),'name') =~? 'comment'
+  let syn = synIDattr(synID(line('.'),col('.') - 1,0),'name')
+  if syn =~? 'comment'
     " tpope/vim-commentary
     if &commentstring !~# '%s\s*\S'
       let commst = substitute(
             \ &commentstring, '\S\zs\s*%s\s*','','')
-      let vcol = searchpos(commst,'bWn',line('.'))[1]
-      if vcol
-        let savev = &virtualedit
-        set virtualedit=all
-        return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
+      if getline('.') !~? '\V\^\s\*'.commst
+        let vcol = searchpairpos('\V'.escape(commst,'\').'\&','','\%#','bnW',
+              \ 'synIDattr(synID(line("."),searchpos("\\m\\S","bWn")[1],0),"name") =~? "comment"',line('.'))[1]
+        if vcol
+          let savev = &virtualedit
+          set virtualedit=all
+          return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
+        endif
       endif
     endif
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
-        \ synIDattr(synID(line('.'),col('.') - 1,0),'name') !~? 'string\|regex\|comment'
+        \ syn !~? 'string\|regex\|comment'
     return "\<CR>}\<C-o>O"
   end
   return "\<CR>"
 endfun
 inoremap <expr> <CR> <SID>MyCR()
+
+
 
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
