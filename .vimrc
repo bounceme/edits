@@ -127,7 +127,15 @@ xnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 fun! s:MyCR()
-  if getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
+  if synIDattr(synID(line('.'),col('.') - 1,0),'name') =~? 'comment'
+    " tpope/vim-commentary
+    let commst = substitute(substitute(
+          \ &commentstring, '\S\zs%s','','') ,'%s\ze\S', '', '')
+    let savev = &virtualedit
+    set virtualedit=all
+    let vcol = searchpos(commst,'bWn',line('.'))[1]
+    return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
+  elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
         \ synIDattr(synID(line('.'),col('.') - 1,0),'name') !~? 'string\|regex\|comment'
     return "\<CR>}\<C-o>O"
   end
