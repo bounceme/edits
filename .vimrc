@@ -130,7 +130,7 @@ fun! s:MyCR()
   let syn = synIDattr(synID(line('.'),col('.') - 1,0),'name')
   if syn =~? 'comment'
     " tpope/vim-commentary
-    if &commentstring !~# '%s\s*\S\|^$'
+    if &commentstring =~# '\S\s*%s\s*$'
       let commst = substitute(
             \ &commentstring, '\S\zs\s*%s\s*','','')
       if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
