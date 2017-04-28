@@ -131,7 +131,7 @@ fun! s:MyCR()
     " tpope/vim-commentary
     if &commentstring !~# '%s\s*\S'
       let commst = substitute(
-            \ &commentstring, '\S\zs\s*%s','','')
+            \ &commentstring, '\S\zs\s*%s\s*','','')
       let vcol = searchpos(commst,'bWn',line('.'))[1]
       if vcol
         let savev = &virtualedit
