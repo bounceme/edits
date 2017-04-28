@@ -129,17 +129,15 @@ xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 fun! s:MyCR()
   let syn = synIDattr(synID(line('.'),col('.') - 1,0),'name')
   if syn =~? 'comment'
-    " tpope/vim-commentary
-    if &commentstring =~# '\S\s*%s\s*$'
-      let commst = substitute(
-            \ &commentstring, '\S\zs\s*%s\s*','','')
-      if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
-        let vcol = stridx(getline('.'),commst) + 1
-        if vcol
-          let savev = &virtualedit
-          set virtualedit=all
-          return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
-        endif
+    let commst = matchstr(
+          \ &commentstring, '^\s*\zs.*\S\ze\s*%s\s*$')
+    if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
+      let vcol = stridx(getline('.'),commst) + 1
+      let align = matchstr(strpart(getline('.'),vcol - 1 + strlen(commst)),'^\s*')
+      if vcol
+        let savev = &virtualedit
+        set virtualedit=all
+        return "\<CR>\<C-o>".vcol."|".commst.align."\<C-o>:let &virtualedit='".savev."'\<CR>"
       endif
     endif
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
