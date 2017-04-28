@@ -132,8 +132,8 @@ fun! s:MyCR()
     let commst = matchstr(
           \ &commentstring, '^\s*\zs.*\S\ze\s*%s\s*$')
     if getline('.') !~? '\V\^\s\*'.escape(commst,'\')
-      let vcol = stridx(getline('.'),commst) + 1
-      let align = matchstr(strpart(getline('.'),vcol - 1 + strlen(commst)),'^\s*')
+      let vcol = strdisplaywidth(matchstr(getline('.'),'\V\^\.\{-}\ze'.escape(commst,'\')))+1
+      let align = matchstr(getline('.'),'\%'.(vcol+strlen(commst)).'v\s*')
       if vcol
         let savev = &virtualedit
         set virtualedit=all
