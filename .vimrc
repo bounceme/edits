@@ -137,7 +137,7 @@ fun! s:MyCR()
       if vcol
         let savev = &virtualedit
         set virtualedit=all
-        return "\<CR>\<C-o>".vcol."|".commst.align."\<C-o>:let &virtualedit='".savev."'\<CR>"
+        return "\<CR>\<C-o>".vcol."|".commst.align."\<C-o>:let &virtualedit='".savev."'\<bar>.retab!\<CR>"
       endif
     endif
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
