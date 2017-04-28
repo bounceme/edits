@@ -134,7 +134,9 @@ fun! s:MyCR()
     let savev = &virtualedit
     set virtualedit=all
     let vcol = searchpos(commst,'bWn',line('.'))[1]
-    return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
+    if vcol
+      return "\<CR>\<C-o>".vcol."|".commst." \<C-o>:let &virtualedit='".savev."'\<CR>"
+    endif
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
         \ synIDattr(synID(line('.'),col('.') - 1,0),'name') !~? 'string\|regex\|comment'
     return "\<CR>}\<C-o>O"
