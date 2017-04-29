@@ -127,18 +127,17 @@ xnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 fun! s:MyCR()
+  let ws = &sw == 0 ? &ts : &sw
   let syn = synIDattr(synID(line('.'),col('.') - 1,0),'name')
   if syn =~? 'comment'
     let commst = matchstr(
           \ &commentstring, '^\s*\zs.*\S\ze\s*%s\s*$')
     let pretext = matchstr(getline('.'),'\V\^\.\{-}\ze'.escape(commst,'\'))
     if pretext =~ '\S'
-      let vcol = strdisplaywidth(pretext)+1
-      let align = matchstr(getline('.'),'\%'.(vcol+strlen(commst)).'v\s*')
+      let vcol = strdisplaywidth(pretext)
+      let align = matchstr(getline('.'),'\%'.(vcol+strlen(commst)+1).'v\s*')
       if vcol
-        let savev = &virtualedit
-        set virtualedit=all
-        return "\<CR>\<C-o>".vcol."\<Bar>".commst."\<C-o>:let &virtualedit='".savev."'\<Bar>.retab!\<CR>".align
+        return "\<CR>0\<C-d>".repeat("\<C-t>",vcol/ws).repeat(' ',vcol%ws).commst.align
       endif
     endif
   elseif getline('.')[col('.')-2] == '{' && col('.') == col('$') &&
