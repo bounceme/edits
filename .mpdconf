@@ -3,5 +3,10 @@ playlist_directory      "~/.mpd/playlists"
 db_file                 "~/.mpd/mpd.db"
 restore_paused          "yes"
 replaygain              "track"
-
-port              "6600"
+auto_update     	"yes"
+audio_output {
+        type            "osx"
+	name            "My Mac Device"
+        mixer_type      "software"
+}
+port              	"6600"

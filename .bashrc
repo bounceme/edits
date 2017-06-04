@@ -4,22 +4,22 @@ PS1="\h:\W \u\$ "
 
 
 alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
+alias mpdrefresh='{ killall mpd; rm ~/.mpd/mpd.db; touch ~/.mpd/mpd.db; mpd; \
+if ! ps -x | grep mpdkeys | grep python ; then ( mpdkeys & ) ; fi ;} &>/dev/null'
 
 shopt -s globstar &> /dev/null
 
 # Alias vi to $EDITOR, which in turn call editor()
 alias emacs='emacs -nw'
-if hash vim >/dev/null 2>&1; then
 	alias vi=editor
-fi
 
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
 	if [ $# -ne 0 ]; then
 		if hash nvim >/dev/null 2>&1; then
-			nvim -i NONE "$@"
+			nvim "$@" "+set viminfo="
 		else
-			vim -i NONE "$@"
+			vim "$@" "+set viminfo="
 		fi
 	else
 		if hash nvim >/dev/null 2>&1; then
