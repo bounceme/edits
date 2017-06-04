@@ -1,10 +1,9 @@
-(setq package-list '(emms golden-ratio))
+(setq package-list '(emms golden-ratio exec-path-from-shell))
 
 (setq package-archives '(("elpa" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
-
 ; fetch the list of packages available 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -14,6 +13,8 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ; enable mouse reporting for terminal emulators
 (unless window-system
@@ -30,7 +31,7 @@
 (require 'cl)
 (require 'emms-setup)
 (require 'emms-playing-time)
-(emms-standard)
+(emms-all)
 (emms-default-players)
 (emms-cache-enable)
 (add-to-list 'emms-player-list 'emms-player-mpd)
@@ -53,12 +54,13 @@
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] 'emms-browser-toggle-subitems)
 
+(setq ring-bell-function 'ignore)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (golden-ratio emms))))
+ '(package-selected-packages (quote (exec-path-from-shell golden-ratio emms))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
