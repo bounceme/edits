@@ -26,6 +26,10 @@
                               (interactive)
                               (scroll-up 1))))
 
+(setq inhibit-startup-screen t)
+(blink-cursor-mode 0)
+(setq ring-bell-function 'ignore)
+
 (require 'golden-ratio)
 (golden-ratio-mode 1)
 (require 'cl)
@@ -54,16 +58,25 @@
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] 'emms-browser-toggle-subitems)
 
-(setq ring-bell-function 'ignore)
+
+
+
+
+
+
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (exec-path-from-shell golden-ratio emms))))
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(line-number-mode nil)
+  '(menu-bar-mode nil)
+  '(package-selected-packages (quote (exec-path-from-shell golden-ratio emms)))
+  '(scroll-bar-mode nil)
+  '(tool-bar-mode nil))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
