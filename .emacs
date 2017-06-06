@@ -54,9 +54,30 @@
 (defun emms-clear-play ()
   (interactive)
   (emms-browser-clear-playlist)
-  (emms-browser-add-tracks-and-play))
+  (emms-browser-add-tracks-and-play)
+  (emms-playlist-mode-switch-buffer)
+  (save-excursion (goto-char (point-min))
+                  (emms-walk-tracks
+                    (emms-playlist-update-track)))
+  (emms-playlist-mode-switch-buffer))
+
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] 'emms-browser-toggle-subitems)
+
+(defun my-info-func (track)
+  "Return a description of TRACK."
+  (let ((artist (emms-track-get track 'info-artist))
+        (title  (emms-track-get track 'info-title))
+        (ptime (emms-track-get track 'info-playing-time)))
+    (cond
+      ((and artist title ptime)
+       (concat artist (format " - %-20s - " title) (format "%5s:%-5s" (/ ptime 60) (% ptime 60))))
+      (title
+        title)
+      (t
+        (emms-track-simple-description track)))))
+(setq emms-track-description-function 'my-info-func)
+
 
 
 
