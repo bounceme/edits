@@ -71,7 +71,8 @@
         (ptime (emms-track-get track 'info-playing-time)))
     (cond
       ((and artist title ptime)
-       (concat artist (format " - %-20s - " title) (format "%5s:%-5s" (/ ptime 60) (% ptime 60))))
+       (concat artist (format " - %-20s - " title) (format "%5s:%.2s" (/ ptime 60)
+                                                           (concat (number-to-string (% ptime 60)) "0"))))
       (title
         title)
       (t
