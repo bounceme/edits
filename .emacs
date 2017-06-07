@@ -79,7 +79,7 @@
     (cond
       ((and artist title ptime)
        (concat artist (format " - %-20s - " title) (format "%5s:%.2s" (/ ptime 60)
-                                                           (concat (format "%02d" (% ptime 60)) "0"))))
+                                                            (format "%02d" (% ptime 60)))))
       (title
         title)
       (t
