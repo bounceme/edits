@@ -1,3 +1,11 @@
+;; Turn off mouse interface early in startup to avoid momentary display
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'line-number-mode) (line-number-mode -1))
+
+;; No splash screen please ... jeez
+(setq inhibit-startup-message t)
 (setq package-list '(emms golden-ratio exec-path-from-shell))
 
 (setq package-archives '(("elpa" . "http://elpa.gnu.org/packages/")
@@ -26,7 +34,6 @@
                               (interactive)
                               (scroll-up 1))))
 
-(setq inhibit-startup-screen t)
 (blink-cursor-mode 0)
 (setq ring-bell-function 'ignore)
 
@@ -44,8 +51,8 @@
 (emms-player-mpd-update-all)
 (emms-cache-set-from-mpd-all)
 (emms-playing-time 1)
+; (setq emms-playing-time-style 'bar)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
-
 
 (add-hook 'emms-player-started-hook 'emms-smart-browse)
 (add-hook 'emms-player-started-hook 'emms-player-mpd-show)
@@ -72,7 +79,7 @@
     (cond
       ((and artist title ptime)
        (concat artist (format " - %-20s - " title) (format "%5s:%.2s" (/ ptime 60)
-                                                           (concat (number-to-string (% ptime 60)) "0"))))
+                                                           (concat (format "%02d" (% ptime 60)) "0"))))
       (title
         title)
       (t
@@ -86,19 +93,9 @@
 
 
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  '(line-number-mode nil)
-  '(menu-bar-mode nil)
-  '(package-selected-packages (quote (exec-path-from-shell golden-ratio emms)))
-  '(scroll-bar-mode nil)
-  '(tool-bar-mode nil))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
