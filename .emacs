@@ -4,7 +4,8 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'line-number-mode) (line-number-mode -1))
-
+; start fullscreen
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;; No splash screen please ... jeez
 (setq inhibit-startup-message t)
 (setq package-list '(emms golden-ratio exec-path-from-shell))
@@ -89,10 +90,10 @@
 
 ; modeline-buttons {{{1
 (defun mpdseek-button (sign)
-  "Return a description of TRACK."
+  "seek forward or backwards 1/10 of song length"
   (let ((seco (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
                  (* sign 10))))
-    (emms-player-mpd-seek seco)(emms-playing-time-seek seco)))
+    (emms-player-mpd-seek seco) (emms-playing-time-seek seco)))
 
 (defun fr-mpmms()
   (interactive)
@@ -101,7 +102,6 @@
   (interactive)
   (mpdseek-button 1))
 
-; seek-backwards 1/10 of song
 (defconst my-mode-line-map3 (make-sparse-keymap "fr"))
 (setq global-mode-string 
       (append global-mode-string 
@@ -123,7 +123,6 @@
 (define-key my-mode-line-map 
             [mode-line down-mouse-1] 'emms-player-mpd-pause)
 
-; seek-forwards 1/10 of song
 (defconst my-mode-line-map2 (make-sparse-keymap "ff"))
 (setq global-mode-string 
       (append global-mode-string 
