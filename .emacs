@@ -91,9 +91,8 @@
 ; modeline-buttons {{{1
 (defun mpdseek-button (sign)
   "seek forward or backwards 1/10 of song length"
-  (let ((seco (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
-                 (* sign 10))))
-    (emms-player-mpd-seek seco) (emms-playing-time-seek seco)))
+  (emms-player-seek (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
+                       (* sign 10))))
 
 (defun fr-mpmms()
   (interactive)
