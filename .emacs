@@ -101,6 +101,9 @@
 (defun ff-mpmms()
   (interactive)
   (mpdseek-button 1))
+(defun p-mpmms()
+  (interactive)
+  (emms-player-pause))
 
 (defconst my-mode-line-map3 (make-sparse-keymap "fr"))
 (setq global-mode-string 
@@ -121,7 +124,7 @@
                             'local-map my-mode-line-map
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map 
-            [mode-line down-mouse-1] 'emms-player-mpd-pause)
+            [mode-line down-mouse-1] 'p-mpmms)
 
 (defconst my-mode-line-map2 (make-sparse-keymap "ff"))
 (setq global-mode-string 
