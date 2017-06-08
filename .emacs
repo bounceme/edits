@@ -92,10 +92,21 @@
 
 
 
+(defconst my-mode-line-map (make-sparse-keymap "play-pause"))
+
+(setq global-mode-string 
+      (append global-mode-string 
+              (list
+                (propertize "⏯"
+                            'local-map my-mode-line-map
+                            'mouse-face 'mode-line-highlight))))
+
+(define-key my-mode-line-map 
+            [mode-line down-mouse-1] 'emms-player-mpd-pause)
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
