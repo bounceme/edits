@@ -1,3 +1,4 @@
+; vim: set foldmethod=marker foldlevel=0:
 ;; Turn off mouse interface early in startup to avoid momentary display
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -86,27 +87,50 @@
         (emms-track-simple-description track)))))
 (setq emms-track-description-function 'my-info-func)
 
+; modeline-buttons {{{1
+(defun mpdseek-button (sign)
+  "Return a description of TRACK."
+  (let ((seco (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
+                 (* sign 10))))
+    (emms-player-mpd-seek seco)(emms-playing-time-seek seco)))
 
+(defun fr-mpmms()
+  (interactive)
+  (mpdseek-button -1))
+(defun ff-mpmms()
+  (interactive)
+  (mpdseek-button 1))
 
+; seek-backwards 1/10 of song
+(defconst my-mode-line-map3 (make-sparse-keymap "fr"))
+(setq global-mode-string 
+      (append global-mode-string 
+              (list
+                (propertize "⏪"
+                            'local-map my-mode-line-map3
+                            'mouse-face 'mode-line-highlight))))
+(define-key my-mode-line-map3 
+            [mode-line down-mouse-1] 'fr-mpmms)
 
-
-
-
+; play/pause
 (defconst my-mode-line-map (make-sparse-keymap "play-pause"))
-
 (setq global-mode-string 
       (append global-mode-string 
               (list
                 (propertize "⏯"
                             'local-map my-mode-line-map
                             'mouse-face 'mode-line-highlight))))
-
 (define-key my-mode-line-map 
             [mode-line down-mouse-1] 'emms-player-mpd-pause)
 
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+; seek-forwards 1/10 of song
+(defconst my-mode-line-map2 (make-sparse-keymap "ff"))
+(setq global-mode-string 
+      (append global-mode-string 
+              (list
+                (propertize "⏩"
+                            'local-map my-mode-line-map2
+                            'mouse-face 'mode-line-highlight))))
+(define-key my-mode-line-map2 
+            [mode-line down-mouse-1]  'ff-mpmms)
+;}}}
