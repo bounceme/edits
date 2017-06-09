@@ -38,6 +38,8 @@
 
 (blink-cursor-mode 0)
 (setq ring-bell-function 'ignore)
+(tooltip-mode nil)
+(setq show-help-function nil)
 
 (require 'golden-ratio)
 (golden-ratio-mode 1)
@@ -94,22 +96,6 @@
   (emms-player-seek (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
                        (* sign 10))))
 
-(defun fr-mpmms()
-  (interactive)
-  (mpdseek-button -1))
-(defun ff-mpmms()
-  (interactive)
-  (mpdseek-button 1))
-(defun p-mpmms()
-  (interactive)
-  (emms-player-pause))
-(defun pr-mpmms ()
-  (interactive)
-  (emms-previous))
-(defun n-mpmms ()
-  (interactive)
-  (emms-next))
-
 (defconst my-mode-line-map1 (make-sparse-keymap))
 (setq global-mode-string 
       (append global-mode-string 
@@ -118,7 +104,9 @@
                             'local-map my-mode-line-map1
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map1 
-            [mode-line mouse-1] 'pr-mpmms)
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (emms-previous)))
 
 (defconst my-mode-line-map3 (make-sparse-keymap))
 (setq global-mode-string 
@@ -128,7 +116,9 @@
                             'local-map my-mode-line-map3
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map3 
-            [mode-line mouse-1] 'fr-mpmms)
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (mpdseek-button -1)))
 
 ; play/pause
 (defconst my-mode-line-map (make-sparse-keymap))
@@ -139,7 +129,9 @@
                             'local-map my-mode-line-map
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map 
-            [mode-line mouse-1] 'p-mpmms)
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (emms-player-pause)))
 
 (defconst my-mode-line-map2 (make-sparse-keymap))
 (setq global-mode-string 
@@ -149,7 +141,9 @@
                             'local-map my-mode-line-map2
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map2 
-            [mode-line mouse-1]  'ff-mpmms)
+            [mode-line mouse-1]  (lambda ()
+                                   (interactive)
+                                   (mpdseek-button 1)))
 
 (defconst my-mode-line-map4 (make-sparse-keymap))
 (setq global-mode-string 
@@ -159,5 +153,7 @@
                             'local-map my-mode-line-map4
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map4
-            [mode-line mouse-1] 'n-mpmms)
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (emms-next)))
 ;}}}
