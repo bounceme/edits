@@ -103,7 +103,7 @@
 (defun p-mpmms()
   (interactive)
   (emms-player-pause))
-(defun p-mpmms ()
+(defun pr-mpmms ()
   (interactive)
   (emms-previous))
 (defun n-mpmms ()
@@ -118,7 +118,7 @@
                             'local-map my-mode-line-map1
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map1 
-            [mode-line mouse-1] 'p-mpmms)
+            [mode-line mouse-1] 'pr-mpmms)
 
 (defconst my-mode-line-map3 (make-sparse-keymap))
 (setq global-mode-string 
