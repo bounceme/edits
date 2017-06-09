@@ -56,8 +56,8 @@
 ; (setq emms-playing-time-style 'bar)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
 
-(add-hook 'emms-player-started-hook 'emms-smart-browse)
-(add-hook 'emms-player-started-hook 'emms-player-mpd-show)
+(emms-smart-browse)
+(emms-player-mpd-show)
 (emms-mode-line-disable)
 
 (defun emms-clear-play ()
@@ -103,35 +103,61 @@
 (defun p-mpmms()
   (interactive)
   (emms-player-pause))
+(defun p-mpmms ()
+  (interactive)
+  (emms-previous))
+(defun n-mpmms ()
+  (interactive)
+  (emms-next))
 
-(defconst my-mode-line-map3 (make-sparse-keymap "fr"))
+(defconst my-mode-line-map1 (make-sparse-keymap))
 (setq global-mode-string 
       (append global-mode-string 
               (list
-                (propertize "⏪"
+                (propertize " ⏮ "
+                            'local-map my-mode-line-map1
+                            'mouse-face 'mode-line-highlight))))
+(define-key my-mode-line-map1 
+            [mode-line mouse-1] 'p-mpmms)
+
+(defconst my-mode-line-map3 (make-sparse-keymap))
+(setq global-mode-string 
+      (append global-mode-string 
+              (list
+                (propertize " ⏪ "
                             'local-map my-mode-line-map3
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map3 
-            [mode-line down-mouse-1] 'fr-mpmms)
+            [mode-line mouse-1] 'fr-mpmms)
 
 ; play/pause
-(defconst my-mode-line-map (make-sparse-keymap "play-pause"))
+(defconst my-mode-line-map (make-sparse-keymap))
 (setq global-mode-string 
       (append global-mode-string 
               (list
-                (propertize "⏯"
+                (propertize " ⏯ "
                             'local-map my-mode-line-map
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map 
-            [mode-line down-mouse-1] 'p-mpmms)
+            [mode-line mouse-1] 'p-mpmms)
 
-(defconst my-mode-line-map2 (make-sparse-keymap "ff"))
+(defconst my-mode-line-map2 (make-sparse-keymap))
 (setq global-mode-string 
       (append global-mode-string 
               (list
-                (propertize "⏩"
+                (propertize " ⏩ "
                             'local-map my-mode-line-map2
                             'mouse-face 'mode-line-highlight))))
 (define-key my-mode-line-map2 
-            [mode-line down-mouse-1]  'ff-mpmms)
+            [mode-line mouse-1]  'ff-mpmms)
+
+(defconst my-mode-line-map4 (make-sparse-keymap))
+(setq global-mode-string 
+      (append global-mode-string 
+              (list
+                (propertize " ⏭ "
+                            'local-map my-mode-line-map4
+                            'mouse-face 'mode-line-highlight))))
+(define-key my-mode-line-map4
+            [mode-line mouse-1] 'n-mpmms)
 ;}}}
