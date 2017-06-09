@@ -8,7 +8,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;; No splash screen please ... jeez
 (setq inhibit-startup-message t)
-(setq package-list '(emms golden-ratio exec-path-from-shell))
+(setq package-list '(rjsx-mode restclient emms golden-ratio exec-path-from-shell))
 
 (setq package-archives '(("elpa" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
@@ -55,11 +55,10 @@
 (emms-player-mpd-update-all)
 (emms-cache-set-from-mpd-all)
 (emms-playing-time 1)
-; (setq emms-playing-time-style 'bar)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
 
 (emms-smart-browse)
-(emms-player-mpd-show)
+(add-hook 'emms-player-started-hook 'emms-show)
 (emms-mode-line-disable)
 
 (defun emms-clear-play ()
