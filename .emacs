@@ -62,11 +62,11 @@
 (emms-mode-line-disable)
 
 (defun form-track (&optional arg)
-  (emms-playlist-mode-switch-buffer)
-  (save-excursion (goto-char (point-min))
+  (save-excursion (emms-playlist-mode-switch-buffer)
+                  (goto-char (point-min))
                   (emms-walk-tracks
-                    (emms-playlist-update-track)))
-  (emms-playlist-mode-switch-buffer))
+                    (emms-playlist-update-track))
+                  (emms-playlist-mode-switch-buffer)))
 
 (defun emms-clear-play ()
   (interactive)
@@ -77,7 +77,9 @@
 (add-hook 'emms-browser-tracks-added-hook 'form-track)
 
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
-(define-key emms-browser-mode-map [mouse-1] (lambda() (interactive)(emms-browser-show-subitems)))
+(define-key emms-browser-mode-map [mouse-1] (lambda ()
+                                              (interactive)
+                                              (emms-browser-show-subitems)))
 
 (defun my-info-func (track)
   "Return a description of TRACK."
