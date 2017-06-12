@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ "$(uname)" = "Darwin" ]; then
+	while true
+	do
+		if mpc | head -n 2 | tail -n 1 | grep '^\[playing\]'; then
+			caffeinate -i sleep 5
+		else
+			sleep 5
+		fi
+	done
+fi
