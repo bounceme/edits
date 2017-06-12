@@ -79,7 +79,8 @@
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] (lambda ()
                                               (interactive)
-                                              (emms-browser-show-subitems)))
+                                              (when (not (eq (emms-browser-level-at-point) 3))
+                                                (emms-browser-toggle-subitems))))
 
 (defun my-info-func (track)
   "Return a description of TRACK."
