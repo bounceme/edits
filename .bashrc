@@ -41,3 +41,6 @@ fi
 HISTCONTROL=erasedups:ignoredups
 HISTSIZE=20000
 HISTFILESIZE=20000
+
+kill $(ps aux | grep mpd-loop | grep -v grep | grep -o '[0-9]*' | head -n 1) &>/dev/null
+(nohup ./mpd-loop &>/dev/null &)
