@@ -46,6 +46,7 @@
 (require 'cl)
 (require 'emms-setup)
 (require 'emms-playing-time)
+
 (emms-all)
 (emms-default-players)
 (emms-cache-enable)
@@ -57,6 +58,7 @@
 (emms-playing-time 1)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
 
+(setq emms-browser-alpha-sort-function nil)
 (emms-smart-browse)
 (add-hook 'emms-player-started-hook 'emms-show)
 (emms-mode-line-disable)
@@ -72,7 +74,6 @@
   (interactive)
   (emms-browser-clear-playlist)
   (emms-browser-add-tracks-and-play))
-
 
 (add-hook 'emms-browser-tracks-added-hook 'form-track)
 
