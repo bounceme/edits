@@ -53,11 +53,10 @@
 (add-to-list 'emms-player-list 'emms-player-mpd)
 (setq emms-player-mpd-music-directory "~/Music")
 (emms-player-mpd-connect)
-(emms-player-mpd-update-all)
-(emms-cache-set-from-mpd-all)
+(emms-player-mpd-update-all-reset-cache)
 (emms-playing-time 1)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
-
+(setq emms-browser-covers '("cover_small" "cover" "cover_large"))
 (setq emms-browser-alpha-sort-function nil)
 (emms-smart-browse)
 (add-hook 'emms-player-started-hook 'emms-show)
@@ -75,7 +74,20 @@
   (emms-browser-clear-playlist)
   (emms-browser-add-tracks-and-play))
 
+(defun emms-append-correctly ()
+  (interactive)
+  (let ((eline  (save-excursion (save-current-buffer (emms-playlist-mode-switch-buffer)
+                                                     (point-max)))))
+    (emms-browser-add-tracks)
+    (save-excursion (emms-playlist-mode-switch-buffer)
+                    (goto-char eline)
+                    (emms-walk-tracks
+                      (emms-player-mpd-add (emms-playlist-track-at) (or nil) #'ignore))
+                    (emms-playlist-mode-switch-buffer))))
+
 (add-hook 'emms-browser-tracks-added-hook 'form-track)
+
+(define-key emms-browser-mode-map (kbd "RET") 'emms-append-correctly)
 
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] (lambda ()
@@ -165,3 +177,17 @@
                                   (interactive)
                                   (emms-next)))
 ;}}}
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell golden-ratio emms restclient rjsx-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
