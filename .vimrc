@@ -4,7 +4,6 @@ set showmode
 set autoindent
 set wildmenu
 set wildmode=longest:full,full
-set wildignorecase
 set hlsearch
 set ttyfast
 set lazyredraw
@@ -183,25 +182,36 @@ catch
   echo 'NO PLUGINS'
 endtry
 
+let g:surround_indent = 0
+let poppy_point_enable = 1
 let no_extend_comment_CR = &fo !~# 'r'
 
 silent! set inccommand=nosplit
 
 imap <CR> <PLUG>extendCR
-let javascript_test_command = 1
+
 if exists('g:plugs["fairedit.vim"]')
-  nmap C <Plug>Fair_C
-  nmap D <Plug>Fair_D
+  nmap C <Plug>Fair_M_C
+  nmap D <Plug>Fair_M_D
+  omap $ <Plug>Fair_M_dollar
   if maparg('Y','n') ==# 'y$'
     nunmap Y
-    nmap Y <Plug>Fair_yEOL
+    nmap Y <Plug>Fair_M_yEOL
   endif
 endif
 
 command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
-au vimrc filetype javascript noremap <buffer> Z! :w !node -p<cr>
-au vimrc filetype javascript setl path=.,node_modules,,
+function! s:InitJBuf()
+  noremap <buffer> Z! :w !node -p<cr>
+  setl path=.,node_modules,,
+  if exists('g:plugs["tern_for_vim"]') && empty(tagfiles())
+    nnoremap <silent> <buffer> K :TernDoc<CR>
+    nnoremap <silent> <buffer> <c-]> :TernDef<CR>
+    nnoremap <silent> <buffer> [D :TernRefs<CR>
+  endif
+endfunction
+au vimrc filetype javascript call <SID>InitJBuf()
 
 silent! if neomake#has_async_support()
 au vimrc bufwritepost * Neomake
@@ -249,8 +259,3 @@ let g:user_emmet_settings = {
 
 let g:SuperTabDefaultCompletionType = "context"
 let g:tern_show_signature_in_pum = 1
-if exists('g:plugs["tern_for_vim"]')
-  autocmd vimrc FileType javascript nnoremap <silent> <buffer> K :TernDoc<CR>
-  autocmd vimrc FileType javascript nnoremap <silent> <buffer> <c-]> :TernDef<CR>
-  autocmd vimrc FileType javascript nnoremap <silent> <buffer> [D :TernRefs<CR>
-endif
