@@ -42,6 +42,8 @@ set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude=tags
 
 let g:loaded_vimballPlugin = 1
 let g:loaded_getscriptPlugin = 1
+" let g:loaded_netrwPlugin = 1
+" let g:loaded_netrw = 1
 runtime macros/matchit.vim
 let g:netrw_use_errorwindow=0
 let g:netrw_dirhistmax=0
@@ -67,18 +69,13 @@ au vimrc FileType * setl fo<
 au vimrc bufwritepost $MYVIMRC source $MYVIMRC
 
 au vimrc FileType netrw nmap <buffer> g? <f1>
-au vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
+" au vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
 au vimrc FileType help nnoremap <buffer> <cr> <C-]>
 
 au vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
       \ | wincmd p | diffthis
-command! DiffIndent
-      \ exe 'norm! gg=G'<bar>
-      \ if &mod<bar>
-      \ exe "norm! :silent! DiffOrig\<cr>"<bar>
-      \ endif
 
 au vimrc FileType gitcommit setl tw=72 fo+=a spell
 
@@ -148,7 +145,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-vinegar'
 Plug 'airblade/vim-rooter'
 
 " editing features
@@ -157,7 +153,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-rsi'
 Plug 'tommcdo/vim-exchange'
-Plug 'coderifous/textobj-word-column.vim'
 
 " syntax,indent &c.
 Plug 'mxw/vim-jsx'
@@ -176,15 +171,17 @@ Plug 'bounceme/extendCR.vim'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
+Plug 'justinmk/vim-dirvish'
 
 call plug#end()
 catch
   echo 'NO PLUGINS'
 endtry
+let g:jsx_check_react_import = 1
 
 let g:surround_indent = 0
-let poppy_point_enable = 1
-let no_extend_comment_CR = &fo !~# 'r'
+let g:poppy_point_enable = 1
+let g:no_extend_comment_CR = &fo !~# 'r'
 
 silent! set inccommand=nosplit
 
@@ -216,7 +213,7 @@ au vimrc filetype javascript call <SID>InitJBuf()
 silent! if neomake#has_async_support()
 au vimrc bufwritepost * Neomake
 else
-  au vimrc bufwritepost *.{js,jsx} silent! Neomake
+  au vimrc filetype javascript au vimrc bufwritepost <buffer> silent! Neomake
 endif
 
 augroup Poppy
