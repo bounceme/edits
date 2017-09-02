@@ -14,7 +14,7 @@
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
-; fetch the list of packages available 
+; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -56,11 +56,22 @@
 (emms-player-mpd-update-all-reset-cache)
 (emms-playing-time 1)
 (define-key emms-playlist-mode-map [double-mouse-1] 'emms-playlist-mode-play-smart)
-(setq emms-browser-covers '("cover_small" "cover" "cover_large"))
 (setq emms-browser-alpha-sort-function nil)
 (emms-smart-browse)
 (add-hook 'emms-player-started-hook 'emms-show)
 (emms-mode-line-disable)
+
+(setq-default mode-line-format
+              '("%e" mode-line-front-space
+                mode-line-mule-info
+                mode-line-client
+                mode-line-modified
+                mode-line-remote
+                mode-line-frame-identification
+                "   " mode-line-position "  "
+                mode-line-modes
+                mode-line-misc-info
+                mode-line-end-spaces))
 
 (defun form-track (&optional arg)
   (save-excursion (emms-playlist-mode-switch-buffer)
@@ -116,64 +127,86 @@
   (emms-player-seek (/ (emms-track-get (emms-playlist-current-selected-track) 'info-playing-time)
                        (* sign 10))))
 
-(defconst my-mode-line-map1 (make-sparse-keymap))
-(setq global-mode-string 
-      (append global-mode-string 
-              (list
-                (propertize " ⏮ "
-                            'local-map my-mode-line-map1
-                            'mouse-face 'mode-line-highlight))))
-(define-key my-mode-line-map1 
-            [mode-line mouse-1] (lambda ()
-                                  (interactive)
-                                  (emms-previous)))
-
-(defconst my-mode-line-map3 (make-sparse-keymap))
-(setq global-mode-string 
-      (append global-mode-string 
-              (list
-                (propertize " ⏪ "
-                            'local-map my-mode-line-map3
-                            'mouse-face 'mode-line-highlight))))
-(define-key my-mode-line-map3 
-            [mode-line mouse-1] (lambda ()
-                                  (interactive)
-                                  (mpdseek-button -1)))
-
-; play/pause
-(defconst my-mode-line-map (make-sparse-keymap))
-(setq global-mode-string 
-      (append global-mode-string 
-              (list
-                (propertize " ⏯ "
-                            'local-map my-mode-line-map
-                            'mouse-face 'mode-line-highlight))))
-(define-key my-mode-line-map 
-            [mode-line mouse-1] (lambda ()
-                                  (interactive)
-                                  (emms-player-pause)))
-
-(defconst my-mode-line-map2 (make-sparse-keymap))
-(setq global-mode-string 
-      (append global-mode-string 
-              (list
-                (propertize " ⏩ "
-                            'local-map my-mode-line-map2
-                            'mouse-face 'mode-line-highlight))))
-(define-key my-mode-line-map2 
-            [mode-line mouse-1]  (lambda ()
-                                   (interactive)
-                                   (mpdseek-button 1)))
-
 (defconst my-mode-line-map4 (make-sparse-keymap))
-(setq global-mode-string 
-      (append global-mode-string 
-              (list
+(setq global-mode-string
+      (append (list
                 (propertize " ⏭ "
                             'local-map my-mode-line-map4
-                            'mouse-face 'mode-line-highlight))))
+                            'mouse-face 'mode-line-highlight))
+              global-mode-string))
 (define-key my-mode-line-map4
             [mode-line mouse-1] (lambda ()
                                   (interactive)
                                   (emms-next)))
+
+(defconst my-mode-line-map2 (make-sparse-keymap))
+(setq global-mode-string
+      (append (list
+                (propertize " ⏩ "
+                            'local-map my-mode-line-map2
+                            'mouse-face 'mode-line-highlight))
+              global-mode-string))
+(define-key my-mode-line-map2
+            [mode-line mouse-1]  (lambda ()
+                                   (interactive)
+                                   (mpdseek-button 1)))
+
+; play/pause
+(defconst my-mode-line-map (make-sparse-keymap))
+(setq global-mode-string
+      (append (list
+                (propertize " ⏯ "
+                            'local-map my-mode-line-map
+                            'mouse-face 'mode-line-highlight))
+              global-mode-string))
+(define-key my-mode-line-map
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (emms-player-pause)))
+
+(defconst my-mode-line-map3 (make-sparse-keymap))
+(setq global-mode-string
+      (append (list
+                (propertize " ⏪ "
+                            'local-map my-mode-line-map3
+                            'mouse-face 'mode-line-highlight))
+              global-mode-string))
+(define-key my-mode-line-map3
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (mpdseek-button -1)))
+
+(defconst my-mode-line-map1 (make-sparse-keymap))
+(setq global-mode-string
+      (append (list
+                (propertize " ⏮ "
+                            'local-map my-mode-line-map1
+                            'mouse-face 'mode-line-highlight))
+              global-mode-string))
+(define-key my-mode-line-map1
+            [mode-line mouse-1] (lambda ()
+                                  (interactive)
+                                  (emms-previous)))
+
 ;}}}
+
+(put 'emms-browser-delete-files 'disabled nil)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(custom-enabled-themes (quote (anti-zenburn)))
+  '(custom-safe-themes
+     (quote
+       ("5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" default)))
+  '(package-selected-packages
+     (quote
+       (niflheim-theme anti-zenburn-theme rjsx-mode restclient golden-ratio exec-path-from-shell emms))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
