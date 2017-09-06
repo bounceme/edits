@@ -186,24 +186,21 @@ let g:no_extend_comment_CR = &fo !~# 'r'
 silent! set inccommand=nosplit
 
 " " micro language: assignment expression
-" let s:idr = []
 " function! s:Le(...)
 "   silent! redir END
 "   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
 "   call extend(l:,a:1)
 "   let [lhs, rhs] = matchlist(a:2,'\C^\s*\(\k\+\)\s*=\s*\(.*\)$')[1:2]
-"   call add(s:idr, [a:1,lhs])
+"   let res = eval(rhs)
+"   let res = type(res) == type('') ? string(res) : res
 "   redir => a:1[lhs]
-"   silent echon eval(rhs)
+"   silent echon res
 "   redir END
-"   call remove(s:idr,-1)
-"   if len(s:idr)
-"     redir =>> s:idr[-1][0][s:idr[-1][1]]
-"   endif
+"   let a:1[lhs] = eval(a:1[lhs])
 "   return a:1[lhs]
 " endfunction
-" silent! call s:Le(s:,'from=s:Le(s:,"g=''hello''")')
-" " echom string(s:)
+" call s:Le(s:,'from=s:Le(s:,"g={}")')
+" echom string(s:)
 " unlet! s:from s:g | delfunc s:Le
 
 imap <CR> <PLUG>extendCR
