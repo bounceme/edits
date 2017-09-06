@@ -69,7 +69,7 @@ au vimrc FileType * setl fo<
 au vimrc bufwritepost $MYVIMRC source $MYVIMRC
 
 au vimrc FileType netrw nmap <buffer> g? <f1>
-" au vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
+au vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
 au vimrc FileType help nnoremap <buffer> <cr> <C-]>
 
 au vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -184,6 +184,27 @@ let g:poppy_point_enable = 1
 let g:no_extend_comment_CR = &fo !~# 'r'
 
 silent! set inccommand=nosplit
+
+" " micro language: assignment expression
+" let s:idr = []
+" function! s:Le(...)
+"   silent! redir END
+"   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
+"   call extend(l:,a:1)
+"   let [lhs, rhs] = matchlist(a:2,'\C^\s*\(\k\+\)\s*=\s*\(.*\)$')[1:2]
+"   call add(s:idr, [a:1,lhs])
+"   redir => a:1[lhs]
+"   silent echon eval(rhs)
+"   redir END
+"   call remove(s:idr,-1)
+"   if len(s:idr)
+"     redir =>> s:idr[-1][0][s:idr[-1][1]]
+"   endif
+"   return a:1[lhs]
+" endfunction
+" silent! call s:Le(s:,'from=s:Le(s:,"g=''hello''")')
+" " echom string(s:)
+" unlet! s:from s:g | delfunc s:Le
 
 imap <CR> <PLUG>extendCR
 
