@@ -187,16 +187,10 @@ silent! set inccommand=nosplit
 
 " " micro language: assignment expression
 " function! s:Le(...)
-"   silent! redir END
 "   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
 "   call extend(l:,a:1)
 "   let [lhs, rhs] = matchlist(a:2,'\C^\s*\(\k\+\)\s*=\s*\(.*\)$')[1:2]
-"   let res = eval(rhs)
-"   let res = type(res) == type('') ? string(res) : res
-"   redir => a:1[lhs]
-"   silent echon res
-"   redir END
-"   let a:1[lhs] = eval(a:1[lhs])
+"   let a:1[lhs] = eval(rhs)
 "   return a:1[lhs]
 " endfunction
 " call s:Le(s:,'from=s:Le(s:,"g={}")')
