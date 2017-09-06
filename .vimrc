@@ -185,13 +185,11 @@ let g:no_extend_comment_CR = &fo !~# 'r'
 
 silent! set inccommand=nosplit
 
-" " micro language: assignment expression
 " function! s:Le(...)
 "   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
 "   call extend(l:,a:1)
-"   let [lhs, rhs] = matchlist(a:2,'\C^\s*\(\k\+\)\s*=\s*\(.*\)$')[1:2]
-"   let a:1[lhs] = eval(rhs)
-"   return a:1[lhs]
+"   exe 'let a:1.'.join(split(matchlist(a:2,'^\s*\(.*\S\)')[1],'\s*=\zs'))
+"   return a:1[matchstr(a:2,'\w\+')]
 " endfunction
 " call s:Le(s:,'from=s:Le(s:,"g={}")')
 " echom string(s:)
