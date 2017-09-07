@@ -188,7 +188,7 @@ silent! set inccommand=nosplit
 " function! s:Le(...)
 "   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
 "   call extend(l:,a:1)
-"   exe 'let a:1.'.join(split(matchlist(a:2,'^\s*\(.*\S\)')[1],'\s*=\zs'))
+"   exe 'let a:1.'.substitute(a:2,'^\s*','','')
 "   return a:1[matchstr(a:2,'\w\+')]
 " endfunction
 " call s:Le(s:,'from=s:Le(s:,"g={}")')
