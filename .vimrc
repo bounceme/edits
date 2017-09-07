@@ -195,6 +195,21 @@ silent! set inccommand=nosplit
 " echom string(s:)
 " unlet! s:from s:g | delfunc s:Le
 
+" function! s:Le(...)
+"   let ts = localtime()
+"   let a:1['this'.ts] = a:2
+"   exe "function a:1.".a:3."(e)\n"
+"         \ ."call extend(a:,filter(remove(self,'this".ts."'),'v:key !~ ''^\\d'''))\n"
+"         \ ."call extend(l:,filter(self,'type(v:val) != type(function(''tr'')) || v:key !=# ''".a:3."'''))\n"
+"         \ ."exe 'let self.'.substitute(a:e,'^\\s*','','')\n"
+"         \ ."return self[matchstr(a:e,'\\w\\+')]\n"
+"         \ ."endfunction"
+"   return a:1
+" endfunction
+" echom string(s:Le(s:,{},'a').a('from={}'))
+" echom string(s:)
+" delfunc s:Le
+
 imap <CR> <PLUG>extendCR
 
 if exists('g:plugs["fairedit.vim"]')
