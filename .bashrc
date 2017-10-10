@@ -1,5 +1,5 @@
 export PATH=/usr/local/bin:$PATH
-export PATH=$HOME/edits:$PATH
+# ln -sf $(find edits/ -type f | grep -v git) ./
 export PATH=$HOME/node_modules/.bin:$PATH
 export LYNX_LSS=$HOME/lynx.lss
 PS1="\h:\W \u\$ "
