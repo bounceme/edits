@@ -171,6 +171,7 @@ Plug 'bounceme/extendCR.vim'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
+Plug 'bounceme/remote-viewer'
 Plug 'justinmk/vim-dirvish'
 
 call plug#end()
@@ -178,37 +179,11 @@ catch
   echo 'NO PLUGINS'
 endtry
 let g:jsx_check_react_import = 1
-
 let g:surround_indent = 0
 let g:poppy_point_enable = 1
 let g:no_extend_comment_CR = &fo !~# 'r'
 
 silent! set inccommand=nosplit
-
-" function! s:Le(...)
-"   call extend(a:,filter(copy(get(a:000,2,{})),'v:key !~ "^\\d"'))
-"   call extend(l:,a:1)
-"   exe 'let a:1.'.substitute(a:2,'^\s*','','')
-"   return a:1[matchstr(a:2,'\w\+')]
-" endfunction
-" call s:Le(s:,'from=s:Le(s:,"g={}")')
-" echom string(s:)
-" unlet! s:from s:g | delfunc s:Le
-
-" function! s:Le(...)
-"   let ts = localtime()
-"   let a:1['this'.ts] = a:2
-"   exe "function a:1.".a:3."(e)\n"
-"         \ ."call extend(a:,filter(remove(self,'this".ts."'),'v:key !~ ''^\\d'''))\n"
-"         \ ."call extend(l:,filter(self,'type(v:val) != type(function(''tr'')) || v:key !=# ''".a:3."'''))\n"
-"         \ ."exe 'let self.'.substitute(a:e,'^\\s*','','')\n"
-"         \ ."return self[matchstr(a:e,'\\w\\+')]\n"
-"         \ ."endfunction"
-"   return a:1
-" endfunction
-" echom string(s:Le(s:,{},'a').a('from={}'))
-" echom string(s:)
-" delfunc s:Le
 
 imap <CR> <PLUG>extendCR
 
