@@ -1,15 +1,17 @@
 export PATH=/usr/local/bin:$PATH
 # ln -sf $(find edits/ -type f | grep -v git) ./
 export PATH=$HOME/node_modules/.bin:$PATH
+export PATH=$HOME/Library/Python/3.6/bin:$PATH
+
 export LYNX_LSS=$HOME/lynx.lss
 PS1="\h:\W \u\$ "
 
 
 alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
-alias mpdrefresh='{ killall mpd; rm $HOME/.mpd/mpd.db; touch $HOME/.mpd/mpd.db; mpd; \
-if ! ps -x | grep mpdkeys | grep python ; then ( mpdkeys & ) ; fi ;} &>/dev/null'
+alias mpdrefresh='{ pkill -f mpd ; rm $HOME/.mpd/mpd.db ; touch $HOME/.mpd/mpd.db ; mpd ; \
+($HOME/mpd-loop & mpdkeys &) ; } > /dev/null 2>&1'
 
-shopt -s globstar &> /dev/null
+shopt -s globstar > /dev/null 2>&1
 
 # Alias vi to $EDITOR, which in turn call editor()
 alias emacs='emacs -nw'
@@ -18,13 +20,13 @@ alias emacs='emacs -nw'
 # Use neovim instead of vim if installed or vi if all else fails
 function editor() {
 	if [ $# -ne 0 ]; then
-		if hash nvim >/dev/null 2>&1; then
+		if hash nvim > /dev/null 2>&1; then
 			nvim "$@" "+set viminfo="
 		else
 			vim "$@" "+set viminfo="
 		fi
 	else
-		if hash nvim >/dev/null 2>&1; then
+		if hash nvim > /dev/null 2>&1; then
 			nvim
 		else
 			vim
@@ -43,6 +45,3 @@ fi
 HISTCONTROL=erasedups:ignoredups
 HISTSIZE=20000
 HISTFILESIZE=20000
-
-pkill -f /mpd-loop$
-(nohup ./mpd-loop &>/dev/null &)
