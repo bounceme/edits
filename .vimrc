@@ -79,7 +79,7 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 
 au vimrc FileType gitcommit setl tw=72 fo+=a spell
 
-set statusline=%<%F\ %h%m%r%Y\ %{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%{fnamemodify(expand('%'),':.')}\ %h%m%r%Y\ %{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 map Q %
 
@@ -168,7 +168,7 @@ Plug 'bounceme/fairedit.vim'
 Plug 'bounceme/extendCR.vim'
 
 " autocompletion
-Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+" Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
 Plug 'bounceme/remote-viewer'
@@ -182,6 +182,7 @@ let g:jsx_check_react_import = 1
 let g:surround_indent = 0
 let g:poppy_point_enable = 1
 let g:no_extend_comment_CR = &fo !~# 'r'
+let g:CoolTotalMatches=1
 
 silent! set inccommand=nosplit
 
@@ -199,10 +200,12 @@ endif
 
 command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
+nnoremap <silent><expr> <c-]> empty(tagfiles()) ? ":DimJumpPos<cr>" : "<c-]>"
+
 function! s:InitJBuf()
   noremap <buffer> Z! :w !node -p<cr>
   setl path=.,node_modules,,
-  if exists('g:plugs["tern_for_vim"]') && empty(tagfiles())
+  if exists('g:plugs["tern_for_vim"]')
     nnoremap <silent> <buffer> K :TernDoc<CR>
     nnoremap <silent> <buffer> <c-]> :TernDef<CR>
     nnoremap <silent> <buffer> [D :TernRefs<CR>
