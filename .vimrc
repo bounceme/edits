@@ -227,20 +227,31 @@ nnoremap <silent> <leader>hp :call clearmatches() \| let g:poppy = -get(g:,'popp
 
 au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
 
-au vimrc filetype text
-      \   ino <buffer> . .<c-g>u
-      \ | ino <buffer> ! !<c-g>u
-      \ | ino <buffer> ? ?<c-g>u
-      \ | ino <buffer> , ,<c-g>u
-      \ | ino <buffer> ; ;<c-g>u
-      \ | ino <buffer> : :<c-g>u
-
 let g:rooter_use_lcd = 1
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/', 'package.json']
 
+inoremap <silent><expr><C-D>
+      \ (&indentexpr isnot '' ? &indentkeys : &cinkeys) =~? '!\^F' &&
+      \ &backspace =~? '.*eol\&.*start\&.*indent\&' &&
+      \ !search('\S','nbW',line('.')) ? (col('.') != 1 ? "\<C-U>" : "") .
+      \ "\<bs>" . (getline(line('.')-1) =~ '\S' ? "" : "\<C-F>") : "\<C-D>"
+
+function! s:rmrf() abort
+  call inputsave()
+  if input('delete '.getline('.').' ? (y/n)') ==# 'y'
+    if !delete(getline('.'),'rf')
+      let p = winsaveview()
+      e
+      call winrestview(p)
+    endif
+  endif
+  call inputrestore()
+endfunction
+au vimrc filetype dirvish nnoremap <buffer> D :call <SID>rmrf()<cr>
+
 if !exists('g:colors_name')
-  exe 'colo ' . ((strftime('%H') % 20) > 7 ? 'default' : 'molokai')
+  exe 'colo' ((strftime('%H') % 20) > 7 ? 'default' : 'molokai')
 endif
 
 let g:user_emmet_settings = {
