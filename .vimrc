@@ -56,7 +56,7 @@ augroup END
 
 
 if &viminfo isnot ''
-  set viminfo^=%25
+  set viminfo+=%25
 end
 
 set wildignore+=*.swp,*.bak,*.un~
@@ -183,6 +183,7 @@ let g:surround_indent = 0
 let g:poppy_point_enable = 1
 let g:no_extend_comment_CR = &fo !~# 'r'
 let g:CoolTotalMatches=1
+let g:dirvish_mode=2
 
 silent! set inccommand=nosplit
 
@@ -222,7 +223,7 @@ endif
 augroup Poppy
   au!
 augroup END
-nnoremap <silent> <leader>hp :call clearmatches() \| let g:poppy = -get(g:,'poppy',-1) \|
+nnoremap <silent> <LEADER>hp :call clearmatches() \| let g:poppy = -get(g:,'poppy',-1) \|
       \ exe 'au! Poppy CursorMoved *' . (g:poppy > 0 ? ' call PoppyInit()' : '') <cr>
 
 au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
