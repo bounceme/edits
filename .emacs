@@ -99,6 +99,8 @@
 (add-hook 'emms-browser-tracks-added-hook 'form-track)
 
 (define-key emms-browser-mode-map (kbd "RET") 'emms-append-correctly)
+(define-key emms-browser-mode-map (kbd "SPC") 'emms-pause)
+(define-key emms-playlist-mode-map (kbd "SPC") 'emms-pause)
 
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] (lambda ()
@@ -162,7 +164,7 @@
 (define-key my-mode-line-map
             [mode-line mouse-1] (lambda ()
                                   (interactive)
-                                  (emms-player-pause)))
+                                  (emms-pause)))
 
 (defconst my-mode-line-map3 (make-sparse-keymap))
 (setq global-mode-string
