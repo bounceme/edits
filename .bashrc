@@ -14,8 +14,6 @@ alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
 if [ "$(uname)" = "Darwin" ]; then
 	alias mposx='{ pkill -f mpd ; rm $HOME/.mpd/mpd.db ; touch $HOME/.mpd/mpd.db ; mpd ; \
 ($HOME/mpd-loop & mpdkeys &) ; } > /dev/null 2>&1 ; osascript -e '\''quit app "Emacs"'\'' ; sleep 1 ; open -a Emacs'
-else
-	alias mposx='echo "$(Uname)"'
 fi
 
 shopt -s globstar > /dev/null 2>&1
