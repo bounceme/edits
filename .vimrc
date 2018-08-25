@@ -18,7 +18,6 @@ set laststatus=2
 set autoindent
 set backspace=indent,eol,start
 set synmaxcol=500
-set ffs=unix,dos
 set guioptions+=c
 set ttimeoutlen=50
 set completeopt=menu,menuone,noselect
@@ -30,12 +29,28 @@ set autoread
 set foldopen-=block
 set foldopen+=search
 set nojs
-set fo+=j fo-=o fo-=t fo-=r fo+=c
-set guicursor=
 
+function! g:PPPP()
+  while search('^LETTER','W')
+    norm yil
+    exe '.+1,$s/\V\^'.escape(@@,'\').'\_.\{-}\ze\n\^LETTER/'
+  endwhile
+endfunction
+
+set fo+=j fo-=o fo-=t fo+=c
+if has('gui_running') || has('nvim')
+  set gcr=
+  if has("gui_macvim")
+    let macvim_skip_cmd_opt_movement = 1
+  endif
+endif
+if has('mac')
+  set guifont=Monaco:h16
+endif
 if !has('nvim')
   set directory-=.
 endif
+
 set undofile
 
 set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude=tags
@@ -54,10 +69,22 @@ augroup vimrc
   au!
 augroup END
 
-
-if &viminfo isnot ''
-  set viminfo+=%25
-end
+let g:se = [1513620419,4]
+if !exists('*g:Rem')
+  if &viminfo isnot ''
+    set viminfo+=%25
+  endif
+  function g:Rem()
+    let g:sc = (g:se[1] - (localtime() - g:se[0]) / 60 / 60 / 24) % 5
+    let g:sc = 0 + tr(g:sc < 0 ? 5 + g:sc : g:sc,0,5)
+    au vimrc VimLeave * wv!
+  endfunction
+  if v:vim_did_enter
+    call g:Rem()
+  else
+    au vimrc VimEnter * call g:Rem() | au! vimrc Vimenter *
+  endif
+endif
 
 set wildignore+=*.swp,*.bak,*.un~
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
@@ -132,6 +159,53 @@ endfun
 xnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
+if has('mac') && !has('gui_running') && !has('clipboard')
+  function! g:Clip(type, ...)
+    let sel_save = &selection
+    let &selection = "inclusive"
+    let reg_save = @@
+    if a:0
+      silent exe "normal! gvy"
+    elseif a:type == 'line'
+      silent exe "normal! '[V']y"
+    else
+      silent exe "normal! `[v`]y"
+    endif
+    call system('pbcopy',@@)
+    let &selection = sel_save
+    let @@ = reg_save
+  endfunction
+  nnoremap <silent> "*y :set opfunc=Clip<CR>g@
+  nnoremap <silent> "*Y :set opfunc=Clip<CR>g@$
+  xnoremap <silent> "*y :<C-U>call Clip(visualmode(), 1)<CR>
+endif
+
+function! s:OF()
+  let a = bufnr('')
+  while bufnr('') == a
+    let c = getpos('.')
+    exe "norm! \<C-o>"
+    if c == getpos('.')
+      break
+    endif
+  endwhile
+endfunction
+command! OFile call <SID>OF()
+
+function! s:Align()
+  let pos = [search('\m^$\|\%^','bnW'),search('\m^$\|\%$','nW')]
+  let bal = max(map(getline(pos[0],pos[1]), "matchend(v:val,'^\\S\\+') + 1"))
+  if bal > 0
+    execute 'silent keeppatterns keepjumps' join(pos,',')
+          \ .'substitute/\m^\S\+\s\+/\=printf("%-".bal."S",submatch(0))'
+  endif
+endfunction
+command! YYY call <SID>Align()
+
+command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
+
+silent! set inccommand=nosplit
+
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 let g:plug_shallow=0
@@ -144,8 +218,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-tbone'
-Plug 'airblade/vim-rooter'
+" Plug 'airblade/vim-rooter'
 
 " editing features
 Plug 'tpope/vim-unimpaired'
@@ -168,8 +241,7 @@ Plug 'bounceme/fairedit.vim'
 Plug 'bounceme/extendCR.vim'
 
 " autocompletion
-" Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': ['html','php'] }
 Plug 'ervandew/supertab'
 Plug 'bounceme/remote-viewer'
 Plug 'justinmk/vim-dirvish'
@@ -177,40 +249,36 @@ Plug 'justinmk/vim-dirvish'
 call plug#end()
 catch
   echo 'NO PLUGINS'
+  finish
 endtry
+
 let g:jsx_check_react_import = 1
 let g:surround_indent = 0
 let g:poppy_point_enable = 1
 let g:no_extend_comment_CR = &fo !~# 'r'
+if exists('##optionset')
+  au vimrc optionset formatoptions let g:no_extend_comment_CR = &fo !~# 'r'
+endif
 let g:CoolTotalMatches=1
 let g:dirvish_mode=2
 
-silent! set inccommand=nosplit
-
-imap <CR> <PLUG>extendCR
+if exists('g:plugs["extendCR.vim"]')
+  imap <CR> <PLUG>extendCR
+endif
 
 if exists('g:plugs["fairedit.vim"]')
   nmap C <Plug>Fair_M_C
   nmap D <Plug>Fair_M_D
   omap $ <Plug>Fair_M_dollar
-  if maparg('Y','n') ==# 'y$'
-    nunmap Y
-    nmap Y <Plug>Fair_M_yEOL
-  endif
+  nunmap Y
+  nmap Y <Plug>Fair_M_yEOL
 endif
-
-command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
 nnoremap <silent><expr> <c-]> empty(tagfiles()) ? ":DimJumpPos<cr>" : "<c-]>"
 
 function! s:InitJBuf()
   noremap <buffer> Z! :w !node -p<cr>
   setl path=.,node_modules,,
-  if exists('g:plugs["tern_for_vim"]')
-    nnoremap <silent> <buffer> K :TernDoc<CR>
-    nnoremap <silent> <buffer> <c-]> :TernDef<CR>
-    nnoremap <silent> <buffer> [D :TernRefs<CR>
-  endif
 endfunction
 au vimrc filetype javascript call <SID>InitJBuf()
 
@@ -232,18 +300,18 @@ let g:rooter_use_lcd = 1
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/', 'package.json']
 
-inoremap <silent><expr><C-D>
-      \ (&indentexpr isnot '' ? &indentkeys : &cinkeys) =~? '!\^F' &&
-      \ &backspace =~? '.*eol\&.*start\&.*indent\&' &&
-      \ !search('\S','nbW',line('.')) ? (col('.') != 1 ? "\<C-U>" : "") .
-      \ "\<bs>" . (getline(line('.')-1) =~ '\S' ? "" : "\<C-F>") : "\<C-D>"
+" inoremap <silent><expr><bs>
+"       \ (&indentexpr isnot '' ? &indentkeys : &cinkeys) =~? '!\^F' &&
+"       \ &backspace =~? '.*eol\&.*start\&.*indent\&' &&
+"       \ !search('\S','nbW',line('.')) ? (col('.') != 1 ? "\<C-U>" : "") .
+"       \ "\<bs>" . (getline(line('.')-1) =~ '\S' ? "" : "\<C-F>") : "\<bs>"
 
 function! s:rmrf() abort
   call inputsave()
   if input('delete '.getline('.').' ? (y/n)') ==# 'y'
     if !delete(getline('.'),'rf')
       let p = winsaveview()
-      e
+      edit
       call winrestview(p)
     endif
   endif

@@ -98,10 +98,18 @@
 
 (add-hook 'emms-browser-tracks-added-hook 'form-track)
 
+
+(define-key emms-browser-mode-map (kbd "D")
+            (lambda () (interactive)
+              (let ((current-prefix-arg '(4)))
+                (call-interactively 'emms-browser-delete-files))))
 (define-key emms-browser-mode-map (kbd "RET") 'emms-append-correctly)
 (define-key emms-browser-mode-map (kbd "SPC") 'emms-pause)
 (define-key emms-playlist-mode-map (kbd "SPC") 'emms-pause)
+(define-key emms-playlist-mode-map (kbd "<right>") 'emms-next)
+(define-key emms-playlist-mode-map (kbd "<left>") 'emms-previous)
 
+(define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [double-mouse-1] 'emms-clear-play)
 (define-key emms-browser-mode-map [mouse-1] (lambda ()
                                               (interactive)
@@ -195,20 +203,20 @@
 (put 'emms-browser-delete-files 'disabled nil)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  '(custom-enabled-themes (quote (anti-zenburn)))
-  '(custom-safe-themes
-     (quote
-       ("5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" default)))
-  '(package-selected-packages
-     (quote
-       (niflheim-theme anti-zenburn-theme rjsx-mode restclient golden-ratio exec-path-from-shell emms))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (anti-zenburn)))
+ '(custom-safe-themes
+   (quote
+    ("bea5fd3610ed135e6ecc35bf8a9c27277d50336455dbdd2969809f7d7c1f7d79" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" default)))
+ '(package-selected-packages
+   (quote
+    (niflheim-theme anti-zenburn-theme rjsx-mode restclient golden-ratio exec-path-from-shell emms))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
