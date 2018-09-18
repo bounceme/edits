@@ -1,2 +1,11 @@
 #!/usr/bin/env sh
-{ pkill -f mpd ; rm $HOME/.mpd/mpd.db ; touch $HOME/.mpd/mpd.db ; mpd ; ($HOME/mpd-loop & mpdkeys &) ; } > /dev/null 2>&1 ; osascript -e 'quit app "Emacs"' ; sleep 1 ; open -a Emacs
+{
+        pkill -f mpd
+        > $HOME/.mpd/mpd.db
+        mpd
+        ($HOME/mpd-loop &)
+        (mpdkeys &)
+        osascript -e 'quit app "Emacs"'
+        sleep 1
+        open -a Emacs
+} > /dev/null 2>&1
