@@ -69,29 +69,14 @@ augroup vimrc
   au!
 augroup END
 
-let g:se = [1513620419,4]
-if !exists('*g:Rem')
-  if &viminfo isnot ''
-    set viminfo+=%25
-  endif
-  function g:Rem()
-    let g:sc = (g:se[1] - (localtime() - g:se[0]) / 60 / 60 / 24) % 5
-    let g:sc = 0 + tr(g:sc < 0 ? 5 + g:sc : g:sc,0,5)
-    au vimrc VimLeave * wv!
-  endfunction
-  if v:vim_did_enter
-    call g:Rem()
-  else
-    au vimrc VimEnter * call g:Rem() | au! vimrc Vimenter *
-  endif
-endif
-
 set wildignore+=*.swp,*.bak,*.un~
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
 set wildignore+=*/min/*,*/vendor/*,*/bower_components/*
 silent! set wildignorecase
 
 au vimrc FileType * setl fo<
+
+au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
 
 au vimrc bufwritepost $MYVIMRC source $MYVIMRC
 
@@ -159,27 +144,6 @@ endfun
 xnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
-if has('mac') && !has('gui_running') && !has('clipboard')
-  function! g:Clip(type, ...)
-    let sel_save = &selection
-    let &selection = "inclusive"
-    let reg_save = @@
-    if a:0
-      silent exe "normal! gvy"
-    elseif a:type == 'line'
-      silent exe "normal! '[V']y"
-    else
-      silent exe "normal! `[v`]y"
-    endif
-    call system('pbcopy',@@)
-    let &selection = sel_save
-    let @@ = reg_save
-  endfunction
-  nnoremap <silent> "*y :set opfunc=Clip<CR>g@
-  nnoremap <silent> "*Y :set opfunc=Clip<CR>g@$
-  xnoremap <silent> "*y :<C-U>call Clip(visualmode(), 1)<CR>
-endif
-
 function! s:OF()
   let a = bufnr('')
   while bufnr('') == a
@@ -206,19 +170,20 @@ command! MakeTags silent! exe '!find . -iname "*.%:e" | xargs ctags' | redraw!
 
 silent! set inccommand=nosplit
 
-" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 let g:plug_shallow=0
 try
 call plug#begin('~/.vim/bundle')
 
-" libraries, &c.
+" libraries, general stuff
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-scriptease'
-" Plug 'airblade/vim-rooter'
+Plug 'ojroques/vim-oscyank'
+Plug 'justinmk/vim-dirvish'
+Plug 'bounceme/remote-viewer'
 
 " editing features
 Plug 'tpope/vim-unimpaired'
@@ -241,10 +206,7 @@ Plug 'bounceme/fairedit.vim'
 Plug 'bounceme/extendCR.vim'
 
 " autocompletion
-Plug 'mattn/emmet-vim', { 'for': ['html','php'] }
 Plug 'ervandew/supertab'
-Plug 'bounceme/remote-viewer'
-Plug 'justinmk/vim-dirvish'
 
 call plug#end()
 catch
@@ -262,17 +224,15 @@ endif
 let g:CoolTotalMatches=1
 let g:dirvish_mode=2
 
-if exists('g:plugs["extendCR.vim"]')
-  imap <CR> <PLUG>extendCR
-endif
+imap <CR> <PLUG>extendCR
 
-if exists('g:plugs["fairedit.vim"]')
-  nmap C <Plug>Fair_M_C
-  nmap D <Plug>Fair_M_D
-  omap $ <Plug>Fair_M_dollar
-  nunmap Y
-  nmap Y <Plug>Fair_M_yEOL
-endif
+vnoremap <leader>c :OSCYank<CR>
+
+nmap C <Plug>Fair_M_C
+nmap D <Plug>Fair_M_D
+omap $ <Plug>Fair_M_dollar
+nunmap Y
+nmap Y <Plug>Fair_M_yEOL
 
 nnoremap <silent><expr> <c-]> empty(tagfiles()) ? ":DimJumpPos<cr>" : "<c-]>"
 
@@ -293,12 +253,6 @@ augroup Poppy
 augroup END
 nnoremap <silent> <LEADER>hp :call clearmatches() \| let g:poppy = -get(g:,'poppy',-1) \|
       \ exe 'au! Poppy CursorMoved *' . (g:poppy > 0 ? ' call PoppyInit()' : '') <cr>
-
-au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
-
-let g:rooter_use_lcd = 1
-let g:rooter_silent_chdir = 1
-let g:rooter_patterns = ['.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/', 'package.json']
 
 " inoremap <silent><expr><bs>
 "       \ (&indentexpr isnot '' ? &indentkeys : &cinkeys) =~? '!\^F' &&
@@ -323,19 +277,4 @@ if !exists('g:colors_name')
   exe 'colo' ((strftime('%H') % 20) > 7 ? 'default' : 'molokai')
 endif
 
-let g:user_emmet_settings = {
-      \    'javascript' : {
-      \        'snippets' : {
-      \            'f' : "function() {\n\t|${child}\n}",
-      \            'fun' : "function |() {\n\t${child}\n}",
-      \            'for' : "for (var i = 0; i < |; i++){\n\t${child}\n}",
-      \            'forr' : "for (var i = | - 1; i >= 0; i--){\n\t${child}\n}",
-      \            'iife' : "(function() {\n\t|${child}\n}());",
-      \            'tm' : "setTimeout(function() {\n\t|${child}\n}, 100)",
-      \            'cl' : "console.log(|${child})",
-      \        },
-      \    },
-      \}
-
 let g:SuperTabDefaultCompletionType = "context"
-let g:tern_show_signature_in_pum = 1
