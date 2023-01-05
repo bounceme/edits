@@ -244,8 +244,6 @@ au vimrc filetype javascript call <SID>InitJBuf()
 
 silent! if neomake#has_async_support()
 au vimrc bufwritepost * Neomake
-else
-  au vimrc filetype javascript au vimrc bufwritepost <buffer> silent! Neomake
 endif
 
 augroup Poppy
