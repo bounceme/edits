@@ -38,15 +38,6 @@ function! g:PPPP()
 endfunction
 
 set fo+=j fo-=o fo-=t fo+=c
-if has('gui_running') || has('nvim')
-  set gcr=
-  if has("gui_macvim")
-    let macvim_skip_cmd_opt_movement = 1
-  endif
-endif
-if has('mac')
-  set guifont=Monaco:h16
-endif
 if !has('nvim')
   set directory-=.
 endif
@@ -80,8 +71,6 @@ au vimrc cmdWinEnter [:>] syntax sync maxlines=1 minlines=1
 
 au vimrc bufwritepost $MYVIMRC source $MYVIMRC
 
-au vimrc FileType netrw nmap <buffer> g? <f1>
-au vimrc FileType netrw nnoremap <nowait><buffer> q :bd<cr>
 au vimrc FileType help nnoremap <buffer> <cr> <C-]>
 
 au vimrc BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -99,8 +88,6 @@ nnoremap c* *``cgn
 nnoremap c# #``cgN
 
 nnoremap <LEADER>cd :cd %:p:h<cr>
-nnoremap <lEADER>cp :let @* = expand("%:p")<cr>
-nnoremap <lEADER>v :e $MYVIMRC<cr>
 
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C-L>
 
