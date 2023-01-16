@@ -30,13 +30,6 @@ set foldopen-=block
 set foldopen+=search
 set nojs
 
-function! g:PPPP()
-  while search('^LETTER','W')
-    norm yil
-    exe '.+1,$s/\V\^'.escape(@@,'\').'\_.\{-}\ze\n\^LETTER/'
-  endwhile
-endfunction
-
 set fo+=j fo-=o fo-=t fo+=c
 if !has('nvim')
   set directory-=.
@@ -88,6 +81,7 @@ nnoremap c* *``cgn
 nnoremap c# #``cgN
 
 nnoremap <LEADER>cd :cd %:p:h<cr>
+nnoremap <lEADER>v :e $MYVIMRC<cr>
 
 nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'\|diffupdate':''<CR><CR><C-L>
 
